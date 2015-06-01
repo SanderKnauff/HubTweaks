@@ -47,19 +47,6 @@ public class CommandHandler implements CommandExecutor {
             }
             return true;
         }
-        if (cmd.getName().equalsIgnoreCase("ToggleParkourCreation")) {
-            if (!(sender instanceof Player)) {
-                System.out.println("This command can only be used by a Player");
-                return true;
-            } else {
-                Player player = (Player) sender;
-                if (player.hasPermission("hubtweaks.admin.parkour")) {
-                    HubTweaks.pmc.put(player, 1);
-                    System.out.println("Toggled Parkour Creation");
-                    return true;
-                }
-            }
-        }
         if (cmd.getName().equalsIgnoreCase("ConvertRuleBook")) {
             if (!(sender instanceof Player)) {
                 System.out.println("This command can only be used by a Player");

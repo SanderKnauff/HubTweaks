@@ -1,14 +1,11 @@
 package nl.imine.hubtweaks;
 
-import java.util.HashMap;
-
 import nl.imine.hubtweaks.kotl.Kotl;
 import nl.imine.hubtweaks.parkour.Parkour;
 import nl.imine.hubtweaks.pvp.PvP;
 import nl.imine.hubtweaks.warps.QuickWarp;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,9 +17,6 @@ public class HubTweaks extends JavaPlugin {
     private Kotl kotl;
     private QuickWarp qw;
     private Parkour parkour;
-
-    public static HashMap<Player, Integer> ppl = new HashMap<>();
-    public static HashMap<Player, Integer> pmc = new HashMap<>();
 
     @Override
     public void onEnable() {

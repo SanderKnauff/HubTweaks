@@ -44,7 +44,6 @@ public class EventListener implements Listener {
     public void onPlayerDisconnect(final PlayerQuitEvent Event) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), () -> {
             PlayerDataManager.RemovePlayerData(Event.getPlayer());
-            HubTweaks.pmc.remove(Event.getPlayer());
         }, 10);
     }
 
@@ -77,10 +76,8 @@ public class EventListener implements Listener {
         item.setItemMeta(metadat);
         player.getInventory().clear();
         player.getInventory().addItem(item);
-        HubTweaks.pmc.put(e.getPlayer(), 0);
         int lvl = 1;
         lvl = plugin.getConfig().getInt("PlayerData." + player.getUniqueId() + ".ParkourLvl");
-        HubTweaks.ppl.put(player, lvl);
         plugin.saveConfig();
         if (plugin.getConfig().getConfigurationSection("RuleBook.Pages") != null) {
             if (!plugin.getConfig().getConfigurationSection("RuleBook.Pages").getKeys(false).isEmpty()) {

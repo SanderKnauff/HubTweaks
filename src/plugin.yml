@@ -5,9 +5,6 @@ commands:
    createQuickWarp:
       description: This command creates a QuickWarp.
       usage: /createQuickWarp <warpname> <SlotNumber>
-   ToggleParkourCreation:
-      description: Toggles the creation of parkour lvls.
-      usage: /ToggleParkourCreation
    ConvertRuleBook:
       description: Converts the in-hand book to a rulebook.
       usage: /ConvertRuleBook
