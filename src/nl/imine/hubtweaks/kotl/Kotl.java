@@ -2,6 +2,7 @@ package nl.imine.hubtweaks.kotl;
 
 import java.io.File;
 import java.io.IOException;
+import nl.imine.hubtweaks.HubTweaks;
 
 import nl.imine.hubtweaks.refrence.KotlConfig;
 import nl.imine.hubtweaks.util.Log;
@@ -20,17 +21,21 @@ import org.bukkit.plugin.Plugin;
 
 public class Kotl {
 
+    private static Kotl kotl;
+    
     private Location plate;
     private Player king;
     private int radius;
     private final File configFile;
     private YamlConfiguration config; 
 
-    private Plugin plugin;
-
-    public Kotl(Plugin plugin) {
-        this.plugin = plugin;
-        this.configFile = new File(plugin.getDataFolder() + File.separator + "KOTL.yml");
+    public static void init(){
+        Kotl.kotl = new Kotl();
+        KotlListener.init(kotl);
+    }
+    
+    public Kotl() {
+        this.configFile = new File(HubTweaks.getInstance().getDataFolder() + File.separator + "KOTL.yml");
         if(!configFile.exists()){
             try {
                 boolean success = configFile.createNewFile();
@@ -38,7 +43,6 @@ public class Kotl {
             } catch (IOException e) {
             }
         }
-        KotlListener.init(plugin, this);
         loadKOTL();
     }
 
@@ -107,10 +111,14 @@ public class Kotl {
     }
 
     private Location getLocationFromSection(ConfigurationSection section) {
-        World world = plugin.getServer().getWorld(section.getString(KotlConfig.LOCATION_WORLD));
+        World world = HubTweaks.getInstance().getServer().getWorld(section.getString(KotlConfig.LOCATION_WORLD));
         int x = (int) section.getDouble(KotlConfig.LOCATION_X);
         int y = (int) section.getDouble(KotlConfig.LOCATION_Y);
         int z = (int) section.getDouble(KotlConfig.LOCATION_Z);
         return new Location(world, x, y, z);
+    }
+    
+    public static Kotl getInstance(){
+        return Kotl.kotl;
     }
 }

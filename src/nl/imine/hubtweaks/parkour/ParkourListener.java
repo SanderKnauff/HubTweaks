@@ -8,6 +8,7 @@ package nl.imine.hubtweaks.parkour;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.util.Log;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -18,12 +19,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.material.Wool;
-import org.bukkit.plugin.Plugin;
 
 /**
  *
@@ -31,24 +30,13 @@ import org.bukkit.plugin.Plugin;
  */
 public class ParkourListener implements Listener {
 
-    private final int patat = 5;
-
-    private final Parkour parkour;
-    private final Plugin plugin;
-
-    public static ParkourListener init(Parkour parkour, Plugin plugin) {
-        ParkourListener p = new ParkourListener(parkour, plugin);
-        plugin.getServer().getPluginManager().registerEvents(p, plugin);
-        return p;
-    }
-
-    private ParkourListener(Parkour parkour, Plugin plugin) {
-        this.parkour = parkour;
-        this.plugin = plugin;
+    public static void init() {
+        HubTweaks.getInstance().getServer().getPluginManager().registerEvents(new ParkourListener(), HubTweaks.getInstance());
     }
 
     @EventHandler
     public void onPlayerPlateInteract(PlayerInteractEvent evt) {
+        Parkour parkour = Parkour.getInstance();
         if (evt.getAction().equals(Action.PHYSICAL)) {
             if (evt.getClickedBlock().getRelative(BlockFace.DOWN).getType().equals(Material.WOOL)) {
                 ParkourPlayer player = parkour.getPlayer(evt.getPlayer());
@@ -91,8 +79,8 @@ public class ParkourListener implements Listener {
 
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent evt) {
-        if (parkour.getPlayer(evt.getPlayer()) == null) {
-            this.parkour.addPlayer(new ParkourPlayer(evt.getPlayer().getUniqueId().toString(), new ParkourLevel(-1, DyeColor.BLACK)));
+        if (Parkour.getInstance().getPlayer(evt.getPlayer()) == null) {
+            Parkour.getInstance().addPlayer(new ParkourPlayer(evt.getPlayer().getUniqueId().toString(), new ParkourLevel(-1, DyeColor.BLACK)));
         }
     }
 
@@ -101,8 +89,8 @@ public class ParkourListener implements Listener {
         if (evt.getAction().equals(Action.PHYSICAL)) {
             if (evt.getClickedBlock().getRelative(BlockFace.DOWN).getType().equals(Material.BARRIER)) {
                 if (evt.getPlayer().hasPermission("ht.createParkour")) {
-                    parkour.getPlayer(evt.getPlayer()).setBuilding(!parkour.getPlayer(evt.getPlayer()).isBuilding());
-                    evt.getPlayer().sendMessage("Building: " + parkour.getPlayer(evt.getPlayer()).isBuilding());
+                    Parkour.getInstance().getPlayer(evt.getPlayer()).setBuilding(!Parkour.getInstance().getPlayer(evt.getPlayer()).isBuilding());
+                    evt.getPlayer().sendMessage("Building: " + Parkour.getInstance().getPlayer(evt.getPlayer()).isBuilding());
                 }
             }
         }

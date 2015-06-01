@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,18 +20,11 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 
 public class EventListener implements Listener {
 
-    private final Plugin plugin;
-
-    public static void init(Plugin plugin) {
-        plugin.getServer().getPluginManager().registerEvents(new EventListener(plugin), plugin);
-    }
-
-    private EventListener(Plugin plugin) {
-        this.plugin = plugin;
+    public static void init() {
+        HubTweaks.getInstance().getServer().getPluginManager().registerEvents(new EventListener(), HubTweaks.getInstance());
     }
 
     @EventHandler
@@ -65,6 +59,7 @@ public class EventListener implements Listener {
     }
 
     private void playerRespawn(PlayerEvent e) {
+        FileConfiguration config = HubTweaks.getInstance().getConfig();
         Player player = e.getPlayer();
         player.getInventory().clear();
         ItemStack item = new ItemStack(Material.COMPASS, 1);
@@ -76,21 +71,17 @@ public class EventListener implements Listener {
         item.setItemMeta(metadat);
         player.getInventory().clear();
         player.getInventory().addItem(item);
-        int lvl = 1;
-        lvl = plugin.getConfig().getInt("PlayerData." + player.getUniqueId() + ".ParkourLvl");
-        plugin.saveConfig();
-        if (plugin.getConfig().getConfigurationSection("RuleBook.Pages") != null) {
-            if (!plugin.getConfig().getConfigurationSection("RuleBook.Pages").getKeys(false).isEmpty()) {
+        HubTweaks.getInstance().saveConfig();
+        if (config.getConfigurationSection("RuleBook.Pages") != null) {
+            if (!config.getConfigurationSection("RuleBook.Pages").getKeys(false).isEmpty()) {
                 ItemStack RuleBook = new ItemStack(Material.WRITTEN_BOOK, 1);
                 BookMeta RuleBookMeta = (BookMeta) RuleBook.getItemMeta();
-                List<String> PageList = new ArrayList<String>();
-                for (int Pages = 1; Pages <= plugin.getConfig().getConfigurationSection("RuleBook.Pages").getKeys(false).size(); Pages++) {
-                    PageList.add(plugin.getConfig().getString("RuleBook.Pages." + Pages));
-                    // RuleBookMeta.setPage(Pages,
-                    // plugin.getConfig().getString("RuleBook.Pages." + Pages));
+                List<String> PageList = new ArrayList<>();
+                for (int Pages = 1; Pages <= config.getConfigurationSection("RuleBook.Pages").getKeys(false).size(); Pages++) {
+                    PageList.add(config.getString("RuleBook.Pages." + Pages));
                 }
                 RuleBookMeta.setPages(PageList);
-                RuleBookMeta.setTitle(plugin.getConfig().getString("RuleBook.Title"));
+                RuleBookMeta.setTitle(config.getString("RuleBook.Title"));
                 RuleBook.setItemMeta(RuleBookMeta);
                 player.getInventory().addItem(RuleBook);
             }

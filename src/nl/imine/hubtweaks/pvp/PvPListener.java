@@ -26,17 +26,13 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import nl.imine.hubtweaks.HubTweaks;
 
 public class PvPListener implements Listener {
 
-    private final Plugin plugin;
 
-    public static void init(Plugin plugin) {
-        plugin.getServer().getPluginManager().registerEvents(new PvPListener(plugin), plugin);
-    }
-
-    private PvPListener(Plugin plugin) {
-        this.plugin = plugin;
+    public static void init() {
+        HubTweaks.getInstance().getServer().getPluginManager().registerEvents(new PvPListener(), HubTweaks.getInstance());
     }
 
     @EventHandler
@@ -66,7 +62,7 @@ public class PvPListener implements Listener {
             if (PvP.getPlayerList().contains((Player) E.getDamager())) {
                 if (E.getDamage() > 0) {
                     Location loc = new Location(E.getEntity().getLocation().getWorld(), E.getEntity().getLocation().getX() + 0.5, E.getEntity().getLocation().getY() + 0.5, E.getEntity().getLocation().getZ() + 0.5);
-                    plugin.getServer().getWorld(E.getDamager().getLocation().getWorld().getName()).playEffect(loc, Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
+                    HubTweaks.getInstance().getServer().getWorld(E.getDamager().getLocation().getWorld().getName()).playEffect(loc, Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
                 }
             }
         }
@@ -202,7 +198,7 @@ public class PvPListener implements Listener {
     }
 
     private WorldGuardPlugin getWorldGuard() {
-        Plugin wg = plugin.getServer().getPluginManager().getPlugin("WorldGuard");
+        Plugin wg = HubTweaks.getInstance().getServer().getPluginManager().getPlugin("WorldGuard");
 
         // WorldGuard may not be loaded
         if (wg == null || !(wg instanceof WorldGuardPlugin)) {

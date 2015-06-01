@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import nl.imine.hubtweaks.HubTweaks;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,13 +22,11 @@ public class PvP {
     private static File pvpConfigFile = null;
     private static FileConfiguration pvpConfig = null;
 
-    private static Plugin plugin;
     private static List<Player> pvpList;
 
-    public static void init(Plugin plugin) {
+    public static void init() {
         System.out.println("HTPVP: Initialized PVP class");
-        PvP.plugin = plugin;
-        PvPListener.init(plugin);
+        PvPListener.init();
         pvpList = new ArrayList<>();
         loadArena();
     }
@@ -55,7 +54,7 @@ public class PvP {
 
     public static void loadArena() {
         System.out.println("HTPVP: Loading Arena");
-        pvpConfigFile = new File(plugin.getDataFolder().getPath() + File.separatorChar + "PvP.yml");
+        pvpConfigFile = new File(HubTweaks.getInstance().getDataFolder().getPath() + File.separatorChar + "PvP.yml");
         if (!pvpConfigFile.exists()) {
             System.out.println("PVPCONFIG does not Exist, Creating it");
             try {
@@ -72,7 +71,7 @@ public class PvP {
         if (pvpConfig.getConfigurationSection("Spawns") != null) {
             int spawncount = 0;
             for (String key : pvpConfig.getConfigurationSection("Spawns").getKeys(false)) {
-                World world = plugin.getServer().getWorld(pvpConfig.getString("Spawns." + key + ".world"));
+                World world = HubTweaks.getInstance().getServer().getWorld(pvpConfig.getString("Spawns." + key + ".world"));
                 double x = pvpConfig.getDouble("Spawns." + key + ".x");
                 double y = pvpConfig.getDouble("Spawns." + key + ".y");
                 double z = pvpConfig.getDouble("Spawns." + key + ".z");

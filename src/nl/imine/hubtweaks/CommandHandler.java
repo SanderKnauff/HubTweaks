@@ -1,5 +1,6 @@
 package nl.imine.hubtweaks;
 
+import nl.imine.hubtweaks.kotl.Kotl;
 import nl.imine.hubtweaks.pvp.PvP;
 import nl.imine.hubtweaks.warps.QuickWarp;
 
@@ -31,7 +32,7 @@ public class CommandHandler implements CommandExecutor {
                     if (args.length > 1) {
                         if (isInteger(args[1]) == true) {
                             if (player.getItemInHand().getType() != Material.AIR) {
-                                plugin.getQuickWarp().addQuickWarp(player, args[0], Integer.parseInt(args[1]));
+                                QuickWarp.getInstance().addQuickWarp(player, args[0], Integer.parseInt(args[1]));
                             } else {
                                 player.sendMessage("You need to have an In-Hand item to do this");
                             }
@@ -96,20 +97,20 @@ public class CommandHandler implements CommandExecutor {
                         return true;
                     }
                     if (args[0].equalsIgnoreCase("setKOTL")) {
-                        if (plugin.getKotl().getConfig().getConfigurationSection("Kotl") == null) {
-                            plugin.getKotl().getConfig().createSection("Kotl");
-                            plugin.getKotl().saveConfig();
+                        if (Kotl.getInstance().getConfig().getConfigurationSection("Kotl") == null) {
+                            Kotl.getInstance().getConfig().createSection("Kotl");
+                            Kotl.getInstance().saveConfig();
                         }
                         int x = player.getLocation().getBlockX();
                         int y = player.getLocation().getBlockY();
                         int z = player.getLocation().getBlockZ();
                         String worldName = player.getWorld().getName();
-                        plugin.getKotl().getConfig().getConfigurationSection("Kotl").set("w", worldName);
-                        plugin.getKotl().getConfig().getConfigurationSection("Kotl").set("x", x);
-                        plugin.getKotl().getConfig().getConfigurationSection("Kotl").set("y", y);
-                        plugin.getKotl().getConfig().getConfigurationSection("Kotl").set("z", z);
+                        Kotl.getInstance().getConfig().getConfigurationSection("Kotl").set("w", worldName);
+                        Kotl.getInstance().getConfig().getConfigurationSection("Kotl").set("x", x);
+                        Kotl.getInstance().getConfig().getConfigurationSection("Kotl").set("y", y);
+                        Kotl.getInstance().getConfig().getConfigurationSection("Kotl").set("z", z);
                         player.sendMessage(ChatColor.DARK_RED + "[Kotl]" + ChatColor.WHITE + " Kotl set");
-                        plugin.getKotl().saveConfig();
+                        Kotl.getInstance().saveConfig();
                         return true;
                     }
                     sendHelp(player);
@@ -119,9 +120,9 @@ public class CommandHandler implements CommandExecutor {
                     if (args[0].equalsIgnoreCase("setPlayersInRadius")) {
                         try {
                             int integer = Integer.parseInt(args[1]);
-                            plugin.getKotl().getConfig().set("pir", integer);
+                            Kotl.getInstance().getConfig().set("pir", integer);
                             player.sendMessage(ChatColor.DARK_RED + "[Kotl]" + ChatColor.WHITE + " PlayersInRadius set");
-                            plugin.getKotl().saveConfig();
+                            Kotl.getInstance().saveConfig();
                             return true;
                         } catch (NumberFormatException e) {
                             player.sendMessage(ChatColor.DARK_RED + "[Kotl]" + ChatColor.WHITE + " Bad usage for help:'/Kotl'" + ChatColor.ITALIC + " Example: /Kotl setPlayersInRadius 4");
@@ -131,9 +132,9 @@ public class CommandHandler implements CommandExecutor {
                     if (args[0].equalsIgnoreCase("setCoinsInSeconds")) {
                         try {
                             int integer = Integer.parseInt(args[1]);
-                            plugin.getKotl().getConfig().set("cis", integer);
+                            Kotl.getInstance().getConfig().set("cis", integer);
                             player.sendMessage(ChatColor.DARK_RED + "[Kotl]" + ChatColor.WHITE + " CoinsInSeconds set");
-                            plugin.getKotl().saveConfig();
+                            Kotl.getInstance().saveConfig();
                             return true;
                         } catch (NumberFormatException e) {
                             player.sendMessage(ChatColor.DARK_RED + "[Kotl]" + ChatColor.WHITE + " Bad usage for help:'/Kotl'" + ChatColor.ITALIC + " Example: /Kotl setcoinsinseconds 4");
@@ -143,9 +144,9 @@ public class CommandHandler implements CommandExecutor {
                     if (args[0].equalsIgnoreCase("setRadiusOfKOTL")) {
                         try {
                             int integer = Integer.parseInt(args[1]);
-                            plugin.getKotl().getConfig().set("rok", integer);
+                            Kotl.getInstance().getConfig().set("rok", integer);
                             player.sendMessage(ChatColor.DARK_RED + "[Kotl]" + ChatColor.WHITE + " RadiusOfKOTL set");
-                            plugin.getKotl().saveConfig();
+                            Kotl.getInstance().saveConfig();
                             return true;
                         } catch (NumberFormatException e) {
                             player.sendMessage(ChatColor.DARK_RED + "[Kotl]" + ChatColor.WHITE + " Bad usage for help:'/Kotl'" + ChatColor.ITALIC + " Example: /Kotl setRadiusOfKOTL 4");

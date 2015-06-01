@@ -10,7 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class Warp {
 
-    public static final List<Warp> warpList = new ArrayList<Warp>();
+    private static final List<Warp> warpList = new ArrayList<Warp>();
 
     private Location loc;
     private int slot;
@@ -20,21 +20,20 @@ public class Warp {
     private ItemStack item;
 
     public Warp(QuickWarp qw, Location loc, int slot, String[] data, Material material, short metaid) {
-        this.setLoc(loc);
-        this.setSlot(slot);
-        this.setData(data);
-        this.setMaterial(material);
-        this.setMetaid(metaid);
+        this.loc = loc;
+        this.slot = slot;
+        this.data = data;
+        this.material = material;
+        this.metaid = metaid;
         item = new ItemStack(material, 1, metaid);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(data[0]);
-        List<String> LoreString = new ArrayList<String>();
+        List<String> LoreString = new ArrayList<>();
         if (data.length < 1) {
             LoreString.add(data[1]);
         }
         meta.setLore(LoreString);
         item.setItemMeta(meta);
-        warpList.add(this);
         qw.getInventory().setItem(slot, item);
     }
 
@@ -84,6 +83,10 @@ public class Warp {
 
     public void setItem(ItemStack item) {
         this.item = item;
+    }
+    
+    public static void addWarp(Warp warp){
+        warpList.add(warp);
     }
 
     public static Warp getWarpByName(String name) {

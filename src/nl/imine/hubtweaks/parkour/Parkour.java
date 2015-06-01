@@ -8,7 +8,6 @@ package nl.imine.hubtweaks.parkour;
 import java.util.ArrayList;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 /**
  *
@@ -16,13 +15,19 @@ import org.bukkit.plugin.Plugin;
  */
 public class Parkour {
     
+    private static Parkour parkour;
+    
     private final ArrayList<ParkourLevel> levels = new ArrayList<>();
     private final ArrayList<ParkourPlayer> players = new ArrayList<>();
         
-    public Parkour(Plugin plugin){
-        ParkourConfig.getLevels(this);
-        ParkourConfig.getPlayers(this);
-        ParkourListener.init(this, plugin);
+    public static void init(){
+        Parkour.parkour = new Parkour();
+        ParkourConfig.getLevels(parkour);
+        ParkourConfig.getPlayers(parkour);
+    }
+    
+    public Parkour(){
+        ParkourListener.init();
     }
     
     public void addLevel(ParkourLevel level){
@@ -66,5 +71,9 @@ public class Parkour {
             }
         }
         return new ParkourLevel(-1, DyeColor.BLACK);
+    }
+    
+    public static Parkour getInstance(){
+        return Parkour.parkour;
     }
 }

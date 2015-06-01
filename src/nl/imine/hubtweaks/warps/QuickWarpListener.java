@@ -1,9 +1,6 @@
 package nl.imine.hubtweaks.warps;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
+import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.pvp.PvPJoinEvent;
 
 import org.bukkit.Material;
@@ -16,20 +13,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 public class QuickWarpListener implements Listener {
 
-    private Plugin plugin;
-    private QuickWarp qw;
 
-    public static void init(Plugin plugin, QuickWarp qw){
-        plugin.getServer().getPluginManager().registerEvents(new QuickWarpListener(plugin, qw), plugin);
-    }
-    
-    private QuickWarpListener(Plugin plugin, QuickWarp qw) {
-        this.plugin = plugin;
-        this.qw = qw;
+    public static void init(QuickWarp qw){
+        HubTweaks.getInstance().getServer().getPluginManager().registerEvents(new QuickWarpListener(), HubTweaks.getInstance());
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -37,7 +26,7 @@ public class QuickWarpListener implements Listener {
         if (Event.getAction().equals(Action.RIGHT_CLICK_AIR) || Event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             Player player = Event.getPlayer();
             if (player.getItemInHand().getType().equals(Material.COMPASS)) {
-                qw.openWarpInv(player);
+                QuickWarp.getInstance().openWarpInv(player);
             }
         }
     }
@@ -45,7 +34,7 @@ public class QuickWarpListener implements Listener {
     @EventHandler
     public void onPlayerInventoryClickEvent(InventoryClickEvent Event) {
         Player player = (Player) Event.getWhoClicked();
-        if (Event.getInventory().getName().equals(qw.getInventory().getName())) {
+        if (Event.getInventory().getName().equals(QuickWarp.getInstance().getInventory().getName())) {
             if (Event.getCurrentItem() != null) {
                 if (Event.getCurrentItem().getType() != Material.AIR) {
                     if (Warp.getWarpByName(Event.getCurrentItem().getItemMeta().getDisplayName()) != null) {
@@ -54,7 +43,7 @@ public class QuickWarpListener implements Listener {
                         }
                         if (Event.getCurrentItem().getItemMeta().getDisplayName().contains("One in the Chamber")) {
                             PvPJoinEvent pvpjoinevent = new PvPJoinEvent(player);
-                            plugin.getServer().getPluginManager().callEvent(pvpjoinevent);
+                            HubTweaks.getInstance().getServer().getPluginManager().callEvent(pvpjoinevent);
                             Event.setCancelled(true);
                         }
                     }
@@ -62,30 +51,7 @@ public class QuickWarpListener implements Listener {
             }
             Event.setCancelled(true);
         }
-        /*if (quickWarp.warpExists(Event.getSlot()).equals(true)) {
-         if (Event.getInventory().getName().equals(QuickWarp.WarpInv.getName())) {
-         int slot = Event.getSlot();
-         if (Event.getInventory().getItem(slot).getItemMeta().getDisplayName().contains("Creative")) {
-         ByteArrayOutputStream b = new ByteArrayOutputStream();
-         DataOutputStream out = new DataOutputStream(b);
-         try {
-         out.writeUTF("Connect");
-         out.writeUTF("Creative"); // Target Server
-         } catch (IOException e) {
-         // Can never happen
-         }
-         player.sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
-         Event.setCancelled(true);
-         } else {
-         Location loc = quickWarp.TpLoc(slot);
-         if (loc != null) {
-         player.teleport(loc, TeleportCause.PLUGIN);
-         Event.setCancelled(true);
-         }
-         }
-         }
-         }*/
-        if (!Event.getInventory().getName().equals(qw.getInventory().getName())) {
+        if (!Event.getInventory().getName().equals(QuickWarp.getInstance().getInventory().getName())) {
             if (Event.getCurrentItem() != null) {
                 if (Event.getCurrentItem().getType().equals(Material.LEATHER_BOOTS)) {
                     player.getInventory().setBoots(new ItemStack(Material.AIR, 1));
@@ -96,7 +62,7 @@ public class QuickWarpListener implements Listener {
         /*if(!player.hasPermission("Hubtweaks.inv")){
          Event.setCancelled(true);
          }*/
-        if (Event.getInventory().getName().equals(qw.getInventory().getName())) {
+        if (Event.getInventory().getName().equals(QuickWarp.getInstance().getInventory().getName())) {
             Event.setCancelled(true);
         }
     }

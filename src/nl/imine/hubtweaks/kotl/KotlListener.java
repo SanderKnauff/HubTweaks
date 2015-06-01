@@ -22,15 +22,14 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class KotlListener implements Listener {
 
     private final Kotl kotl;
 
-    public static void init(Plugin plugin, Kotl kotl) {
-        plugin.getServer().getPluginManager().registerEvents(new KotlListener(kotl), plugin);
+    public static void init(Kotl kotl) {
+        HubTweaks.getInstance().getServer().getPluginManager().registerEvents(new KotlListener(kotl), HubTweaks.getInstance());
     }
 
     private KotlListener(Kotl kotl) {
