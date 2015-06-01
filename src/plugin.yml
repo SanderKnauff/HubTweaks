@@ -1,0 +1,22 @@
+name: HubTweaks
+main: nl.imine.hubtweaks.HubTweaks
+version: V0.0.1a
+commands:
+   createQuickWarp:
+      description: This command creates a QuickWarp.
+      usage: /createQuickWarp <warpname> <SlotNumber>
+   ToggleParkourCreation:
+      description: Toggles the creation of parkour lvls.
+      usage: /ToggleParkourCreation
+   ConvertRuleBook:
+      description: Converts the in-hand book to a rulebook.
+      usage: /ConvertRuleBook
+   ReloadTracks:
+      description: Reloads the Track list on the fly.
+      usage: /ReloadTracks
+   HubTweaks:
+      description: Default command for anything in this plugin.
+      usage: /HubTweaks
+   kotl:
+      description: Default command for kingdom of the ladder.
+      usage: /kotl
