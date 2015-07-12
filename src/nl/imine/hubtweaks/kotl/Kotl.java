@@ -17,7 +17,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 
 public class Kotl {
 
@@ -25,6 +24,7 @@ public class Kotl {
     
     private Location plate;
     private Player king;
+    private Player oldKing;
     private int radius;
     private final File configFile;
     private YamlConfiguration config; 
@@ -71,16 +71,10 @@ public class Kotl {
     }
 
     public void removeEntropiaWand(final Player p) {
-
-        if (p.getInventory().contains(Material.GOLDEN_CARROT)) {
-            p.getInventory().remove(Material.GOLDEN_CARROT);
-        }
-        if (p.getInventory().contains(Material.GOLD_HELMET)) {
-            p.getInventory().remove(Material.GOLD_HELMET);
-        }
-        if ((p.getInventory().getHelmet() != null) && (p.getInventory().getHelmet().getType() != null) && (p.getInventory().getHelmet().getType().equals(Material.GOLD_HELMET))) {
-            p.getInventory().setHelmet(null);
-        }
+        p.getInventory().remove(Material.GOLDEN_CARROT);
+        p.getInventory().remove(Material.GOLD_HELMET);
+        p.getInventory().setHelmet(new ItemStack(Material.AIR));
+        p.setItemOnCursor(new ItemStack(Material.AIR));
     }
 
     public Location getPlateLoc() {
@@ -88,15 +82,20 @@ public class Kotl {
     }
 
     public void setKing(Player player) {
-        king = player;
+        this.oldKing = king;
+        this.king = player;
     }
 
     public Player getKing() {
-        return king;
+        return this.king;
+    }
+    
+    public Player getOldKing(){
+        return this.oldKing;
     }
 
     public int getRadius() {
-        return radius;
+        return this.radius;
     }
     
     public YamlConfiguration getConfig(){

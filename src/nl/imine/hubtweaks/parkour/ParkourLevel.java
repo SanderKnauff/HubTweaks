@@ -33,4 +33,8 @@ public class ParkourLevel {
     public String toString(){
         return this.level + " || " + this.color.toString();
     }
+    
+    public boolean equals(ParkourLevel plvl){
+        return (this.getColor().equals(plvl.getColor()) && this.getLevel() == plvl.getLevel());
+    }
 }

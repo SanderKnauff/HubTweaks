@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -65,11 +66,20 @@ public class KotlListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent evt) {
         Player player = evt.getPlayer();
         if (evt.getAction().equals(Action.PHYSICAL) && evt.getClickedBlock().getLocation().equals(kotl.getPlateLoc())) {
-            if (kotl.getKing() == null) {
+            if (kotl.getKing() == null || !kotl.getKing().isOnline()) {
                 kotl.setKing(player);
                 kotl.addEntropiaWand(player);
-                Messenger.sendActionMessageToAll(ChatColor.GOLD.toString() + ChatColor.BOLD.toString() + player.getDisplayName() + " is the new king!");
+                if(!kotl.getKing().equals(kotl.getOldKing())){
+                    Messenger.sendActionMessageToAll(ChatColor.GOLD.toString() + ChatColor.BOLD.toString() + player.getDisplayName() + " is the new king!"); 
+                }
             }
+        }
+    }
+    
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent evt){
+        if(evt.getCurrentItem().getType().equals(Material.GOLDEN_CARROT) || evt.getCurrentItem().getType().equals(Material.GOLD_HELMET)){
+            evt.setCancelled(true);
         }
     }
 

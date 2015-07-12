@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.util.Log;
+import nl.imine.hubtweaks.util.Messenger;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -45,6 +46,9 @@ public class ParkourListener implements Listener {
                         if (parkour.getLevel(((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData()).getColor()).getLevel() > player.getLevel().getLevel()) {
                             player.setLevel(parkour.getLevel(((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData()).getColor()));
                             player.save();
+                            if(parkour.getLevel(((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData()).getColor()).getLevel() == 5){
+                                Messenger.sendActionMessageToAll(evt.getPlayer().getName() + " has reached the end of the parkour!");
+                            }
                         }
                         ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
                         LeatherArmorMeta meta = (LeatherArmorMeta) boots.getItemMeta();
@@ -54,13 +58,13 @@ public class ParkourListener implements Listener {
                             evt.getPlayer().getInventory().setBoots(boots);  
                         }
                     } else {
-                        if (parkour.getLevel(((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData()).getColor()) == null) {
+                        if (parkour.getLevel(((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData()).getColor()).equals(new ParkourLevel(-1, DyeColor.BLACK))) {
                             File f = new File(ParkourConfig.CONFIGPATH + "Levels.yml");
                             YamlConfiguration config = new YamlConfiguration();
                             try {
                                 config.load(f);
                                 config.set((parkour.getLevels().size() + 1) + ".Color", ((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData()).getColor().toString());
-                                config.set(-1 + ".Color", DyeColor.BLACK);
+                                config.set(-1 + ".Color", DyeColor.BLACK.name());
                                 config.save(f);
                             } catch (FileNotFoundException e) {
                                 Log.warning("Exception finding file: " + f.getPath() + " || " + e.getMessage());

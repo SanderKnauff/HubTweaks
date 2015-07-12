@@ -2,6 +2,7 @@ package nl.imine.hubtweaks;
 
 import java.util.ArrayList;
 import java.util.List;
+import nl.imine.hubtweaks.pvp.PvP;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,6 +12,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -28,9 +30,9 @@ public class EventListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent e) {
-        if(e.getPlayer().getLocation().getBlockY() < 0){
-            e.getPlayer().setHealth(0);
+    public void onPlayerMove(PlayerMoveEvent evt) {
+        if(evt.getPlayer().getLocation().getBlockY() < 0){
+            evt.getPlayer().teleport(evt.getPlayer().getWorld().getSpawnLocation());
         }
     }
     
