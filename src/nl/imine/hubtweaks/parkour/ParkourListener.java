@@ -25,11 +25,13 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.material.Wool;
+import org.bukkit.potion.PotionEffectType;
 
 /**
  *
@@ -140,9 +142,16 @@ public class ParkourListener implements Listener {
     public void onPlayerToggleFlight(PlayerToggleFlightEvent evt) {
         Parkour.getInstance().getPlayer(evt.getPlayer()).setTouchedPlate(true);
     }
-    
+
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent evt) {
         Parkour.getInstance().getPlayer(evt.getEntity()).setTouchedPlate(false);
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent evt) {
+        if (!evt.getPlayer().getActivePotionEffects().isEmpty()) {
+            Parkour.getInstance().getPlayer(evt.getPlayer()).setTouchedPlate(false);
+        }
     }
 }
