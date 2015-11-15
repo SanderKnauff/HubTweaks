@@ -2,6 +2,7 @@ package nl.imine.hubtweaks;
 
 import java.util.ArrayList;
 import java.util.List;
+import nl.imine.hubtweaks.parkour.Parkour;
 import nl.imine.hubtweaks.pvp.PvP;
 
 import org.bukkit.Bukkit;
@@ -12,7 +13,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -31,11 +31,13 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent evt) {
-        if(evt.getPlayer().getLocation().getBlockY() < 0){
+        if (evt.getPlayer().getLocation().getBlockY() < 0) {
             evt.getPlayer().teleport(evt.getPlayer().getWorld().getSpawnLocation());
+            Parkour.getInstance().getPlayer(evt.getPlayer()).setTouchedPlate(false);
+            evt.getPlayer().setGameMode(GameMode.ADVENTURE);
         }
     }
-    
+
     @EventHandler
     public void onPlayerDisconnect(final PlayerQuitEvent Event) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), () -> {
@@ -63,6 +65,7 @@ public class EventListener implements Listener {
     private void playerRespawn(PlayerEvent e) {
         FileConfiguration config = HubTweaks.getInstance().getConfig();
         Player player = e.getPlayer();
+        player.setGameMode(GameMode.ADVENTURE);
         player.getInventory().clear();
         ItemStack item = new ItemStack(Material.COMPASS, 1);
         ItemMeta metadat = (ItemMeta) item.getItemMeta();

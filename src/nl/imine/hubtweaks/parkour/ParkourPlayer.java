@@ -8,7 +8,9 @@ package nl.imine.hubtweaks.parkour;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.UUID;
 import nl.imine.hubtweaks.util.Log;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -21,6 +23,10 @@ public class ParkourPlayer {
     private final String uuid;
     private ParkourLevel level;
     private boolean isBuilding;
+
+    //Not stored between reboots
+    private boolean hasReachedTop = false;
+    private boolean hasTouchedPlate = false;
 
     public ParkourPlayer(String uuid, ParkourLevel level) {
         this.uuid = uuid;
@@ -70,9 +76,37 @@ public class ParkourPlayer {
             }
         }
     }
-    
+
     @Override
-    public String toString(){
+    public String toString() {
         return uuid + " || " + this.level.toString();
+    }
+
+    /**
+     * @return the hasReachedTop
+     */
+    public boolean hasReachedTop() {
+        return hasReachedTop;
+    }
+
+    /**
+     * @param hasReachedTop the hasReachedTop to set
+     */
+    public void setReachedTop(boolean hasReachedTop) {
+        this.hasReachedTop = hasReachedTop;
+    }
+
+    /**
+     * @return the hasTouchedPlate
+     */
+    public boolean hasTouchedPlate() {
+        return hasTouchedPlate;
+    }
+
+    /**
+     * @param hasTouchedPlate the hasTouchedPlate to set
+     */
+    public void setTouchedPlate(boolean hasTouchedPlate) {
+        this.hasTouchedPlate = hasTouchedPlate;
     }
 }

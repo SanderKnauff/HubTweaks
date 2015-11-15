@@ -151,6 +151,8 @@ public class PvPListener implements Listener {
             PvP.getPlayerList().remove(E.getEntity());
         }
     }
+    
+    
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent E) {
