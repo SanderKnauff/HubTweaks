@@ -8,9 +8,7 @@ package nl.imine.hubtweaks.parkour;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.UUID;
 import nl.imine.hubtweaks.util.Log;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 

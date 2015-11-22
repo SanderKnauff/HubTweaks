@@ -3,7 +3,6 @@ package nl.imine.hubtweaks;
 import java.util.ArrayList;
 import java.util.List;
 import nl.imine.hubtweaks.parkour.Parkour;
-import nl.imine.hubtweaks.pvp.PvP;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
