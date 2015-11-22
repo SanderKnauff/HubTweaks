@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -32,8 +31,7 @@ public class EventListener implements Listener {
     public void onPlayerMove(PlayerMoveEvent evt) {
         if (evt.getPlayer().getLocation().getBlockY() < 0) {
             evt.getPlayer().teleport(evt.getPlayer().getWorld().getSpawnLocation());
-            Parkour.getInstance().getPlayer(evt.getPlayer()).setTouchedPlate(false);
-            evt.getPlayer().setGameMode(GameMode.ADVENTURE);
+            playerRespawn(evt.getPlayer());
         }
     }
 
@@ -53,20 +51,19 @@ public class EventListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent evt) {
-        this.playerRespawn(evt);
+        this.playerRespawn(evt.getPlayer());
     }
 
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent evt) {
-        this.playerRespawn(evt);
+        this.playerRespawn(evt.getPlayer());
     }
 
-    private void playerRespawn(PlayerEvent e) {
+    private void playerRespawn(final Player player) {
         FileConfiguration config = HubTweaks.getInstance().getConfig();
-        final Player player = e.getPlayer();
         player.setGameMode(GameMode.ADVENTURE);
-        player.getInventory().clear();
-        ItemStack item = new ItemStack(Material.COMPASS, 1);
+        Parkour.getInstance().getPlayer(player).setTouchedPlate(false);
+        final ItemStack item = new ItemStack(Material.COMPASS, 1);
         ItemMeta metadat = (ItemMeta) item.getItemMeta();
         List<String> list = new ArrayList<>();
         list.add(ChatColor.GOLD + "Right click to open Warp Menu");
