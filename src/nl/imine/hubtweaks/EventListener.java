@@ -63,7 +63,7 @@ public class EventListener implements Listener {
 
     private void playerRespawn(PlayerEvent e) {
         FileConfiguration config = HubTweaks.getInstance().getConfig();
-        Player player = e.getPlayer();
+        final Player player = e.getPlayer();
         player.setGameMode(GameMode.ADVENTURE);
         player.getInventory().clear();
         ItemStack item = new ItemStack(Material.COMPASS, 1);
@@ -73,22 +73,28 @@ public class EventListener implements Listener {
         metadat.setLore(list);
         metadat.setDisplayName(ChatColor.DARK_PURPLE.toString() + ChatColor.BOLD.toString() + "Teleporter");
         item.setItemMeta(metadat);
-        player.getInventory().clear();
-        player.getInventory().addItem(item);
-        HubTweaks.getInstance().saveConfig();
-        if (config.getConfigurationSection("RuleBook.Pages") != null) {
-            if (!config.getConfigurationSection("RuleBook.Pages").getKeys(false).isEmpty()) {
-                ItemStack RuleBook = new ItemStack(Material.WRITTEN_BOOK, 1);
-                BookMeta RuleBookMeta = (BookMeta) RuleBook.getItemMeta();
-                List<String> PageList = new ArrayList<>();
-                for (int Pages = 1; Pages <= config.getConfigurationSection("RuleBook.Pages").getKeys(false).size(); Pages++) {
-                    PageList.add(config.getString("RuleBook.Pages." + Pages));
+        player.closeInventory();
+        Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                player.getInventory().clear();
+                player.getInventory().addItem(item);
+                HubTweaks.getInstance().saveConfig();
+                if (config.getConfigurationSection("RuleBook.Pages") != null) {
+                    if (!config.getConfigurationSection("RuleBook.Pages").getKeys(false).isEmpty()) {
+                        ItemStack RuleBook = new ItemStack(Material.WRITTEN_BOOK, 1);
+                        BookMeta RuleBookMeta = (BookMeta) RuleBook.getItemMeta();
+                        List<String> PageList = new ArrayList<>();
+                        for (int Pages = 1; Pages <= config.getConfigurationSection("RuleBook.Pages").getKeys(false).size(); Pages++) {
+                            PageList.add(config.getString("RuleBook.Pages." + Pages));
+                        }
+                        RuleBookMeta.setPages(PageList);
+                        RuleBookMeta.setTitle(config.getString("RuleBook.Title"));
+                        RuleBook.setItemMeta(RuleBookMeta);
+                        player.getInventory().addItem(RuleBook);
+                    }
                 }
-                RuleBookMeta.setPages(PageList);
-                RuleBookMeta.setTitle(config.getString("RuleBook.Title"));
-                RuleBook.setItemMeta(RuleBookMeta);
-                player.getInventory().addItem(RuleBook);
             }
-        }
+        }, 10L);
     }
 }
