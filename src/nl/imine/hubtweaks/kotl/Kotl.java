@@ -62,7 +62,7 @@ public class Kotl {
         ItemStack EWStack = new ItemStack(Material.GOLDEN_CARROT, 1);
         ItemMeta EWMeta = EWStack.getItemMeta();
         EWMeta.setDisplayName(ChatColor.RESET + "Entropia Wand");
-        EWMeta.addEnchant(Enchantment.KNOCKBACK, 2, true);
+        EWMeta.addEnchant(Enchantment.KNOCKBACK, 255, true);
         EWStack.setItemMeta(EWMeta);
         ItemStack EntropiaWand = EWStack;
 
