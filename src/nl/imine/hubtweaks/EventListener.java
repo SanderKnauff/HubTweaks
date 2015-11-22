@@ -79,7 +79,6 @@ public class EventListener implements Listener {
             public void run() {
                 player.getInventory().clear();
                 player.getInventory().addItem(item);
-                HubTweaks.getInstance().saveConfig();
                 if (config.getConfigurationSection("RuleBook.Pages") != null) {
                     if (!config.getConfigurationSection("RuleBook.Pages").getKeys(false).isEmpty()) {
                         ItemStack RuleBook = new ItemStack(Material.WRITTEN_BOOK, 1);
