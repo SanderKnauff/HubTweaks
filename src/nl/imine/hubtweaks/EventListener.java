@@ -15,6 +15,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -48,6 +49,13 @@ public class EventListener implements Listener, Runnable {
             if (e instanceof Player) {
                 playerRespawn((Player) e);
             }
+        }
+    }
+
+    @EventHandler
+    public void onAnimalHurt(EntityDamageEvent ede) {
+        if (!(ede.getEntity() instanceof Player)) {
+            ede.setCancelled(true);
         }
     }
 
