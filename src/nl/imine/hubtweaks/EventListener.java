@@ -28,7 +28,7 @@ public class EventListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent evt) {
+    public void onPlayerMove(final PlayerMoveEvent evt) {
         if (evt.getPlayer().getLocation().getBlockY() < 0) {
             evt.getPlayer().teleport(evt.getPlayer().getWorld().getSpawnLocation());
             playerRespawn(evt.getPlayer());
@@ -43,19 +43,19 @@ public class EventListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerItemDrop(PlayerDropItemEvent evt) {
+    public void onPlayerItemDrop(final PlayerDropItemEvent evt) {
         if (!evt.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
             evt.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent evt) {
+    public void onPlayerJoin(final PlayerJoinEvent evt) {
         this.playerRespawn(evt.getPlayer());
     }
 
     @EventHandler
-    public void onPlayerRespawn(PlayerRespawnEvent evt) {
+    public void onPlayerRespawn(final PlayerRespawnEvent evt) {
         this.playerRespawn(evt.getPlayer());
     }
 
