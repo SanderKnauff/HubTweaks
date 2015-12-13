@@ -15,6 +15,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -53,8 +54,16 @@ public class EventListener implements Listener, Runnable {
     }
 
     @EventHandler
-    public void onAnimalHurt(EntityDamageEvent ede) {
+    public void onAnimalHurt(final EntityDamageEvent ede) {
         if (!(ede.getEntity() instanceof Player)) {
+            if (ede instanceof EntityDamageByEntityEvent) {
+                EntityDamageByEntityEvent edebe = (EntityDamageByEntityEvent) ede;
+                if (edebe.getDamager() != null && edebe.getDamager() instanceof Player) {
+                    if (!((Player) edebe.getDamager()).hasPermission("iMine.hub.hurtEntity")) {
+                        return;
+                    }
+                }
+            }
             ede.setDamage(0D);
         }
     }
