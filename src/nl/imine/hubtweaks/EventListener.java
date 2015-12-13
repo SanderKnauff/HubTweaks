@@ -55,7 +55,7 @@ public class EventListener implements Listener, Runnable {
     @EventHandler
     public void onAnimalHurt(EntityDamageEvent ede) {
         if (!(ede.getEntity() instanceof Player)) {
-            ede.setCancelled(true);
+            ede.setDamage(0D);
         }
     }
 
