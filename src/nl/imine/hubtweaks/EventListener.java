@@ -59,7 +59,8 @@ public class EventListener implements Listener, Runnable {
 			if (ede instanceof EntityDamageByEntityEvent) {
 				EntityDamageByEntityEvent edebe = (EntityDamageByEntityEvent) ede;
 				if (edebe.getDamager() instanceof Player) {
-					if (((Player) edebe.getDamager()).hasPermission("iMine.hub.hurtEntity")) {
+					if (((Player) edebe.getDamager()).hasPermission("iMine.hub.hurtEntity")
+							&& ((Player) edebe.getDamager()).getGameMode() != GameMode.ADVENTURE) {
 						return;
 					}
 				}
