@@ -7,6 +7,7 @@ import nl.imine.hubtweaks.parkour.Parkour;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -46,7 +47,9 @@ public class EventListener implements Listener, Runnable {
 	private void teleportSpawn(final Entity e) {
 		if (e.getLocation().getY() <= 0) {
 			e.setFallDistance(0f);
-			e.teleport(e.getWorld().getSpawnLocation());
+			Location spawn = e.getWorld().getSpawnLocation();
+			spawn.setDirection(e.getLocation().getDirection());
+			e.teleport(spawn);
 			if (e instanceof Player) {
 				playerRespawn((Player) e);
 			}
