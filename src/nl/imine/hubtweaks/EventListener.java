@@ -47,7 +47,8 @@ public class EventListener implements Listener, Runnable {
 	private void teleportSpawn(final Entity e) {
 		if (e.getLocation().getY() <= 0) {
 			e.setFallDistance(0f);
-			Location spawn = e.getWorld().getSpawnLocation();
+			Location spawn = e.getWorld().getSpawnLocation().getBlock().getLocation();
+			spawn.add(0.5D, 0.1D, 0.5D);
 			spawn.setDirection(e.getLocation().getDirection());
 			e.teleport(spawn);
 			if (e instanceof Player) {
