@@ -3,6 +3,7 @@ package nl.imine.hubtweaks;
 import nl.imine.hubtweaks.kotl.Kotl;
 import nl.imine.hubtweaks.parkour.Parkour;
 import nl.imine.hubtweaks.pvp.PvP;
+import nl.imine.hubtweaks.ride.EntityRide;
 import nl.imine.hubtweaks.warps.QuickWarp;
 
 import org.bukkit.Bukkit;
@@ -12,7 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class HubTweaks extends JavaPlugin {
 
     private static HubTweaks plugin;
-    
+
     @Override
     public void onEnable() {
         plugin = this;
@@ -21,6 +22,7 @@ public class HubTweaks extends JavaPlugin {
         Kotl.init();
         QuickWarp.init();
         Parkour.init();
+        EntityRide.init();
         Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
         getCommand("createQuickWarp").setExecutor(new CommandHandler(this));
         getCommand("ConvertRuleBook").setExecutor(new CommandHandler(this));
