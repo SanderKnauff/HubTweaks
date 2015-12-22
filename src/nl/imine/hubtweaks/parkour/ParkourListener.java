@@ -14,6 +14,7 @@ import nl.imine.hubtweaks.util.Log;
 import nl.imine.hubtweaks.util.Messenger;
 import org.bukkit.DyeColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -72,6 +73,9 @@ public class ParkourListener implements Listener {
                         boots.setItemMeta(meta);
                         if (player.getLevel().getLevel() != -1) {
                             evt.getPlayer().getInventory().setBoots(boots);
+                        } else {
+                            evt.getPlayer().teleport(new Location(evt.getPlayer().getWorld(), 74.5D, 36D, -504.5D, 140.3F, -27.3F));
+                            evt.getPlayer().sendMessage(ChatColor.GOLD + "You don't have done parkour yet");
                         }
                         player.setTouchedPlate(true);
                         //Als de player het parkour aan het maken is.
