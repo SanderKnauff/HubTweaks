@@ -75,7 +75,7 @@ public class ParkourListener implements Listener {
                             evt.getPlayer().getInventory().setBoots(boots);
                         } else {
                             evt.getPlayer().teleport(new Location(evt.getPlayer().getWorld(), 74.5D, 36D, -504.5D, 140.3F, -27.3F));
-                            evt.getPlayer().sendMessage(ChatColor.GOLD + "You don't have done parkour yet");
+                            evt.getPlayer().sendMessage(ChatColor.GOLD + "You have not reached any parkour checkpoints yet. Start here.");
                         }
                         player.setTouchedPlate(true);
                         //Als de player het parkour aan het maken is.
