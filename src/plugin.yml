@@ -1,6 +1,7 @@
 name: HubTweaks
 main: nl.imine.hubtweaks.HubTweaks
 version: 0.0.1a
+depend: [iMine_Statistics]
 commands:
    createQuickWarp:
       description: This command creates a QuickWarp.

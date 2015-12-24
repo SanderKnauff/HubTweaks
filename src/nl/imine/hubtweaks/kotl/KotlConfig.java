@@ -1,4 +1,4 @@
-package nl.imine.hubtweaks.refrence;
+package nl.imine.hubtweaks.kotl;
 
 public class KotlConfig {
 
