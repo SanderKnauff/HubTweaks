@@ -54,7 +54,7 @@ public class EntityRide implements Listener {
     public void onPlayerInterct(final PlayerInteractEntityEvent piee) {
         final Player pl = piee.getPlayer();
         final Entity e = piee.getRightClicked();
-        if (timeOut.containsKey(e) || e instanceof Villager) {
+        if (timeOut.containsKey(e) || e instanceof Villager || e.getLocation().getY() > 64) {
             return;
         }
         if (e instanceof LivingEntity && pl.hasPermission("iMine.hub.ride")
