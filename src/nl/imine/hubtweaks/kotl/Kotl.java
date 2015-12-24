@@ -81,7 +81,7 @@ public class Kotl {
     }
 
     public void setKing(Player player) {
-        if (king != player) {
+        if (king != player && player != null) {
             Statistic.addToKing(player);
         }
         this.oldKing = king;
