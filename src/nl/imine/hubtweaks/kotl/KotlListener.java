@@ -31,7 +31,8 @@ public class KotlListener implements Listener {
     private final Kotl kotl;
 
     public static void init(Kotl kotl) {
-        HubTweaks.getInstance().getServer().getPluginManager().registerEvents(new KotlListener(kotl), HubTweaks.getInstance());
+        HubTweaks.getInstance().getServer().getPluginManager().registerEvents(new KotlListener(kotl),
+                HubTweaks.getInstance());
     }
 
     private KotlListener(Kotl kotl) {
@@ -41,7 +42,9 @@ public class KotlListener implements Listener {
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        if ((event.getItemDrop().getItemStack() != null) && (event.getItemDrop().getItemStack().getType() != null) && ((event.getItemDrop().getItemStack().getType().equals(Material.GOLD_HELMET)) || (event.getItemDrop().getItemStack().getType().equals(Material.GOLDEN_CARROT)))) {
+        if ((event.getItemDrop().getItemStack() != null) && (event.getItemDrop().getItemStack().getType() != null)
+                && ((event.getItemDrop().getItemStack().getType().equals(Material.GOLD_HELMET))
+                        || (event.getItemDrop().getItemStack().getType().equals(Material.GOLDEN_CARROT)))) {
             event.setCancelled(true);
         }
     }
@@ -49,7 +52,8 @@ public class KotlListener implements Listener {
     @EventHandler
     public void onPlayerPickup(PlayerPickupItemEvent event) {
         ItemStack is = event.getItem().getItemStack();
-        if ((is != null) && (is.getType() != null) && ((is.getType().equals(Material.GOLD_HELMET)) || (is.getType().equals(Material.GOLDEN_CARROT)))) {
+        if ((is != null) && (is.getType() != null)
+                && ((is.getType().equals(Material.GOLD_HELMET)) || (is.getType().equals(Material.GOLDEN_CARROT)))) {
             event.setCancelled(true);
         }
     }
@@ -57,7 +61,8 @@ public class KotlListener implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         for (ItemStack is : new ArrayList<>(event.getDrops())) {
-            if ((is != null) && (is.getType() != null) && ((is.getType().equals(Material.GOLD_HELMET)) || (is.getType().equals(Material.GOLDEN_CARROT)))) {
+            if ((is != null) && (is.getType() != null)
+                    && ((is.getType().equals(Material.GOLD_HELMET)) || (is.getType().equals(Material.GOLDEN_CARROT)))) {
                 event.getDrops().remove(is);
             }
         }
@@ -71,7 +76,8 @@ public class KotlListener implements Listener {
                 kotl.setKing(player);
                 kotl.addEntropiaWand(player);
                 if (!kotl.getKing().equals(kotl.getOldKing())) {
-                    Messenger.sendActionMessageToAll(ChatColor.GOLD.toString() + ChatColor.BOLD.toString() + player.getDisplayName() + " is the new king!");
+                    Messenger.sendActionMessageToAll(ChatColor.GOLD.toString() + ChatColor.BOLD.toString()
+                            + player.getDisplayName() + " is the new king!");
                 }
             }
         }
@@ -79,11 +85,13 @@ public class KotlListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent evt) {
-        if(evt.getHotbarButton() == 1 && (evt.getWhoClicked() == kotl.getKing() || evt.getWhoClicked() == kotl.getOldKing())) {
-        	evt.setCancelled(true);
+        if (evt.getHotbarButton() == 1
+                && (evt.getWhoClicked() == kotl.getKing() || evt.getWhoClicked() == kotl.getOldKing())) {
+            evt.setCancelled(true);
         }
         if (evt.getCurrentItem() != null) {
-            if (evt.getCurrentItem().getType().equals(Material.GOLDEN_CARROT) || evt.getCurrentItem().getType().equals(Material.GOLD_HELMET)) {
+            if (evt.getCurrentItem().getType().equals(Material.GOLDEN_CARROT)
+                    || evt.getCurrentItem().getType().equals(Material.GOLD_HELMET)) {
                 evt.setCancelled(true);
             }
         }
@@ -114,12 +122,17 @@ public class KotlListener implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent evt) {
         if (((evt.getDamager() instanceof Player)) && ((evt.getEntity() instanceof Player))) {
             Player damager = (Player) evt.getDamager();
-            if ((damager.getItemInHand().getType() != null) && (damager.getItemInHand().getType().equals(Material.GOLDEN_CARROT))) {
+            damager.eject();
+            if ((damager.getItemInHand().getType() != null)
+                    && (damager.getItemInHand().getType().equals(Material.GOLDEN_CARROT))) {
                 if (Kotl.getInstance().getKing() != null) {
                     if (Kotl.getInstance().getKing().equals(damager)) {
-                        final Firework firework = (Firework) evt.getEntity().getWorld().spawnEntity(evt.getEntity().getLocation(), EntityType.FIREWORK);
+                        final Firework firework = (Firework) evt.getEntity().getWorld()
+                                .spawnEntity(evt.getEntity().getLocation(), EntityType.FIREWORK);
                         FireworkMeta fireworkMeta = firework.getFireworkMeta();
-                        fireworkMeta.addEffect(FireworkEffect.builder().withColor(Color.RED).withColor(Color.BLUE).withColor(Color.GREEN).withColor(Color.YELLOW).with(FireworkEffect.Type.BALL_LARGE).build());
+                        fireworkMeta.addEffect(FireworkEffect.builder().withColor(Color.RED).withColor(Color.BLUE)
+                                .withColor(Color.GREEN).withColor(Color.YELLOW).with(FireworkEffect.Type.BALL_LARGE)
+                                .build());
                         firework.setFireworkMeta(fireworkMeta);
                         new BukkitRunnable() {
                             @Override
