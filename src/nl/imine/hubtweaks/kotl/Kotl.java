@@ -3,8 +3,7 @@ package nl.imine.hubtweaks.kotl;
 import java.io.File;
 import java.io.IOException;
 import nl.imine.hubtweaks.HubTweaks;
-
-import nl.imine.hubtweaks.refrence.KotlConfig;
+import nl.imine.hubtweaks.Statistic;
 import nl.imine.hubtweaks.util.Log;
 
 import org.bukkit.ChatColor;
@@ -82,6 +81,9 @@ public class Kotl {
     }
 
     public void setKing(Player player) {
+        if (king != player) {
+            Statistic.addToKing(player);
+        }
         this.oldKing = king;
         this.king = player;
     }

@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
 import nl.imine.hubtweaks.HubTweaks;
+import nl.imine.hubtweaks.Statistic;
 import nl.imine.hubtweaks.parkour.Parkour;
 
 public class EntityRide implements Listener {
@@ -75,6 +76,10 @@ public class EntityRide implements Listener {
                         Parkour.getInstance().getPlayer(pl).setTouchedPlate(true);
                     }
                 }, 2L);
+            }
+            Statistic.addToRide(pl);
+            if (e instanceof Player) {
+                Statistic.addToRidden(((Player) e));
             }
         }
     }

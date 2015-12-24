@@ -27,6 +27,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import nl.imine.hubtweaks.HubTweaks;
+import nl.imine.hubtweaks.Statistic;
 
 public class PvPListener implements Listener {
 
@@ -87,6 +88,7 @@ public class PvPListener implements Listener {
                     } else {
                         a.getInventory().addItem(new ItemStack(Material.ARROW, 1));
                     }
+                    Statistic.addToKill(a);
                     if (a.hasPermission("coins.vip")) {
                         p.sendMessage(ChatColor.WHITE + "You have been killed by: '" + ChatColor.GOLD + a.getName() + ChatColor.WHITE + "'");
                     } else {

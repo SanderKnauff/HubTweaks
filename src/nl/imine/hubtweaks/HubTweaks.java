@@ -23,6 +23,7 @@ public class HubTweaks extends JavaPlugin {
         QuickWarp.init();
         Parkour.init();
         EntityRide.init();
+        Statistic.init();
         Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
         getCommand("createQuickWarp").setExecutor(new CommandHandler(this));
         getCommand("ConvertRuleBook").setExecutor(new CommandHandler(this));
