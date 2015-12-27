@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import net.md_5.bungee.api.ChatColor;
 import nl.imine.hubtweaks.HubTweaks;
+import nl.imine.hubtweaks.Statistic;
 import nl.imine.hubtweaks.util.Log;
 import nl.imine.hubtweaks.util.Messenger;
 import org.bukkit.DyeColor;
@@ -61,6 +62,7 @@ public class ParkourListener implements Listener {
                                 Messenger.sendActionMessageToAll(ChatColor.RED.toString() + ChatColor.BOLD.toString() + evt.getPlayer().getName()
                                         + ChatColor.RESET.toString() + ChatColor.GOLD.toString() + " has reached the end of the parkour!");
                                 player.setReachedTop(true);
+                                Statistic.addToParkour(evt.getPlayer());
                             }
                             if (!player.hasTouchedPlate()) {
                                 player.setLevel(parkour.getLevel(DyeColor.MAGENTA));

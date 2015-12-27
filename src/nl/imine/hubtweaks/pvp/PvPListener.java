@@ -1,6 +1,5 @@
 package nl.imine.hubtweaks.pvp;
 
-
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -25,6 +24,7 @@ import com.sk89q.worldedit.Vector;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import nl.imine.hubtweaks.HubTweaks;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import nl.imine.hubtweaks.Statistic;
 
 public class PvPListener implements Listener {
 
@@ -71,10 +71,10 @@ public class PvPListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent E) {
-        if (E.getEntity().getKiller() instanceof Player && E.getEntity() instanceof Player) {
-            Player player = (Player) E.getEntity();
-            Player killer = (Player) E.getEntity().getKiller();
+    public void onPlayerDeath(PlayerDeathEvent evt) {
+        if (evt.getEntity().getKiller() instanceof Player && evt.getEntity() instanceof Player) {
+            Player player = (Player) evt.getEntity();
+            Player killer = (Player) evt.getEntity().getKiller();
             if (PvP.getPlayerList().contains(player) && PvP.getPlayerList().contains(killer) && killer.getItemInHand().getType() != null) {
                 PvP.removePlayerFromArena(player);
                 if (killer.getInventory().all(Material.ARROW).isEmpty()) {
@@ -83,21 +83,21 @@ public class PvPListener implements Listener {
                 player.sendMessage(ChatColor.WHITE + "You have been killed by: '" + ChatColor.GRAY + killer.getName() + ChatColor.WHITE + "'");
                 killer.sendMessage(ChatColor.WHITE + "You killed: '" + ChatColor.GRAY + player.getName() + ChatColor.WHITE + "'");
             }
-
+            Statistic.addToKill(killer);
         }
-        E.getDrops().clear();
-        E.setDroppedExp(0);
-        E.setDeathMessage(null);
-        if (PvP.getPlayerList().contains(E.getEntity())) {
-            PvP.getPlayerList().remove(E.getEntity());
+        evt.getDrops().clear();
+        evt.setDroppedExp(0);
+        evt.setDeathMessage(null);
+        if (PvP.getPlayerList().contains(evt.getEntity())) {
+            PvP.getPlayerList().remove(evt.getEntity());
         }
     }
-    
+
     @EventHandler
-    public void onProjectileHit(ProjectileHitEvent evt){
-        if(evt.getEntity().getShooter() instanceof Player){
+    public void onProjectileHit(ProjectileHitEvent evt) {
+        if (evt.getEntity().getShooter() instanceof Player) {
             Player player = (Player) evt.getEntity().getShooter();
-            if(PvP.getPlayerList().contains(player)){
+            if (PvP.getPlayerList().contains(player)) {
                 evt.getEntity().remove();
             }
         }
