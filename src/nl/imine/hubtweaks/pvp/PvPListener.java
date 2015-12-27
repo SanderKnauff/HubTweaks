@@ -1,7 +1,5 @@
 package nl.imine.hubtweaks.pvp;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -22,84 +20,51 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionEffectType;
 
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import nl.imine.hubtweaks.HubTweaks;
+import org.bukkit.event.entity.ProjectileHitEvent;
 
 public class PvPListener implements Listener {
-
 
     public static void init() {
         HubTweaks.getInstance().getServer().getPluginManager().registerEvents(new PvPListener(), HubTweaks.getInstance());
     }
 
     @EventHandler
-    public void onPlayerJoinArena(PvPJoinEvent E) {
-        final Player p = E.getPlayer();
+    public void onPlayerJoinArena(PvPJoinEvent evt) {
+        Player player = evt.getPlayer();
         if (!PvP.getSpawnList().isEmpty()) {
-            PvP.addPlayerToArena(p);
-            PvP.addGear(p);
-            p.teleport(PvP.getRandomSpawn());
-            p.addPotionEffect(PotionEffectType.BLINDNESS.createEffect((int) 100, 0));
-            /*
-             * for (Player enemy : PvP.getPlayerList()) { enemy.hidePlayer(p);
-             * p.hidePlayer(enemy);
-             * plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin,
-             * new Runnable() { public void run() { for (Player enemy :
-             * PvP.getPlayerList()) { enemy.showPlayer(p); p.showPlayer(p); } }
-             * }, 100L); }
-             */
+            PvP.addPlayerToArena(player);
         } else {
-            p.sendMessage(ChatColor.DARK_RED + "ERROR: Warp aborted due to no spawns avalible");
+            player.sendMessage(ChatColor.DARK_RED + "ERROR: Warp aborted due to no spawns avalible");
         }
     }
 
     @EventHandler
-    public void onPvPDamage(EntityDamageByEntityEvent E) {
-        if (E.getDamager() instanceof Player) {
-            if (PvP.getPlayerList().contains((Player) E.getDamager())) {
-                if (E.getDamage() > 0) {
-                    Location loc = new Location(E.getEntity().getLocation().getWorld(), E.getEntity().getLocation().getX() + 0.5, E.getEntity().getLocation().getY() + 0.5, E.getEntity().getLocation().getZ() + 0.5);
-                    HubTweaks.getInstance().getServer().getWorld(E.getDamager().getLocation().getWorld().getName()).playEffect(loc, Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
-                }
-            }
-        }
-        if (E.getEntity() instanceof Player && E.getDamager().getType().equals(EntityType.ARROW)) {
-            Player p = (Player) E.getEntity();
-            Arrow arrow = (Arrow) E.getDamager();
-            if (arrow.getShooter() instanceof Player) {
-                Player a = (Player) arrow.getShooter();
-                if (PvP.getPlayerList().contains(p) && PvP.getPlayerList().contains(a) && a != p) {
-                    if (a.getInventory().all(Material.ARROW).size() != 0) {
-                        int ArrowCount = 0;
-                        for (int i = 0; i < a.getInventory().all(Material.ARROW).size(); i++) {
-                            if (a.getInventory().all(Material.ARROW).get(i) != null) {
-                                if (a.getInventory().all(Material.ARROW).get(i).getType().equals(Material.ARROW)) {
-                                    ArrowCount += a.getInventory().all(Material.ARROW).get(i).getAmount();
-                                    if (ArrowCount < 8) {
-                                        a.getInventory().addItem(new ItemStack(Material.ARROW, 1));
-                                    }
-                                }
-                            }
+    public void onPvPDamage(EntityDamageByEntityEvent evt) {
+        if (evt.getEntity() instanceof Player) {
+            Player player = (Player) evt.getEntity();
+            if (PvP.getPlayerList().contains(player)) {
+                if (evt.getDamager() instanceof Player) {
+                    if (PvP.getPlayerList().contains((Player) evt.getDamager())) {
+                        if (evt.getDamage() > 0) {
+                            Location loc = new Location(evt.getEntity().getLocation().getWorld(), evt.getEntity().getLocation().getX() + 0.5, evt.getEntity().getLocation().getY() + 0.5, evt.getEntity().getLocation().getZ() + 0.5);
+                            HubTweaks.getInstance().getServer().getWorld(evt.getDamager().getLocation().getWorld().getName()).playEffect(loc, Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
                         }
-                    } else {
-                        a.getInventory().addItem(new ItemStack(Material.ARROW, 1));
                     }
-                    if (a.hasPermission("coins.vip")) {
-                        p.sendMessage(ChatColor.WHITE + "You have been killed by: '" + ChatColor.GOLD + a.getName() + ChatColor.WHITE + "'");
-                    } else {
-                        p.sendMessage(ChatColor.WHITE + "You have been killed by: '" + ChatColor.GRAY + a.getName() + ChatColor.WHITE + "'");
+                }
+                if (evt.getEntity() instanceof Player && evt.getDamager().getType().equals(EntityType.ARROW)) {
+                    Arrow arrow = (Arrow) evt.getDamager();
+                    if (arrow.getShooter() instanceof Player) {
+                        Player attacker = (Player) arrow.getShooter();
+                        if (PvP.getPlayerList().contains(player) && PvP.getPlayerList().contains(attacker) && attacker != player) {
+                            player.damage(player.getHealth(), attacker);
+                            arrow.remove();
+                        }
                     }
-                    if (p.hasPermission("coins.vip")) {
-                        a.sendMessage(ChatColor.WHITE + "You killed: '" + ChatColor.GOLD + p.getName() + ChatColor.WHITE + "'");
-                    } else {
-                        a.sendMessage(ChatColor.WHITE + "You killed: '" + ChatColor.GRAY + p.getName() + ChatColor.WHITE + "'");
-                    }
-                    p.setHealth(0.0D);
-                    arrow.remove();
-                    E.setCancelled(true);
+                    evt.setCancelled(true);
                 }
             }
         }
@@ -108,43 +73,19 @@ public class PvPListener implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent E) {
         if (E.getEntity().getKiller() instanceof Player && E.getEntity() instanceof Player) {
-            Player p = (Player) E.getEntity();
-            Player a = (Player) E.getEntity().getKiller();
-            if (PvP.getPlayerList().contains(p) && PvP.getPlayerList().contains(a) && a.getItemInHand().getType() != null) {
-                PvP.removePlayerFromArena(p);
-                if (a.getInventory().all(Material.ARROW).size() != 0) {
-                    int ArrowCount = 0;
-                    for (int i = 0; i < a.getInventory().all(Material.ARROW).size(); i++) {
-                        if (a.getInventory().all(Material.ARROW).get(i) != null) {
-                            if (a.getInventory().all(Material.ARROW).get(i).getType().equals(Material.ARROW)) {
-                                ArrowCount += a.getInventory().all(Material.ARROW).get(i).getAmount();
-                                if (ArrowCount < 8) {
-                                    a.getInventory().addItem(new ItemStack(Material.ARROW, 1));
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    a.getInventory().addItem(new ItemStack(Material.ARROW, 1));
+            Player player = (Player) E.getEntity();
+            Player killer = (Player) E.getEntity().getKiller();
+            if (PvP.getPlayerList().contains(player) && PvP.getPlayerList().contains(killer) && killer.getItemInHand().getType() != null) {
+                PvP.removePlayerFromArena(player);
+                if (killer.getInventory().all(Material.ARROW).isEmpty()) {
+                    killer.getInventory().addItem(new ItemStack(Material.ARROW, 1));
                 }
-                if (a.hasPermission("coins.vip")) {
-                    p.sendMessage(ChatColor.WHITE + "You have been killed by: '" + ChatColor.GOLD + a.getName() + ChatColor.WHITE + "'");
-                } else {
-                    p.sendMessage(ChatColor.WHITE + "You have been killed by: '" + ChatColor.GRAY + a.getName() + ChatColor.WHITE + "'");
-                }
-                if (p.hasPermission("coins.vip")) {
-                    a.sendMessage(ChatColor.WHITE + "You killed: '" + ChatColor.GOLD + p.getName() + ChatColor.WHITE + "'");
-                } else {
-                    a.sendMessage(ChatColor.WHITE + "You killed: '" + ChatColor.GRAY + p.getName() + ChatColor.WHITE + "'");
-                }
+                player.sendMessage(ChatColor.WHITE + "You have been killed by: '" + ChatColor.GRAY + killer.getName() + ChatColor.WHITE + "'");
+                killer.sendMessage(ChatColor.WHITE + "You killed: '" + ChatColor.GRAY + player.getName() + ChatColor.WHITE + "'");
             }
 
         }
-        List<ItemStack> removeDrops = new ArrayList<ItemStack>();
-        for (ItemStack drop : E.getDrops()) {
-            removeDrops.add(drop);
-        }
-        E.getDrops().removeAll(removeDrops);
+        E.getDrops().clear();
         E.setDroppedExp(0);
         E.setDeathMessage(null);
         if (PvP.getPlayerList().contains(E.getEntity())) {
@@ -152,7 +93,15 @@ public class PvPListener implements Listener {
         }
     }
     
-    
+    @EventHandler
+    public void onProjectileHit(ProjectileHitEvent evt){
+        if(evt.getEntity().getShooter() instanceof Player){
+            Player player = (Player) evt.getEntity().getShooter();
+            if(PvP.getPlayerList().contains(player)){
+                evt.getEntity().remove();
+            }
+        }
+    }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent E) {
@@ -201,18 +150,9 @@ public class PvPListener implements Listener {
 
     private WorldGuardPlugin getWorldGuard() {
         Plugin wg = HubTweaks.getInstance().getServer().getPluginManager().getPlugin("WorldGuard");
-
-        // WorldGuard may not be loaded
         if (wg == null || !(wg instanceof WorldGuardPlugin)) {
-            return null; // Maybe you want throw an exception instead
+            return null;
         }
-
         return (WorldGuardPlugin) wg;
     }
-
 }
-
-/*
- * 
- * NAME COLOR
- */

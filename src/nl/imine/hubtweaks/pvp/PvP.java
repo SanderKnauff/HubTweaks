@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import nl.imine.hubtweaks.HubTweaks;
+import nl.imine.hubtweaks.util.Log;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,17 +17,17 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffectType;
 
 public class PvP {
 
-    private static List<Location> arenaSpawns = new ArrayList<Location>();
+    private static final List<Location> arenaSpawns = new ArrayList<>();
     private static File pvpConfigFile = null;
     private static FileConfiguration pvpConfig = null;
 
     private static List<Player> pvpList;
 
     public static void init() {
-        System.out.println("HTPVP: Initialized PVP class");
         PvPListener.init();
         pvpList = new ArrayList<>();
         loadArena();
@@ -43,6 +45,9 @@ public class PvP {
 
     public static void addPlayerToArena(Player player) {
         pvpList.add(player);
+        PvP.addGear(player);
+        player.teleport(PvP.getRandomSpawn());
+        player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect((int) 100, 0));
     }
 
     public static void removePlayerFromArena(Player player) {
@@ -53,15 +58,13 @@ public class PvP {
     }
 
     public static void loadArena() {
-        System.out.println("HTPVP: Loading Arena");
+        Log.fine("HTPVP: Loading Arena");
         pvpConfigFile = new File(HubTweaks.getInstance().getDataFolder().getPath() + File.separatorChar + "PvP.yml");
         if (!pvpConfigFile.exists()) {
-            System.out.println("PVPCONFIG does not Exist, Creating it");
             try {
                 pvpConfigFile.createNewFile();
             } catch (IOException e) {
-                System.out.println("ERROR: PVP FILE COULD NOT BE CREATED");
-                e.printStackTrace();
+                Log.warning("ERROR: PVP FILE COULD NOT BE CREATED");
                 return;
             }
         } else {
@@ -69,16 +72,13 @@ public class PvP {
         }
         pvpConfig = YamlConfiguration.loadConfiguration(pvpConfigFile);
         if (pvpConfig.getConfigurationSection("Spawns") != null) {
-            int spawncount = 0;
             for (String key : pvpConfig.getConfigurationSection("Spawns").getKeys(false)) {
                 World world = HubTweaks.getInstance().getServer().getWorld(pvpConfig.getString("Spawns." + key + ".world"));
                 double x = pvpConfig.getDouble("Spawns." + key + ".x");
                 double y = pvpConfig.getDouble("Spawns." + key + ".y");
                 double z = pvpConfig.getDouble("Spawns." + key + ".z");
                 arenaSpawns.add(new Location(world, x, y, z));
-                spawncount++;
             }
-            System.out.println("Spawncount is: " + spawncount);
         }
     }
 
@@ -105,7 +105,7 @@ public class PvP {
         try {
             pvpConfig.save(pvpConfigFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.warning("IOException loading hubtweaks PvP spawns: " + e.getMessage());
         }
     }
 
