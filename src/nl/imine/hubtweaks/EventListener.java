@@ -17,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -55,6 +56,13 @@ public class EventListener implements Listener, Runnable {
             if (e instanceof Player) {
                 playerRespawn((Player) e);
             }
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent evt) {
+        if (evt.getWhoClicked().getGameMode() == GameMode.ADVENTURE) {
+            evt.setCancelled(true);
         }
     }
 

@@ -1,8 +1,7 @@
 package nl.imine.hubtweaks.kotl;
 
 import java.util.ArrayList;
-import nl.imine.hubtweaks.HubTweaks;
-import nl.imine.hubtweaks.util.Messenger;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Effect;
@@ -16,7 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -25,6 +23,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import nl.imine.hubtweaks.HubTweaks;
+import nl.imine.hubtweaks.util.Messenger;
 
 public class KotlListener implements Listener {
 
@@ -79,19 +80,6 @@ public class KotlListener implements Listener {
                     Messenger.sendActionMessageToAll(ChatColor.GOLD.toString() + ChatColor.BOLD.toString()
                             + player.getDisplayName() + " is the new king!");
                 }
-            }
-        }
-    }
-
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent evt) {
-        if (evt.getHotbarButton() != -1){
-            evt.setCancelled(true);
-        }
-        if (evt.getCurrentItem() != null) {
-            if (evt.getCurrentItem().getType().equals(Material.GOLDEN_CARROT)
-                    || evt.getCurrentItem().getType().equals(Material.GOLD_HELMET)) {
-                evt.setCancelled(true);
             }
         }
     }
