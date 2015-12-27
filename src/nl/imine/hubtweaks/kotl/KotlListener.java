@@ -85,8 +85,7 @@ public class KotlListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent evt) {
-        if (evt.getHotbarButton() == 1
-                && (evt.getWhoClicked() == kotl.getKing() || evt.getWhoClicked() == kotl.getOldKing())) {
+        if (evt.getHotbarButton() != -1){
             evt.setCancelled(true);
         }
         if (evt.getCurrentItem() != null) {
