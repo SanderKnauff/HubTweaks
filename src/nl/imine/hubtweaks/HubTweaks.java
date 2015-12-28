@@ -1,15 +1,16 @@
 package nl.imine.hubtweaks;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import nl.imine.hubtweaks.entity.Spawner;
 import nl.imine.hubtweaks.kotl.Kotl;
 import nl.imine.hubtweaks.parkour.Parkour;
 import nl.imine.hubtweaks.pvp.PvP;
 import nl.imine.hubtweaks.ride.EntityRide;
-import nl.imine.hubtweaks.warps.QuickWarp;
-
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
+import nl.imine.hubtweaks.warps.CompassWarp;
 
 public class HubTweaks extends JavaPlugin {
 
@@ -21,15 +22,12 @@ public class HubTweaks extends JavaPlugin {
         EventListener.init();
         PvP.init();
         Kotl.init();
-        QuickWarp.init();
+        CompassWarp.init();
         Parkour.init();
         EntityRide.init();
         Spawner.init();
         Statistic.init();
         Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
-        getCommand("createQuickWarp").setExecutor(new CommandHandler(this));
-        getCommand("ConvertRuleBook").setExecutor(new CommandHandler(this));
-        getCommand("ReloadTracks").setExecutor(new CommandHandler(this));
         getCommand("HubTweaks").setExecutor(new CommandHandler(this));
         getCommand("kotl").setExecutor(new CommandHandler(this));
         PlayerDataManager.RemoveAllPlayerData();
@@ -46,5 +44,9 @@ public class HubTweaks extends JavaPlugin {
 
     public static Plugin getInstance() {
         return plugin;
+    }
+
+    public static World getMainWorld() {
+        return Bukkit.getWorlds().get(0);
     }
 }
