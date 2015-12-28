@@ -1,5 +1,6 @@
 package nl.imine.hubtweaks;
 
+import nl.imine.hubtweaks.entity.Spawner;
 import nl.imine.hubtweaks.kotl.Kotl;
 import nl.imine.hubtweaks.parkour.Parkour;
 import nl.imine.hubtweaks.pvp.PvP;
@@ -23,6 +24,7 @@ public class HubTweaks extends JavaPlugin {
         QuickWarp.init();
         Parkour.init();
         EntityRide.init();
+        Spawner.init();
         Statistic.init();
         Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
         getCommand("createQuickWarp").setExecutor(new CommandHandler(this));
