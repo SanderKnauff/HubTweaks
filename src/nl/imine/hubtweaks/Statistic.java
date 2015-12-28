@@ -43,6 +43,6 @@ public class Statistic implements Listener {
     @EventHandler
     public void onLoggoff(PlayerQuitEvent pqe) {
         PlayerStatistics.getPlayer(pqe.getPlayer()).getHub()
-                .setTimePlayed(pqe.getPlayer().getStatistic(org.bukkit.Statistic.PLAY_ONE_TICK));
+                .setTimePlayed(pqe.getPlayer().getStatistic(org.bukkit.Statistic.PLAY_ONE_TICK) / 20 / 60);
     }
 }
