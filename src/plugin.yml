@@ -1,20 +1,11 @@
 name: HubTweaks
 main: nl.imine.hubtweaks.HubTweaks
-version: 0.0.1a
-depend: [iMine_Statistics]
+version: 0.0.1b
+depend: [iMine_Statistics, iMineAPI]
 commands:
-   createQuickWarp:
-      description: This command creates a QuickWarp.
-      usage: /createQuickWarp <warpname> <SlotNumber>
-   ConvertRuleBook:
-      description: Converts the in-hand book to a rulebook.
-      usage: /ConvertRuleBook
-   ReloadTracks:
-      description: Reloads the Track list on the fly.
-      usage: /ReloadTracks
-   HubTweaks:
-      description: Default command for anything in this plugin.
-      usage: /HubTweaks
-   kotl:
-      description: Default command for kingdom of the ladder.
-      usage: /kotl
+  HubTweaks:
+    description: Default command for anything in this plugin.
+    usage: /HubTweaks
+  kotl:
+    description: Default command for kingdom of the ladder.
+    usage: /kotl

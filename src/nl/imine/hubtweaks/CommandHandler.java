@@ -1,16 +1,13 @@
 package nl.imine.hubtweaks;
 
-import nl.imine.hubtweaks.kotl.Kotl;
-import nl.imine.hubtweaks.pvp.PvP;
-import nl.imine.hubtweaks.warps.QuickWarp;
-
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.BookMeta;
+
+import nl.imine.hubtweaks.kotl.Kotl;
+import nl.imine.hubtweaks.pvp.PvP;
 
 public class CommandHandler implements CommandExecutor {
 
@@ -22,56 +19,6 @@ public class CommandHandler implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (cmd.getName().equalsIgnoreCase("createQuickWarp")) {
-            if (!(sender instanceof Player)) {
-                System.out.println("This command can only be used by a Player");
-                return true;
-            } else {
-                Player player = (Player) sender;
-                if (player.hasPermission("hubtweaks.admin.quickwarp")) {
-                    if (args.length > 1) {
-                        if (isInteger(args[1]) == true) {
-                            if (player.getItemInHand().getType() != Material.AIR) {
-                                QuickWarp.getInstance().addQuickWarp(player, args[0], Integer.parseInt(args[1]));
-                            } else {
-                                player.sendMessage("You need to have an In-Hand item to do this");
-                            }
-                        } else {
-                            player.sendMessage("Error: \"" + args[1] + "\" is not a valid number");
-                        }
-                    } else {
-                        return false;
-                    }
-                } else {
-                    player.sendMessage("You don't have permission to do that");
-                }
-            }
-            return true;
-        }
-        if (cmd.getName().equalsIgnoreCase("ConvertRuleBook")) {
-            if (!(sender instanceof Player)) {
-                System.out.println("This command can only be used by a Player");
-                return true;
-            } else {
-                Player player = (Player) sender;
-                if (player.hasPermission("hubtweaks.admin.rules")) {
-                    if (player.getItemInHand().getType().equals(Material.WRITTEN_BOOK)) {
-                        BookMeta RuleBookMeta = (BookMeta) player.getItemInHand().getItemMeta();
-                        int PageCount = 0;
-                        for (int Pages = 1; Pages <= RuleBookMeta.getPageCount(); Pages++) {
-                            plugin.getConfig().set("RuleBook.Pages." + Pages, RuleBookMeta.getPage(Pages));
-                            PageCount++;
-                        }
-                        plugin.getConfig().set("RuleBook.Title", RuleBookMeta.getTitle());
-                        player.sendMessage("Added " + PageCount + " Pages to the rulebook with the title:" + RuleBookMeta.getTitle());
-                        plugin.saveConfig();
-                    } else {
-                        player.sendMessage("You need to have a Signed Book in your hand for this command to work");
-                    }
-                    return true;
-                }
-            }
-        }
         if (cmd.getName().equalsIgnoreCase("HubTweaks")) {
             if (args.length >= 1) {
                 if (args[0].equalsIgnoreCase("addPvPSpawn")) {
@@ -126,18 +73,6 @@ public class CommandHandler implements CommandExecutor {
                             return true;
                         } catch (NumberFormatException e) {
                             player.sendMessage(ChatColor.DARK_RED + "[Kotl]" + ChatColor.WHITE + " Bad usage for help:'/Kotl'" + ChatColor.ITALIC + " Example: /Kotl setPlayersInRadius 4");
-                            return true;
-                        }
-                    }
-                    if (args[0].equalsIgnoreCase("setCoinsInSeconds")) {
-                        try {
-                            int integer = Integer.parseInt(args[1]);
-                            Kotl.getInstance().getConfig().set("cis", integer);
-                            player.sendMessage(ChatColor.DARK_RED + "[Kotl]" + ChatColor.WHITE + " CoinsInSeconds set");
-                            Kotl.getInstance().saveConfig();
-                            return true;
-                        } catch (NumberFormatException e) {
-                            player.sendMessage(ChatColor.DARK_RED + "[Kotl]" + ChatColor.WHITE + " Bad usage for help:'/Kotl'" + ChatColor.ITALIC + " Example: /Kotl setcoinsinseconds 4");
                             return true;
                         }
                     }
