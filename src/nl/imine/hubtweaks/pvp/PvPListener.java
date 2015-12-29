@@ -96,10 +96,7 @@ public class PvPListener implements Listener {
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent evt) {
         if (evt.getEntity().getShooter() instanceof Player) {
-            Player player = (Player) evt.getEntity().getShooter();
-            if (PvP.getPlayerList().contains(player)) {
-                evt.getEntity().remove();
-            }
+            evt.getEntity().remove();
         }
     }
 
