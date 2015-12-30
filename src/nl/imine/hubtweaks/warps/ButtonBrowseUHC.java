@@ -48,7 +48,7 @@ public class ButtonBrowseUHC extends Button {
                 for (int i : UHCRequester.getPortalIds()) {
                     PortalRequest request = UHCRequester.request(i);
                     if (request.hasError()) {
-                        String name = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Game " + (i + 1) + "is unavalible.";
+                        String name = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Game " + (i + 1) + " is unavalible.";
                         ItemStack buttonItem = ItemUtil.getBuilder(Material.APPLE).setName(name).build();
                         uhcContainer.addButton(new ButtonUHC(uhcContainer, buttonItem, i + 2, true));
                     } else {
