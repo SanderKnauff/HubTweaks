@@ -21,7 +21,7 @@ import nl.imine.api.util.ItemUtil;
 
 public class NewYear implements Listener, Runnable {
 
-    private static final long DELAY = 20 * 60;
+    private static final long DELAY = 20 * 30;
     private static final Random RAND = new Random();
 
     public NewYear() {
@@ -64,6 +64,16 @@ public class NewYear implements Listener, Runnable {
     @Override
     public void run() {
         for (Player pl : Bukkit.getOnlinePlayers()) {
+            if (!pl.hasPermission("iMine.tab.VIP+")) {
+                if (RAND.nextBoolean()) {
+                    return;
+                }
+            }
+            if (!pl.hasPermission("iMine.tab.VIP")) {
+                if (RAND.nextBoolean()) {
+                    return;
+                }
+            }
             Inventory inv = pl.getInventory();
             if (!inv.contains(Material.FIREWORK)) {
                 inv.addItem(generateFirework());
