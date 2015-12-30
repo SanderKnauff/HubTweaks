@@ -46,6 +46,9 @@ public class PvP {
     public static void addPlayerToArena(Player player) {
         pvpList.add(player);
         PvP.addGear(player);
+        player.setFireTicks(0);
+        player.setHealth(player.getMaxHealth());
+        player.getActivePotionEffects().clear();
         player.teleport(PvP.getRandomSpawn());
         player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect((int) 100, 0));
     }
