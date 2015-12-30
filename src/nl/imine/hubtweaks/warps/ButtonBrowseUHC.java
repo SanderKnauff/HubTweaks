@@ -33,6 +33,7 @@ public class ButtonBrowseUHC extends Button {
         for (int i : UHCRequester.getPortalIds()) {
             if (!UHCRequester.request(i).hasError()) {
                 error = false;
+                break;
             } else {
                 this.itemStack = ItemUtil.getBuilder(Material.APPLE).setName(ChatColor.RED.toString() + ChatColor.BOLD.toString() + "UHC IS OFFLINE").build();
             }
