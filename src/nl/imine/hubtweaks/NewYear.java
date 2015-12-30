@@ -35,7 +35,7 @@ public class NewYear implements Listener, Runnable {
         FireworkMeta fem = (FireworkMeta) is.getItemMeta();
         fem.setLore(MKTUtilsTemp.toList(
                 new String[] { ChatColor.GRAY + "Happy new year", MKTUtilsTemp.rainbow("From the iMine admin team!"),
-                        "" + ChatColor.GRAY + ChatColor.STRIKETHROUGH + "Behalve van tijmen" }));
+                        "" + ChatColor.GRAY + ChatColor.STRIKETHROUGH + "Except from tijmen" }));
         for (int i = 0; i < RAND.nextInt(3) + 1; i++) {
             fem.addEffect(randomEffect());
         }
