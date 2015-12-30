@@ -9,18 +9,22 @@ import org.bukkit.inventory.ItemStack;
 
 public class ButtonUHC extends Button {
 
-    private boolean hasError;
+    private final boolean hasError;
+    private final int id;
 
-    public ButtonUHC(Container container, ItemStack itemStack, int slot, boolean error) {
+    public ButtonUHC(Container container, int id, ItemStack itemStack, int slot, boolean error) {
         super(container, itemStack, slot);
+        this.hasError = error;
+        this.id = id;
     }
 
     @Override
     public void doAction(Player player) {
         if (!hasError) {
-            UHCRequester.sendTo(slot, player);
+            UHCRequester.sendTo(id, player);
         } else {
-            player.sendMessage(ChatColor.RED.toString() + ChatColor.BOLD.toString() + "This server is not avalible at the moment");
+            player.sendMessage(
+                    ChatColor.RED.toString() + ChatColor.BOLD.toString() + "This server is not avalible at the moment");
         }
     }
 }
