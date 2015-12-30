@@ -48,13 +48,13 @@ public class ButtonBrowseUHC extends Button {
                     PortalRequest request = UHCRequester.request(i);
                     if (request.hasError()) {
                         String name = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Game " + (i + 1) + "is unavalible.";
-                        String lore = ChatColor.BLUE + "Players currently in the game: " + request.getPlayerCount();
-                        ItemStack buttonItem = ItemUtil.getBuilder(Material.APPLE).setName(name).setLore(lore).setAmmount(request.getPlayerCount()).build();
+                        ItemStack buttonItem = ItemUtil.getBuilder(Material.APPLE).setName(name).build();
                         uhcContainer.addButton(new ButtonUHC(uhcContainer, buttonItem, i + 2, true));
                     } else {
                         String name = (request.isOpen() ? ChatColor.GREEN.toString() : ChatColor.RED.toString()) + ChatColor.BOLD.toString() + "Game " + (i + 1);
-                        String lore = ChatColor.BLUE + "Players currently in the game: " + request.getPlayerCount();
-                        ItemStack buttonItem = ItemUtil.getBuilder(Material.GOLDEN_APPLE).setName(name).setLore(lore).setAmmount(request.getPlayerCount()).build();
+                        String players = ChatColor.BLUE + "Players currently in the game: " + ChatColor.RED + request.getPlayerCount();
+                        String status = ChatColor.BLUE + "Status: " + ChatColor.RED + request.getStatus();
+                        ItemStack buttonItem = ItemUtil.getBuilder(Material.GOLDEN_APPLE).setName(name).setLore(players, status).setAmmount(request.getPlayerCount()).build();
                         uhcContainer.addButton(new ButtonUHC(uhcContainer, buttonItem, i + 2, false));
                     }
                 }
