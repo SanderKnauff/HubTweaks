@@ -50,13 +50,13 @@ public class ButtonBrowseUHC extends Button {
                     if (request.hasError()) {
                         String name = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Game " + (i + 1) + " is unavalible.";
                         ItemStack buttonItem = ItemUtil.getBuilder(Material.APPLE).setName(name).build();
-                        uhcContainer.addButton(new ButtonUHC(uhcContainer, buttonItem, i + 2, true));
+                        uhcContainer.addButton(new ButtonUHC(uhcContainer, i, buttonItem, i + 2, true));
                     } else {
                         String name = (request.isOpen() ? ChatColor.GREEN.toString() : ChatColor.RED.toString()) + ChatColor.BOLD.toString() + "Game " + (i + 1);
                         String players = ChatColor.BLUE + "Players currently in the game: " + ChatColor.RED + request.getPlayerCount();
                         String status = ChatColor.BLUE + "Status: " + ChatColor.RED + request.getStatus();
                         ItemStack buttonItem = ItemUtil.getBuilder(Material.GOLDEN_APPLE).setName(name).setLore(players, status).setAmmount(request.getPlayerCount()).build();
-                        uhcContainer.addButton(new ButtonUHC(uhcContainer, buttonItem, i + 2, false));
+                        uhcContainer.addButton(new ButtonUHC(uhcContainer, i, buttonItem, i + 2, false));
                     }
                 }
                 Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), () -> {
