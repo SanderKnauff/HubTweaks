@@ -27,7 +27,6 @@ public class HubTweaks extends JavaPlugin {
         EntityRide.init();
         Spawner.init();
         Statistic.init();
-        new NewYear();
         Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
         getCommand("HubTweaks").setExecutor(new CommandHandler(this));
         getCommand("kotl").setExecutor(new CommandHandler(this));
