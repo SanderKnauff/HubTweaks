@@ -11,6 +11,7 @@ import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
 import nl.imine.hubtweaks.HubTweaks;
@@ -29,6 +30,15 @@ public class EntityRide implements Listener {
         new EntityRide();
     }
 
+    @EventHandler
+    public void onPlayerLeft(final PlayerQuitEvent pqe) {
+        Player pl = pqe.getPlayer();
+        if(pl.getVehicle() != null){
+            pl.eject();
+            pl.getVehicle().eject();
+        }
+    }
+    
     @EventHandler
     public void onPlayerSneak(final PlayerToggleSneakEvent ptse) {
         final Player pl = ptse.getPlayer();
