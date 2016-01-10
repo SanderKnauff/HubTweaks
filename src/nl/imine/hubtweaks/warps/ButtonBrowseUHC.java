@@ -26,43 +26,52 @@ import org.bukkit.inventory.ItemStack;
  */
 public class ButtonBrowseUHC extends Button {
 
-    private boolean error = false;
-
     public ButtonBrowseUHC(Container container, ItemStack itemStack, int slot) {
         super(container, itemStack, slot);
+    }
+
+    @Override
+    public ItemStack getItemStack() {
+        boolean error = false;
         for (int i : UHCRequester.getPortalIds()) {
-            if (!UHCRequester.request(i).hasError()) {
-                error = false;
+            if (UHCRequester.request(i).hasError()) {
+                error = true;
                 break;
-            } else {
-                this.itemStack = ItemUtil.getBuilder(Material.APPLE).setName(ChatColor.RED.toString() + ChatColor.BOLD.toString() + "UHC IS OFFLINE").build();
             }
         }
+        if (error) {
+            return ItemUtil.getBuilder(Material.APPLE)
+                    .setName(ChatColor.RED.toString() + ChatColor.BOLD.toString() + "UHC IS OFFLINE").build();
+        }
+        return super.getItemStack();
     }
 
     @Override
     public void doAction(Player player) {
-        if (!error) {
-            Bukkit.getScheduler().runTaskAsynchronously(HubTweaks.getInstance(), () -> {
-                Container uhcContainer = GuiManager.getInstance().createContainer("Select a lobby", 9, true, false);
-                for (int i : UHCRequester.getPortalIds()) {
-                    PortalRequest request = UHCRequester.request(i);
-                    if (request.hasError()) {
-                        String name = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Game " + (i + 1) + " is unavalible.";
-                        ItemStack buttonItem = ItemUtil.getBuilder(Material.APPLE).setName(name).build();
-                        uhcContainer.addButton(new ButtonUHC(uhcContainer, i, buttonItem, i + 2, true));
-                    } else {
-                        String name = (request.isOpen() ? ChatColor.GREEN.toString() : ChatColor.RED.toString()) + ChatColor.BOLD.toString() + "Game " + (i + 1);
-                        String players = ChatColor.BLUE + "Players currently in the game: " + ChatColor.RED + request.getPlayerCount();
-                        String status = ChatColor.BLUE + "Status: " + ChatColor.RED + request.getStatus();
-                        ItemStack buttonItem = ItemUtil.getBuilder(Material.GOLDEN_APPLE).setName(name).setLore(players, status).setAmmount(request.getPlayerCount()).build();
-                        uhcContainer.addButton(new ButtonUHC(uhcContainer, i, buttonItem, i + 2, false));
-                    }
+        Bukkit.getScheduler().runTaskAsynchronously(HubTweaks.getInstance(), () -> {
+            Container uhcContainer = GuiManager.getInstance().createContainer("Select a lobby", 9, true, false);
+            for (int i : UHCRequester.getPortalIds()) {
+                PortalRequest request = UHCRequester.request(i);
+                if (request.hasError()) {
+                    String name = ChatColor.RED.toString() + ChatColor.BOLD.toString() + "Game " + (i + 1)
+                            + " is unavalible.";
+                    ItemStack buttonItem = ItemUtil.getBuilder(Material.APPLE).setName(name).build();
+                    uhcContainer.addButton(new ButtonUHC(uhcContainer, i, buttonItem, i + 2, true));
+                } else {
+                    String name = (request.isOpen() ? ChatColor.GREEN.toString() : ChatColor.RED.toString())
+                            + ChatColor.BOLD.toString() + "Game " + (i + 1);
+                    String players = ChatColor.BLUE + "Players currently in the game: " + ChatColor.RED
+                            + request.getPlayerCount();
+                    String status = ChatColor.BLUE + "Status: " + ChatColor.RED + request.getStatus();
+                    String timer = ChatColor.BLUE + "Timer: " + ChatColor.RED + Math.floor(request.getTimer() / 60) + "min in game.";
+                    ItemStack buttonItem = ItemUtil.getBuilder(Material.GOLDEN_APPLE).setName(name)
+                            .setLore(players, status, timer).setAmmount(request.getPlayerCount()).build();
+                    uhcContainer.addButton(new ButtonUHC(uhcContainer, i, buttonItem, i + 2, false));
                 }
-                Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), () -> {
-                    uhcContainer.open(player);
-                });
+            }
+            Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), () -> {
+                uhcContainer.open(player);
             });
-        }
+        });
     }
 }
