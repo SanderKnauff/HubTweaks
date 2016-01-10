@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 public class PvP {
 
@@ -47,6 +48,8 @@ public class PvP {
         pvpList.add(player);
         PvP.addGear(player);
         player.setFireTicks(0);
+        player.setFallDistance(0);
+        player.setVelocity(new Vector());
         player.setHealth(player.getMaxHealth());
         player.getActivePotionEffects().clear();
         player.teleport(PvP.getRandomSpawn());
