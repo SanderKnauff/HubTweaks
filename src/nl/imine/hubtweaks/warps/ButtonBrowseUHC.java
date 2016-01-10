@@ -66,7 +66,7 @@ public class ButtonBrowseUHC extends Button {
                     String timer = ChatColor.BLUE + "Timer: " + ChatColor.RED
                             + (int) Math.floor(request.getTimer() / 60) + "min " + ChatColor.BLUE + "in game.";
                     if (request.isOpen()) {
-                        timer = ChatColor.BLUE + "Game will begin in " + request.getTimer();
+                        timer = ChatColor.BLUE + "Game will begin in " + request.getTimer() + " seconds.";
                     }
                     ItemStack buttonItem = ItemUtil.getBuilder(Material.GOLDEN_APPLE).setName(name)
                             .setLore(players, status, timer).setAmmount(request.getPlayerCount()).build();
