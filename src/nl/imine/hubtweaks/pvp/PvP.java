@@ -9,6 +9,7 @@ import java.util.Random;
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.util.Log;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -20,17 +21,19 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import com.google.common.collect.Lists;
+
 public class PvP {
 
-    private static final List<Location> arenaSpawns = new ArrayList<>();
+    public static final Location[] BOX = new Location[] { new Location(Bukkit.getWorlds().get(0), 50, 0, -450),
+            new Location(Bukkit.getWorlds().get(0), -15, 60, -400) };
+    private static final List<Player> PVP_LIST = Lists.newArrayList();
+    private static final List<Location> SPAWN_ARENA = new ArrayList<>();
     private static File pvpConfigFile = null;
     private static FileConfiguration pvpConfig = null;
 
-    private static List<Player> pvpList;
-
     public static void init() {
         PvPListener.init();
-        pvpList = new ArrayList<>();
         loadArena();
     }
 
@@ -38,14 +41,14 @@ public class PvP {
     }
 
     public static boolean isPlayerInArena(Player player) {
-        if (pvpList.contains(player)) {
+        if (PVP_LIST.contains(player)) {
             return true;
         }
         return false;
     }
 
     public static void addPlayerToArena(Player player) {
-        pvpList.add(player);
+        PVP_LIST.add(player);
         PvP.addGear(player);
         player.setFireTicks(0);
         player.setFallDistance(0);
@@ -57,8 +60,8 @@ public class PvP {
     }
 
     public static void removePlayerFromArena(Player player) {
-        if (pvpList.contains(player)) {
-            pvpList.remove(player);
+        if (PVP_LIST.contains(player)) {
+            PVP_LIST.remove(player);
             player.getInventory().clear();
         }
     }
@@ -79,35 +82,36 @@ public class PvP {
         pvpConfig = YamlConfiguration.loadConfiguration(pvpConfigFile);
         if (pvpConfig.getConfigurationSection("Spawns") != null) {
             for (String key : pvpConfig.getConfigurationSection("Spawns").getKeys(false)) {
-                World world = HubTweaks.getInstance().getServer().getWorld(pvpConfig.getString("Spawns." + key + ".world"));
+                World world = HubTweaks.getInstance().getServer()
+                        .getWorld(pvpConfig.getString("Spawns." + key + ".world"));
                 double x = pvpConfig.getDouble("Spawns." + key + ".x");
                 double y = pvpConfig.getDouble("Spawns." + key + ".y");
                 double z = pvpConfig.getDouble("Spawns." + key + ".z");
-                arenaSpawns.add(new Location(world, x, y, z));
+                SPAWN_ARENA.add(new Location(world, x, y, z));
             }
         }
     }
 
     public static Location getRandomSpawn() {
         Random r = new Random();
-        return arenaSpawns.get(r.nextInt(arenaSpawns.size()));
+        return SPAWN_ARENA.get(r.nextInt(SPAWN_ARENA.size()));
     }
 
     public static List<Player> getPlayerList() {
-        return pvpList;
+        return PVP_LIST;
     }
 
     public static List<Location> getSpawnList() {
-        return arenaSpawns;
+        return SPAWN_ARENA;
     }
 
     public static void addSpawn(Location spawn) {
-        arenaSpawns.add(spawn);
-        System.out.println(arenaSpawns.size());
-        pvpConfig.set("Spawns." + arenaSpawns.size() + ".world", spawn.getWorld().getName());
-        pvpConfig.set("Spawns." + arenaSpawns.size() + ".x", spawn.getX());
-        pvpConfig.set("Spawns." + arenaSpawns.size() + ".y", spawn.getY());
-        pvpConfig.set("Spawns." + arenaSpawns.size() + ".z", spawn.getZ());
+        SPAWN_ARENA.add(spawn);
+        System.out.println(SPAWN_ARENA.size());
+        pvpConfig.set("Spawns." + SPAWN_ARENA.size() + ".world", spawn.getWorld().getName());
+        pvpConfig.set("Spawns." + SPAWN_ARENA.size() + ".x", spawn.getX());
+        pvpConfig.set("Spawns." + SPAWN_ARENA.size() + ".y", spawn.getY());
+        pvpConfig.set("Spawns." + SPAWN_ARENA.size() + ".z", spawn.getZ());
         try {
             pvpConfig.save(pvpConfigFile);
         } catch (IOException e) {

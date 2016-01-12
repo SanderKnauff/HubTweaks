@@ -57,7 +57,7 @@ public class Kotl {
         }
     }
 
-    public void addEntropiaWand(Player p) {
+    public void addEntropiaWandTo(Player p) {
         ItemStack EWStack = new ItemStack(Material.GOLDEN_CARROT, 1);
         ItemMeta EWMeta = EWStack.getItemMeta();
         EWMeta.setDisplayName(ChatColor.RESET + "Entropia Wand");
@@ -73,7 +73,6 @@ public class Kotl {
         p.getInventory().remove(Material.GOLDEN_CARROT);
         p.getInventory().remove(Material.GOLD_HELMET);
         p.getInventory().setHelmet(new ItemStack(Material.AIR));
-        p.setItemOnCursor(new ItemStack(Material.AIR));
     }
 
     public Location getPlateLoc() {

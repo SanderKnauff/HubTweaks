@@ -18,10 +18,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
-
-import com.sk89q.worldedit.Vector;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import nl.imine.api.util.LocationUtil;
 import nl.imine.hubtweaks.HubTweaks;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import nl.imine.hubtweaks.Statistic;
@@ -29,7 +26,8 @@ import nl.imine.hubtweaks.Statistic;
 public class PvPListener implements Listener {
 
     public static void init() {
-        HubTweaks.getInstance().getServer().getPluginManager().registerEvents(new PvPListener(), HubTweaks.getInstance());
+        HubTweaks.getInstance().getServer().getPluginManager().registerEvents(new PvPListener(),
+                HubTweaks.getInstance());
     }
 
     @EventHandler
@@ -50,8 +48,13 @@ public class PvPListener implements Listener {
                 if (evt.getDamager() instanceof Player) {
                     if (PvP.getPlayerList().contains((Player) evt.getDamager())) {
                         if (evt.getDamage() > 0) {
-                            Location loc = new Location(evt.getEntity().getLocation().getWorld(), evt.getEntity().getLocation().getX() + 0.5, evt.getEntity().getLocation().getY() + 0.5, evt.getEntity().getLocation().getZ() + 0.5);
-                            HubTweaks.getInstance().getServer().getWorld(evt.getDamager().getLocation().getWorld().getName()).playEffect(loc, Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
+                            Location loc = new Location(evt.getEntity().getLocation().getWorld(),
+                                    evt.getEntity().getLocation().getX() + 0.5,
+                                    evt.getEntity().getLocation().getY() + 0.5,
+                                    evt.getEntity().getLocation().getZ() + 0.5);
+                            HubTweaks.getInstance().getServer()
+                                    .getWorld(evt.getDamager().getLocation().getWorld().getName())
+                                    .playEffect(loc, Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
                         }
                     }
                 }
@@ -59,7 +62,8 @@ public class PvPListener implements Listener {
                     Arrow arrow = (Arrow) evt.getDamager();
                     if (arrow.getShooter() instanceof Player) {
                         Player attacker = (Player) arrow.getShooter();
-                        if (PvP.getPlayerList().contains(player) && PvP.getPlayerList().contains(attacker) && attacker != player) {
+                        if (PvP.getPlayerList().contains(player) && PvP.getPlayerList().contains(attacker)
+                                && attacker != player) {
                             player.damage(player.getHealth(), attacker);
                             player.setHealth(0D);
                             arrow.remove();
@@ -76,13 +80,16 @@ public class PvPListener implements Listener {
         if (evt.getEntity().getKiller() instanceof Player && evt.getEntity() instanceof Player) {
             Player player = (Player) evt.getEntity();
             Player killer = (Player) evt.getEntity().getKiller();
-            if (PvP.getPlayerList().contains(player) && PvP.getPlayerList().contains(killer) && killer.getItemInHand().getType() != null) {
+            if (PvP.getPlayerList().contains(player) && PvP.getPlayerList().contains(killer)
+                    && killer.getItemInHand().getType() != null) {
                 PvP.removePlayerFromArena(player);
                 if (killer.getInventory().all(Material.ARROW).isEmpty()) {
                     killer.getInventory().addItem(new ItemStack(Material.ARROW, 1));
                 }
-                player.sendMessage(ChatColor.WHITE + "You have been killed by: '" + ChatColor.GRAY + killer.getName() + ChatColor.WHITE + "'");
-                killer.sendMessage(ChatColor.WHITE + "You killed: '" + ChatColor.GRAY + player.getName() + ChatColor.WHITE + "'");
+                player.sendMessage(ChatColor.WHITE + "You have been killed by: '" + ChatColor.GRAY + killer.getName()
+                        + ChatColor.WHITE + "'");
+                killer.sendMessage(
+                        ChatColor.WHITE + "You killed: '" + ChatColor.GRAY + player.getName() + ChatColor.WHITE + "'");
             }
             Statistic.addToKill(killer);
         }
@@ -102,11 +109,10 @@ public class PvPListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent E) {
-        if (PvP.getPlayerList().contains(E.getPlayer())) {
-            Vector loc = new Vector(E.getPlayer().getLocation().getBlockX(), E.getPlayer().getLocation().getBlockY(), E.getPlayer().getLocation().getBlockZ());
-            if (!getWorldGuard().getRegionManager(E.getPlayer().getWorld()).getApplicableRegionsIDs(loc).contains(getWorldGuard().getRegionManager(E.getPlayer().getWorld()).getRegion("PvP").getId())) {
-                E.getPlayer().setHealth(0.0D);
+    public void onPlayerMove(PlayerMoveEvent pme) {
+        if (PvP.getPlayerList().contains(pme.getPlayer())) {
+            if (!LocationUtil.isInBox(pme.getTo(), PvP.BOX[0], PvP.BOX[0])) {
+                pme.getPlayer().setHealth(0D);
             }
         }
     }
@@ -144,13 +150,5 @@ public class PvPListener implements Listener {
         if (PvP.getPlayerList().contains(E.getPlayer())) {
             PvP.removePlayerFromArena(E.getPlayer());
         }
-    }
-
-    private WorldGuardPlugin getWorldGuard() {
-        Plugin wg = HubTweaks.getInstance().getServer().getPluginManager().getPlugin("WorldGuard");
-        if (wg == null || !(wg instanceof WorldGuardPlugin)) {
-            return null;
-        }
-        return (WorldGuardPlugin) wg;
     }
 }

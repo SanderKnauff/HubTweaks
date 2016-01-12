@@ -75,7 +75,7 @@ public class KotlListener implements Listener {
         if (evt.getAction().equals(Action.PHYSICAL) && evt.getClickedBlock().getLocation().equals(kotl.getPlateLoc())) {
             if (kotl.getKing() == null || !kotl.getKing().isOnline()) {
                 kotl.setKing(player);
-                kotl.addEntropiaWand(player);
+                kotl.addEntropiaWandTo(player);
                 if (!kotl.getKing().equals(kotl.getOldKing())) {
                     Messenger.sendActionMessageToAll(ChatColor.GOLD.toString() + ChatColor.BOLD.toString()
                             + player.getDisplayName() + " is the new king!");
