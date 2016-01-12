@@ -111,7 +111,7 @@ public class PvPListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent pme) {
         if (PvP.getPlayerList().contains(pme.getPlayer())) {
-            if (!LocationUtil.isInBox(pme.getTo(), PvP.BOX[0], PvP.BOX[0])) {
+            if (!LocationUtil.isInBox(pme.getTo(), PvP.BOX[0], PvP.BOX[1])) {
                 pme.getPlayer().setHealth(0D);
             }
         }
