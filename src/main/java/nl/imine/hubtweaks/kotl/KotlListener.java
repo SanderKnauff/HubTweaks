@@ -78,8 +78,8 @@ public class KotlListener implements Listener {
                 kotl.setKing(player);
                 kotl.addEntropiaWandTo(player);
                 if (!kotl.getKing().equals(kotl.getOldKing())) {
-                    Bukkit.getOnlinePlayers().stream().forEach(pl -> PlayerUtil.sendActionMessage(pl, ColorUtil
-                            .replaceColors(String.format("&6&l%s is the new king!", player.getDisplayName()))));
+                    Bukkit.getOnlinePlayers().stream().forEach(pl -> PlayerUtil.sendActionMessage(pl,
+                            ColorUtil.replaceColors("&6&l%s is the new king!", player.getDisplayName())));
                 }
             }
         }

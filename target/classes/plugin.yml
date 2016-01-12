@@ -1,6 +1,6 @@
 name: HubTweaks
 main: nl.imine.hubtweaks.HubTweaks
-version: fc8554b
+version: bbfb7c3
 
 depend: [iMine_Statistics, iMineAPI]
 commands:

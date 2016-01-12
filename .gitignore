@@ -8,3 +8,6 @@ manifest.mf
 .project
 .classpath
 /target/
+target/
+/target/*
+target/*

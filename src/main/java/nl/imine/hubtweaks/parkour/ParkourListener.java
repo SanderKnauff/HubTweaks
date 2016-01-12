@@ -72,11 +72,10 @@ public class ParkourListener implements Listener {
                                 .getLevel() == 5) {
                             if (!player.hasReachedTop()) {
                                 Bukkit.getOnlinePlayers().stream()
-                                        .forEach(
-                                                pl -> PlayerUtil.sendActionMessage(pl,
-                                                        ColorUtil.replaceColors(String.format(
-                                                                "&c&l%s &r&6 has reached the end of the parkour!",
-                                                                evt.getPlayer().getName()))));
+                                        .forEach(pl -> PlayerUtil.sendActionMessage(pl,
+                                                ColorUtil.replaceColors(
+                                                        "&c&l%s &r&6 has reached the end of the parkour!",
+                                                        evt.getPlayer().getName())));
                                 player.setReachedTop(true);
                                 Statistic.addToParkour(evt.getPlayer());
                             }
