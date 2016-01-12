@@ -5,8 +5,8 @@ buildfase:
   script:
     - set $(git remote show -n origin | grep Fetch | sed 's%^.*/\([^/]*\)\.git$%\1%g')
     - mvn clean install
-    - mkdir -p ../dist
-    - cp target/$1.jar ../dist/$1.jar
+    - mkdir -p ../target
+    - cp target/$1.jar ../target/$1.jar
   only:
   - master
 distributefase:
@@ -17,7 +17,7 @@ distributefase:
 # Sudo su
     - "echo $gitcipass|sudo -S bash"
 # Copy files to there locations
-    - "sudo cp -f ../dist/$1 /home/minecraft/multicraft/servers/server3/plugins/update"
+    - "sudo cp -f ../target/$1 /home/minecraft/multicraft/servers/server3/plugins/update"
 stages:
   - build
   - deploy
