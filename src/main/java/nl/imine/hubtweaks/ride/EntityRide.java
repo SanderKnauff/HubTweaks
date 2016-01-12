@@ -45,6 +45,7 @@ public class EntityRide implements Listener {
         if (ptse.isSneaking()) {
             addToTimeout(pl);
             pl.eject();
+            pl.teleport(pl.getLocation().add(0D, -0.5D, 0D));
         }
     }
 
