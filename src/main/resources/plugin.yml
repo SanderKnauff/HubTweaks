@@ -1,0 +1,12 @@
+name: HubTweaks
+main: nl.imine.hubtweaks.HubTweaks
+version: ${git.commit.id.abbrev}
+
+depend: [iMine_Statistics, iMineAPI]
+commands:
+  HubTweaks:
+    description: Default command for anything in this plugin.
+    usage: /HubTweaks
+  kotl:
+    description: Default command for kingdom of the ladder.
+    usage: /kotl
