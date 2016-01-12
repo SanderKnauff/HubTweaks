@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.Statistic;
-import nl.imine.hubtweaks.util.Log;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -38,7 +37,7 @@ public class Kotl {
         if (!configFile.exists()) {
             try {
                 boolean success = configFile.createNewFile();
-                Log.finest("Creating file " + configFile.getPath() + ": " + success);
+                System.err.println("Creating file " + configFile.getPath() + ": " + success);
             } catch (IOException e) {
             }
         }
@@ -46,7 +45,6 @@ public class Kotl {
     }
 
     private void loadKOTL() {
-        Log.info("Loading Config from " + configFile.getPath());
         if (configFile.exists()) {
             config = YamlConfiguration.loadConfiguration(configFile);
             ConfigurationSection section = config.getConfigurationSection("Kotl");

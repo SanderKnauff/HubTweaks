@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Random;
 
 import nl.imine.hubtweaks.HubTweaks;
-import nl.imine.hubtweaks.util.Log;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -67,13 +66,12 @@ public class PvP {
     }
 
     public static void loadArena() {
-        Log.fine("HTPVP: Loading Arena");
         pvpConfigFile = new File(HubTweaks.getInstance().getDataFolder().getPath() + File.separatorChar + "PvP.yml");
         if (!pvpConfigFile.exists()) {
             try {
                 pvpConfigFile.createNewFile();
             } catch (IOException e) {
-                Log.warning("ERROR: PVP FILE COULD NOT BE CREATED");
+                System.err.println("ERROR: PVP FILE COULD NOT BE CREATED");
                 return;
             }
         } else {
@@ -115,7 +113,7 @@ public class PvP {
         try {
             pvpConfig.save(pvpConfigFile);
         } catch (IOException e) {
-            Log.warning("IOException loading hubtweaks PvP spawns: " + e.getMessage());
+            System.err.println("IOException loading hubtweaks PvP spawns: " + e.getMessage());
         }
     }
 

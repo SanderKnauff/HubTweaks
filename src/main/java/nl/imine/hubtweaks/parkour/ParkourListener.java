@@ -9,10 +9,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import net.md_5.bungee.api.ChatColor;
+import nl.imine.api.util.ColorUtil;
+import nl.imine.api.util.PlayerUtil;
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.Statistic;
-import nl.imine.hubtweaks.util.Log;
-import nl.imine.hubtweaks.util.Messenger;
+
+import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -41,7 +43,8 @@ import org.bukkit.material.Wool;
 public class ParkourListener implements Listener {
 
     public static void init() {
-        HubTweaks.getInstance().getServer().getPluginManager().registerEvents(new ParkourListener(), HubTweaks.getInstance());
+        HubTweaks.getInstance().getServer().getPluginManager().registerEvents(new ParkourListener(),
+                HubTweaks.getInstance());
     }
 
     @EventHandler
@@ -51,16 +54,29 @@ public class ParkourListener implements Listener {
             if (evt.getClickedBlock().getRelative(BlockFace.DOWN).getType().equals(Material.WOOL)) {
                 ParkourPlayer player = parkour.getPlayer(evt.getPlayer());
                 if (player != null) {
-                    //Als de player het parkour aan het doen is (zonder te bouwen dus).
+                    // Als de player het parkour aan het doen is (zonder te
+                    // bouwen dus).
                     if (!player.isBuilding()) {
-                        if (parkour.getLevel(((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData()).getColor()).getLevel() > player.getLevel().getLevel()) {
-                            player.setLevel(parkour.getLevel(((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData()).getColor()));
+                        if (parkour.getLevel(
+                                ((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData())
+                                        .getColor())
+                                .getLevel() > player.getLevel().getLevel()) {
+                            player.setLevel(parkour.getLevel(
+                                    ((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData())
+                                            .getColor()));
                             player.save();
                         }
-                        if (parkour.getLevel(((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData()).getColor()).getLevel() == 5) {
+                        if (parkour.getLevel(
+                                ((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData())
+                                        .getColor())
+                                .getLevel() == 5) {
                             if (!player.hasReachedTop()) {
-                                Messenger.sendActionMessageToAll(ChatColor.RED.toString() + ChatColor.BOLD.toString() + evt.getPlayer().getName()
-                                        + ChatColor.RESET.toString() + ChatColor.GOLD.toString() + " has reached the end of the parkour!");
+                                Bukkit.getOnlinePlayers().stream()
+                                        .forEach(
+                                                pl -> PlayerUtil.sendActionMessage(pl,
+                                                        ColorUtil.replaceColors(String.format(
+                                                                "&c&l%s &r&6 has reached the end of the parkour!",
+                                                                evt.getPlayer().getName()))));
                                 player.setReachedTop(true);
                                 Statistic.addToParkour(evt.getPlayer());
                             }
@@ -76,28 +92,38 @@ public class ParkourListener implements Listener {
                         if (player.getLevel().getLevel() != -1) {
                             evt.getPlayer().getInventory().setBoots(boots);
                         } else {
-                            evt.getPlayer().teleport(new Location(evt.getPlayer().getWorld(), 74.5D, 36D, -504.5D, 140.3F, -27.3F));
-                            evt.getPlayer().sendMessage(ChatColor.GOLD + "You have not reached any parkour checkpoints yet. Start here.");
+                            evt.getPlayer().teleport(
+                                    new Location(evt.getPlayer().getWorld(), 74.5D, 36D, -504.5D, 140.3F, -27.3F));
+                            evt.getPlayer().sendMessage(
+                                    ChatColor.GOLD + "You have not reached any parkour checkpoints yet. Start here.");
                         }
                         player.setTouchedPlate(true);
-                        //Als de player het parkour aan het maken is.
+                        // Als de player het parkour aan het maken is.
                     } else {
-                        if (parkour.getLevel(((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData()).getColor()).equals(new ParkourLevel(-1, DyeColor.BLACK))) {
+                        if (parkour.getLevel(
+                                ((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData())
+                                        .getColor())
+                                .equals(new ParkourLevel(-1, DyeColor.BLACK))) {
                             File f = new File(ParkourConfig.CONFIGPATH + "Levels.yml");
                             YamlConfiguration config = new YamlConfiguration();
                             try {
                                 config.load(f);
-                                config.set((parkour.getLevels().size() + 1) + ".Color", ((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData()).getColor().toString());
+                                config.set((parkour.getLevels().size() + 1) + ".Color",
+                                        ((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData())
+                                                .getColor().toString());
                                 config.set(-1 + ".Color", DyeColor.BLACK.name());
                                 config.save(f);
                             } catch (FileNotFoundException e) {
-                                Log.warning("Exception finding file: " + f.getPath() + " || " + e.getMessage());
+                                System.err.println("Exception finding file: " + f.getPath() + " || " + e.getMessage());
                             } catch (IOException e) {
-                                Log.warning("Exception opening file: " + f.getPath() + " || " + e.getMessage());
+                                System.err.println("Exception opening file: " + f.getPath() + " || " + e.getMessage());
                             } catch (InvalidConfigurationException e) {
-                                Log.warning("Exception reading ymlfile: " + f.getPath() + " || " + e.getMessage());
+                                System.err
+                                        .println("Exception reading ymlfile: " + f.getPath() + " || " + e.getMessage());
                             }
-                            parkour.addLevel(new ParkourLevel(parkour.getLevels().size() + 1, ((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData()).getColor()));
+                            parkour.addLevel(new ParkourLevel(parkour.getLevels().size() + 1,
+                                    ((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData())
+                                            .getColor()));
                         }
                     }
                 }
@@ -121,14 +147,16 @@ public class ParkourListener implements Listener {
         if (evt.getAction().equals(Action.PHYSICAL)) {
             if (evt.getClickedBlock().getRelative(BlockFace.DOWN).getType().equals(Material.BARRIER)) {
                 if (evt.getPlayer().hasPermission("ht.createParkour")) {
-                    Parkour.getInstance().getPlayer(evt.getPlayer()).setBuilding(!Parkour.getInstance().getPlayer(evt.getPlayer()).isBuilding());
-                    evt.getPlayer().sendMessage("Building: " + Parkour.getInstance().getPlayer(evt.getPlayer()).isBuilding());
+                    Parkour.getInstance().getPlayer(evt.getPlayer())
+                            .setBuilding(!Parkour.getInstance().getPlayer(evt.getPlayer()).isBuilding());
+                    evt.getPlayer()
+                            .sendMessage("Building: " + Parkour.getInstance().getPlayer(evt.getPlayer()).isBuilding());
                 }
             }
         }
     }
 
-    //PARKOUR ANTICHEAT DOWN HERE
+    // PARKOUR ANTICHEAT DOWN HERE
     @EventHandler
     public void onGameModeChange(PlayerGameModeChangeEvent evt) {
         if (!evt.getNewGameMode().equals(GameMode.ADVENTURE)) {

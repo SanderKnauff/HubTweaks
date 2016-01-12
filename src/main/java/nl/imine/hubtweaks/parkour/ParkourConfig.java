@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import nl.imine.hubtweaks.HubTweaks;
-import nl.imine.hubtweaks.util.Log;
 import org.bukkit.DyeColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -29,7 +28,7 @@ public class ParkourConfig {
         try {
             f.createNewFile(); 
         } catch (IOException e) {
-            Log.warning("Cannot create file || " + e.getMessage());
+            System.err.println("Cannot create file || " + e.getMessage());
         }
         YamlConfiguration config = new YamlConfiguration();
         try {
@@ -39,11 +38,11 @@ public class ParkourConfig {
                 parkour.addLevel(new ParkourLevel(Integer.valueOf(s), DyeColor.valueOf(cs.getString("Color"))));
             }
         } catch (FileNotFoundException e) {
-            Log.warning("Exception finding file: " + f.getPath() + " || " + e.getMessage());
+            System.err.println("Exception finding file: " + f.getPath() + " || " + e.getMessage());
         } catch (IOException e) {
-            Log.warning("Exception opening file: " + f.getPath() + " || " + e.getMessage());
+            System.err.println("Exception opening file: " + f.getPath() + " || " + e.getMessage());
         } catch (InvalidConfigurationException e) {
-            Log.warning("Exception reading ymlfile: " + f.getPath() + " || " + e.getMessage());
+            System.err.println("Exception reading ymlfile: " + f.getPath() + " || " + e.getMessage());
         }
     }
 
@@ -57,13 +56,13 @@ public class ParkourConfig {
                 config.load(f);
                 parkour.addPlayer(new ParkourPlayer(f.getName().split("\\.")[0], parkour.getLevel(config.getString("Level"))));
             } catch (FileNotFoundException e) {
-                Log.warning("Exception finding file: " + f.getPath() + " || " + e.getMessage());
+                System.err.println("Exception finding file: " + f.getPath() + " || " + e.getMessage());
                 break;
             } catch (IOException e) {
-                Log.warning("Exception opening file: " + f.getPath() + " || " + e.getMessage());
+                System.err.println("Exception opening file: " + f.getPath() + " || " + e.getMessage());
                 break;
             } catch (InvalidConfigurationException e) {
-                Log.warning("Exception reading ymlfile: " + f.getPath() + " || " + e.getMessage());
+                System.err.println("Exception reading ymlfile: " + f.getPath() + " || " + e.getMessage());
                 break;
             }
         }

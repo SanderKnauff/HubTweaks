@@ -2,7 +2,7 @@ package nl.imine.hubtweaks.kotl;
 
 import java.util.ArrayList;
 
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Effect;
 import org.bukkit.FireworkEffect;
@@ -24,8 +24,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import nl.imine.api.util.ColorUtil;
+import nl.imine.api.util.PlayerUtil;
 import nl.imine.hubtweaks.HubTweaks;
-import nl.imine.hubtweaks.util.Messenger;
 
 public class KotlListener implements Listener {
 
@@ -77,8 +78,8 @@ public class KotlListener implements Listener {
                 kotl.setKing(player);
                 kotl.addEntropiaWandTo(player);
                 if (!kotl.getKing().equals(kotl.getOldKing())) {
-                    Messenger.sendActionMessageToAll(ChatColor.GOLD.toString() + ChatColor.BOLD.toString()
-                            + player.getDisplayName() + " is the new king!");
+                    Bukkit.getOnlinePlayers().stream().forEach(pl -> PlayerUtil.sendActionMessage(pl, ColorUtil
+                            .replaceColors(String.format("&6&l%s is the new king!", player.getDisplayName()))));
                 }
             }
         }

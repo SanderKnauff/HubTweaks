@@ -8,7 +8,6 @@ package nl.imine.hubtweaks.parkour;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import nl.imine.hubtweaks.util.Log;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -57,7 +56,7 @@ public class ParkourPlayer {
         try {
             f.createNewFile();
         } catch (IOException e) {
-            Log.warning("Cannot create file || " + e.getMessage());
+            System.err.println("Cannot create file || " + e.getMessage());
         }
         if (this.level != null) {
             YamlConfiguration config = new YamlConfiguration();
@@ -66,11 +65,11 @@ public class ParkourPlayer {
                 config.set("Level", this.level.getColor().toString());
                 config.save(f);
             } catch (FileNotFoundException e) {
-                Log.warning("Exception finding file: " + f.getPath() + " || " + e.getMessage());
+                System.err.println("Exception finding file: " + f.getPath() + " || " + e.getMessage());
             } catch (IOException e) {
-                Log.warning("Exception opening file: " + f.getPath() + " || " + e.getMessage());
+                System.err.println("Exception opening file: " + f.getPath() + " || " + e.getMessage());
             } catch (InvalidConfigurationException e) {
-                Log.warning("Exception saving ymlfile: " + f.getPath() + " || " + e.getMessage());
+                System.err.println("Exception saving ymlfile: " + f.getPath() + " || " + e.getMessage());
             }
         }
     }
