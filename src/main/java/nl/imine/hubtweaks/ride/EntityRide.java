@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -33,12 +34,12 @@ public class EntityRide implements Listener {
     @EventHandler
     public void onPlayerLeft(final PlayerQuitEvent pqe) {
         Player pl = pqe.getPlayer();
-        if(pl.getVehicle() != null){
+        if (pl.getVehicle() != null) {
             pl.eject();
             pl.getVehicle().eject();
         }
     }
-    
+
     @EventHandler
     public void onPlayerSneak(final PlayerToggleSneakEvent ptse) {
         final Player pl = ptse.getPlayer();
@@ -82,6 +83,9 @@ public class EntityRide implements Listener {
             if (pl.getVehicle() == null) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), new Runnable() {
                     public void run() {
+                        Location l = pl.getLocation();
+                        pl.teleport(new Location(pl.getWorld(), l.getX(), l.getY(), l.getZ(), e.getLocation().getYaw(),
+                                e.getLocation().getPitch()));
                         e.setPassenger(pl);
                         Parkour.getInstance().getPlayer(pl).setTouchedPlate(true);
                     }
