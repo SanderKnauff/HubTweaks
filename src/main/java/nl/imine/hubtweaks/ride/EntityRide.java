@@ -50,7 +50,7 @@ public class EntityRide implements Listener {
     }
 
     public void addToTimeout(final Entity e) {
-        if (timeOut.containsKey(e)) {
+        if (timeOut.containsKey(e) && timeOut.get(e) > -1) {
             Bukkit.getScheduler().cancelTask(timeOut.get(e));
         }
         int sch = Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), new Runnable() {
