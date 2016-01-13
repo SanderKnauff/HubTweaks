@@ -30,7 +30,7 @@ public class WorldProtector implements Listener {
             Bukkit.getOnlinePlayers().stream().forEach(pl -> pl.setSaturation(20F));
             Bukkit.getOnlinePlayers().stream()
                     .filter(pl -> !LocationUtil.isInBox(pl.getLocation(), PvP.BOX[0], PvP.BOX[1]))
-                    .forEach(pl -> pl.setHealth(20D));
+                    .filter(pl -> !pl.isDead()).forEach(pl -> pl.setHealth(20D));
             ;
         } , 20L, 20L);
     }
