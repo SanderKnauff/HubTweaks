@@ -22,13 +22,14 @@ import nl.imine.hubtweaks.parkour.Parkour;
 public class EntityRide implements Listener {
 
     private final Map<Entity, Integer> timeOut = new HashMap<>();
+    private static EntityRide instance;
 
     public EntityRide() {
         Bukkit.getPluginManager().registerEvents(this, HubTweaks.getInstance());
     }
 
     public static void init() {
-        new EntityRide();
+        instance = new EntityRide();
     }
 
     @EventHandler
@@ -44,21 +45,29 @@ public class EntityRide implements Listener {
     public void onPlayerSneak(final PlayerToggleSneakEvent ptse) {
         final Player pl = ptse.getPlayer();
         if (ptse.isSneaking()) {
-            addToTimeout(pl);
+            addToTimeout(pl, 100L);
             pl.eject();
         }
     }
+    
+    public static void removeFromTimeout(final Entity e){
+        instance.timeOut.remove(e);
+    }
 
-    public void addToTimeout(final Entity e) {
-        if (timeOut.containsKey(e) && timeOut.get(e) > -1) {
-            Bukkit.getScheduler().cancelTask(timeOut.get(e));
+    public static void addToTimeout(final Entity e, long delay) {
+        if (instance.timeOut.containsKey(e) && instance.timeOut.get(e) > -1) {
+            Bukkit.getScheduler().cancelTask(instance.timeOut.get(e));
+            instance.timeOut.remove(e);
         }
-        int sch = Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), new Runnable() {
-            public void run() {
-                timeOut.remove(e);
-            }
-        }, 100L);
-        timeOut.put(e, sch);
+        int sch = -1;
+        if (delay > 0) {
+            sch = Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), new Runnable() {
+                public void run() {
+                    instance.timeOut.remove(e);
+                }
+            }, delay);
+        }
+        instance.timeOut.put(e, sch);
     }
 
     @EventHandler
@@ -78,7 +87,7 @@ public class EntityRide implements Listener {
                 }
                 oldPassenger.teleport(oldPassenger.getLocation().add(0D, -0.5D, 0D));
             }
-            addToTimeout(e);
+            addToTimeout(e, 100L);
             e.eject();
             if (pl.getVehicle() == null) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), new Runnable() {
