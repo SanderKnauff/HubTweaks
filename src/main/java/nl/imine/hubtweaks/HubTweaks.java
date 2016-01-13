@@ -7,6 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import nl.imine.hubtweaks.entity.Spawner;
 import nl.imine.hubtweaks.kotl.Kotl;
+import nl.imine.hubtweaks.login.HideLogs;
 import nl.imine.hubtweaks.parkour.Parkour;
 import nl.imine.hubtweaks.pvp.PvP;
 import nl.imine.hubtweaks.ride.EntityRide;
@@ -19,6 +20,7 @@ public class HubTweaks extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
+        HideLogs.init();
         EventListener.init();
         PvP.init();
         Kotl.init();
