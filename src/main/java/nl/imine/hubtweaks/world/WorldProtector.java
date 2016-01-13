@@ -21,6 +21,9 @@ public class WorldProtector implements Listener {
 
     public WorldProtector() {
         Bukkit.getPluginManager().registerEvents(this, HubTweaks.getInstance());
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(HubTweaks.getInstance(), () -> {
+            Bukkit.getOnlinePlayers().stream().forEach(pl -> pl.setSaturation(20));
+        } , 20L, 20L);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
