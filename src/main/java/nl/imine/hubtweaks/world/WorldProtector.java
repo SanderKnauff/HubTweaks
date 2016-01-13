@@ -2,6 +2,7 @@ package nl.imine.hubtweaks.world;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -36,20 +37,23 @@ public class WorldProtector implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityDamageByEntity(EntityDamageEvent ede) {
-        switch (ede.getCause()) {
-        case FALL:
-        case CONTACT:
-        case BLOCK_EXPLOSION:
-        case DROWNING:
-        case ENTITY_EXPLOSION:
-        case FALLING_BLOCK:
-        case FIRE:
-        case FIRE_TICK:
-        case LAVA:
-            ede.setCancelled(true);
-            break;
-        default:
-            break;
+        if (ede.getEntity() instanceof Player) {
+            switch (ede.getCause()) {
+            case FIRE:
+            case FIRE_TICK:
+            case LAVA:
+                ede.getEntity().setFireTicks(0);
+            case FALL:
+            case CONTACT:
+            case BLOCK_EXPLOSION:
+            case DROWNING:
+            case ENTITY_EXPLOSION:
+            case FALLING_BLOCK:
+                ede.setCancelled(true);
+                break;
+            default:
+                break;
+            }
         }
     }
 
