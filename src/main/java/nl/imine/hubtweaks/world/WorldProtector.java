@@ -59,11 +59,13 @@ public class WorldProtector implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent edbee) {
-        if ((LocationUtil.isInBox(edbee.getDamager().getLocation(), Kotl.BOX[0], Kotl.BOX[1]))) {
-            edbee.setDamage(0D);
-            return;
+        if (edbee.getEntity() instanceof Player) {
+            if ((LocationUtil.isInBox(edbee.getDamager().getLocation(), Kotl.BOX[0], Kotl.BOX[1]))) {
+                edbee.setDamage(0D);
+                return;
+            }
+            edbee.setCancelled(true);
         }
-        edbee.setCancelled(true);
     }
 
     @EventHandler
