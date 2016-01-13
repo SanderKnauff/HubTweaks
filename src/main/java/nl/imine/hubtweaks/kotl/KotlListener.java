@@ -112,7 +112,7 @@ public class KotlListener implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent evt) {
         if (((evt.getDamager() instanceof Player)) && ((evt.getEntity() instanceof Player))) {
             Player damager = (Player) evt.getDamager();
-            if ((LocationUtil.isInBox(damager.getLocation(), Kotl.BOX[0], Kotl.BOX[0]))
+            if ((LocationUtil.isInBox(damager.getLocation(), Kotl.BOX[0], Kotl.BOX[1]))
                     && (damager.getItemInHand().getType() != null)
                     && (damager.getItemInHand().getType().equals(Material.GOLDEN_CARROT))) {
                 evt.setCancelled(false);
