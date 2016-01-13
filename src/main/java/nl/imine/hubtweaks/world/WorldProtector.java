@@ -14,6 +14,7 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 
 import nl.imine.api.util.LocationUtil;
 import nl.imine.hubtweaks.HubTweaks;
+import nl.imine.hubtweaks.kotl.Kotl;
 import nl.imine.hubtweaks.pvp.PvP;
 
 public class WorldProtector implements Listener {
@@ -54,6 +55,9 @@ public class WorldProtector implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent edbee) {
+        if ((LocationUtil.isInBox(edbee.getDamager().getLocation(), Kotl.BOX[0], Kotl.BOX[1]))) {
+            return;
+        }
         edbee.setCancelled(true);
     }
 
