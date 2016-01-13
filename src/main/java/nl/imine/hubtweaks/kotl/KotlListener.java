@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Effect;
-import org.bukkit.EntityEffect;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -26,6 +26,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import nl.imine.api.util.ColorUtil;
+import nl.imine.api.util.LocationUtil;
 import nl.imine.api.util.PlayerUtil;
 import nl.imine.hubtweaks.HubTweaks;
 
@@ -107,14 +108,14 @@ public class KotlListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent evt) {
         if (((evt.getDamager() instanceof Player)) && ((evt.getEntity() instanceof Player))) {
             Player damager = (Player) evt.getDamager();
-            damager.playEffect(EntityEffect.HURT);
-            damager.eject();
-            if ((damager.getItemInHand().getType() != null)
+            if ((LocationUtil.isInBox(damager.getLocation(), Kotl.BOX[0], Kotl.BOX[0]))
+                    && (damager.getItemInHand().getType() != null)
                     && (damager.getItemInHand().getType().equals(Material.GOLDEN_CARROT))) {
+                evt.setCancelled(false);
                 if (Kotl.getInstance().getKing() != null) {
                     if (Kotl.getInstance().getKing().equals(damager)) {
                         final Firework firework = (Firework) evt.getEntity().getWorld()

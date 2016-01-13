@@ -5,6 +5,7 @@ import java.io.IOException;
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.Statistic;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,6 +18,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class Kotl {
+
+    public static final Location[] BOX = new Location[] { new Location(Bukkit.getWorlds().get(0), 58, 44, -513),
+            new Location(Bukkit.getWorlds().get(0), 63, 34, -508) };
 
     private static Kotl kotl;
 
