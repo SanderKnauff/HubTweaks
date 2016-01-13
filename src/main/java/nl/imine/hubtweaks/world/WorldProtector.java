@@ -7,11 +7,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
+import nl.imine.api.util.LocationUtil;
 import nl.imine.hubtweaks.HubTweaks;
+import nl.imine.hubtweaks.pvp.PvP;
 
 public class WorldProtector implements Listener {
 
@@ -22,7 +25,11 @@ public class WorldProtector implements Listener {
     public WorldProtector() {
         Bukkit.getPluginManager().registerEvents(this, HubTweaks.getInstance());
         Bukkit.getScheduler().scheduleSyncRepeatingTask(HubTweaks.getInstance(), () -> {
-            Bukkit.getOnlinePlayers().stream().forEach(pl -> pl.setSaturation(20));
+            Bukkit.getOnlinePlayers().stream().forEach(pl -> pl.setSaturation(20F));
+            Bukkit.getOnlinePlayers().stream()
+                    .filter(pl -> LocationUtil.isInBox(pl.getLocation(), PvP.BOX[0], PvP.BOX[1]))
+                    .forEach(pl -> pl.setHealth(20D));
+            ;
         } , 20L, 20L);
     }
 
@@ -43,6 +50,11 @@ public class WorldProtector implements Listener {
         default:
             break;
         }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent edbee) {
+        edbee.setCancelled(true);
     }
 
     @EventHandler
