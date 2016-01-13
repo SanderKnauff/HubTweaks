@@ -48,13 +48,16 @@ public class PvPListener implements Listener {
                 if (evt.getDamager() instanceof Player) {
                     if (PvP.getPlayerList().contains((Player) evt.getDamager())) {
                         if (evt.getDamage() > 0) {
-                            Location loc = new Location(evt.getEntity().getLocation().getWorld(),
-                                    evt.getEntity().getLocation().getX() + 0.5,
-                                    evt.getEntity().getLocation().getY() + 0.5,
-                                    evt.getEntity().getLocation().getZ() + 0.5);
-                            HubTweaks.getInstance().getServer()
-                                    .getWorld(evt.getDamager().getLocation().getWorld().getName())
-                                    .playEffect(loc, Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
+                            for (int i = 0; i < 3; i++) {
+                                Location loc = new Location(evt.getEntity().getLocation().getWorld(),
+                                        evt.getEntity().getLocation().getX(),
+                                        evt.getEntity().getLocation().getY() + (i * 0.3D),
+                                        evt.getEntity().getLocation().getZ());
+                                HubTweaks.getInstance().getServer()
+                                        .getWorld(evt.getDamager().getLocation().getWorld().getName())
+                                        .playEffect(loc, Effect.STEP_SOUND, Material.REDSTONE_BLOCK);
+                            }
+                            evt.setCancelled(false);
                         }
                     }
                 }
