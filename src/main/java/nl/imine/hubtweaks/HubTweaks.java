@@ -12,6 +12,7 @@ import nl.imine.hubtweaks.parkour.Parkour;
 import nl.imine.hubtweaks.pvp.PvP;
 import nl.imine.hubtweaks.ride.EntityRide;
 import nl.imine.hubtweaks.warps.CompassWarp;
+import nl.imine.hubtweaks.world.WorldProtector;
 
 public class HubTweaks extends JavaPlugin {
 
@@ -22,6 +23,7 @@ public class HubTweaks extends JavaPlugin {
         plugin = this;
         HideLogs.init();
         EventListener.init();
+        WorldProtector.init();
         PvP.init();
         Kotl.init();
         CompassWarp.init();
