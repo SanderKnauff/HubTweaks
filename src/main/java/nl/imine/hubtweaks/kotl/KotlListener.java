@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Effect;
+import org.bukkit.EntityEffect;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -110,6 +111,7 @@ public class KotlListener implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent evt) {
         if (((evt.getDamager() instanceof Player)) && ((evt.getEntity() instanceof Player))) {
             Player damager = (Player) evt.getDamager();
+            damager.playEffect(EntityEffect.HURT);
             damager.eject();
             if ((damager.getItemInHand().getType() != null)
                     && (damager.getItemInHand().getType().equals(Material.GOLDEN_CARROT))) {
