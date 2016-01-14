@@ -44,7 +44,7 @@ public class HubTweaks extends JavaPlugin {
         Tag t = new Tag(new Location(Bukkit.getWorlds().get(0), 56.5, 34, -488.5));
         t.addLine(ChatColor.GOLD + "Dit is " + ChatColor.RED + "Fred");
         t.addLine(ChatColor.RED + "100" + ChatColor.GOLD + "punten");
-        t.addLine(ChatColor.RED + "Fred" + ChatColor.GOLD + " is een faggot.");
+        t.addLine(ChatColor.RED + "Fred" + ChatColor.GOLD + " is een faggot. Net als " + ChatColor.RED + "Beauseant" + ChatColor.GOLD + ".");
     }
 
     @Override
