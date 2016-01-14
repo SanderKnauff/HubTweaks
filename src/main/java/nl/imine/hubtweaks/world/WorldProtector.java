@@ -10,6 +10,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
@@ -57,6 +58,11 @@ public class WorldProtector implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onEntityDamageByEntity(EntityExplodeEvent  eee) {
+        eee.setCancelled(true);
+    }
+    
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent edbee) {
         if (edbee.getEntity() instanceof Player) {
