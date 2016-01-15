@@ -22,6 +22,7 @@ import nl.imine.api.util.LocationUtil;
 import nl.imine.hubtweaks.HubTweaks;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import nl.imine.hubtweaks.Statistic;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 public class PvPListener implements Listener {
 
@@ -34,8 +35,6 @@ public class PvPListener implements Listener {
     public void onPlayerJoinArena(PvPJoinEvent evt) {
         Player player = evt.getPlayer();
         if (!PvP.getSpawnList().isEmpty()) {
-            System.out.println(player.getVehicle());
-            System.out.println(player.getPassenger());
             if(player.getVehicle() != null){
                 player.leaveVehicle();
             }
@@ -120,46 +119,53 @@ public class PvPListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent pme) {
-        if (PvP.getPlayerList().contains(pme.getPlayer())) {
-            if (!LocationUtil.isInBox(pme.getTo(), PvP.BOX[0], PvP.BOX[1])) {
-                pme.getPlayer().setHealth(0D);
+    public void onPlayerMove(PlayerMoveEvent evt) {
+        if (PvP.getPlayerList().contains(evt.getPlayer())) {
+            if (!LocationUtil.isInBox(evt.getTo(), PvP.BOX[0], PvP.BOX[1])) {
+                evt.getPlayer().setHealth(0D);
             }
         }
     }
 
     @EventHandler
-    public void onPlayerItemDrop(PlayerDropItemEvent E) {
-        if (PvP.getPlayerList().contains(E.getPlayer())) {
-            E.setCancelled(true);
+    public void onPlayerItemDrop(PlayerDropItemEvent evt) {
+        if (PvP.getPlayerList().contains(evt.getPlayer())) {
+            evt.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onPlayerItemPickup(PlayerPickupItemEvent E) {
-        if (PvP.getPlayerList().contains(E.getPlayer())) {
-            E.setCancelled(true);
+    public void onPlayerItemPickup(PlayerPickupItemEvent evt) {
+        if (PvP.getPlayerList().contains(evt.getPlayer())) {
+            evt.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onPlayerIventoryChange(InventoryClickEvent E) {
-        if (PvP.getPlayerList().contains((Player) E.getWhoClicked())) {
-            E.setCancelled(true);
+    public void onPlayerInventoryChange(InventoryClickEvent evt) {
+        if (PvP.getPlayerList().contains((Player) evt.getWhoClicked())) {
+            evt.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onPlayerKick(PlayerKickEvent E) {
-        if (PvP.getPlayerList().contains(E.getPlayer())) {
-            PvP.removePlayerFromArena(E.getPlayer());
+    public void onPlayerKick(PlayerKickEvent evt) {
+        if (PvP.getPlayerList().contains(evt.getPlayer())) {
+            PvP.removePlayerFromArena(evt.getPlayer());
         }
     }
 
     @EventHandler
-    public void onPlayerDisconnect(PlayerQuitEvent E) {
-        if (PvP.getPlayerList().contains(E.getPlayer())) {
-            PvP.removePlayerFromArena(E.getPlayer());
+    public void onPlayerDisconnect(PlayerQuitEvent evt) {
+        if (PvP.getPlayerList().contains(evt.getPlayer())) {
+            PvP.removePlayerFromArena(evt.getPlayer());
+        }
+    }
+    
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent evt) {
+        if (PvP.getPlayerList().contains(evt.getPlayer())) {
+            evt.getPlayer().updateInventory();
         }
     }
 }
