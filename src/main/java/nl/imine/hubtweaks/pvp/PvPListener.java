@@ -34,6 +34,8 @@ public class PvPListener implements Listener {
     public void onPlayerJoinArena(PvPJoinEvent evt) {
         Player player = evt.getPlayer();
         if (!PvP.getSpawnList().isEmpty()) {
+            System.out.println(player.getVehicle());
+            System.out.println(player.getPassenger());
             if(player.getVehicle() != null){
                 player.eject();
             }
