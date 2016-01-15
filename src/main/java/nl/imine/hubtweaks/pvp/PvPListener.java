@@ -34,9 +34,15 @@ public class PvPListener implements Listener {
     public void onPlayerJoinArena(PvPJoinEvent evt) {
         Player player = evt.getPlayer();
         if (!PvP.getSpawnList().isEmpty()) {
+            if(player.getVehicle() != null){
+                player.eject();
+            }
+            if(player.getPassenger() != null){
+                player.getPassenger().eject();
+            }
             PvP.addPlayerToArena(player);
         } else {
-            player.sendMessage(ChatColor.DARK_RED + "ERROR: Warp aborted due to no spawns avalible");
+            player.sendMessage(ChatColor.DARK_RED + "ERROR: Warp aborted due to no avalible spawns.");
         }
     }
 
