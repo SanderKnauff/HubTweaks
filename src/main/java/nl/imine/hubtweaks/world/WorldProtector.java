@@ -2,15 +2,19 @@ package nl.imine.hubtweaks.world;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
@@ -36,6 +40,36 @@ public class WorldProtector implements Listener {
         } , 20L, 20L);
     }
 
+    private boolean isBlockedBlock(Block bl) {
+        if (bl == null) {
+            return false;
+        }
+        switch (bl.getType()) {
+        case WOOD_BUTTON:
+        case STONE_BUTTON:
+        case WOOD_PLATE:
+        case STONE_PLATE:
+        case GOLD_PLATE:
+        case IRON_PLATE:
+            return false;
+        default:
+            return true;
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onBlockChange(EntityChangeBlockEvent ecbe) {
+        ecbe.setCancelled(isBlockedBlock(ecbe.getBlock()));
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onHangBreak(HangingBreakByEntityEvent hbbee) {
+        if (hbbee.getRemover() instanceof Player && ((Player) hbbee.getRemover()).getGameMode() == GameMode.ADVENTURE
+                || hbbee instanceof Projectile) {
+            hbbee.setCancelled(true);
+        }
+    }
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityDamageByEntity(EntityDamageEvent ede) {
         if (ede.getEntity() instanceof Player) {
@@ -59,14 +93,14 @@ public class WorldProtector implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onEntityDamageByEntity(EntityExplodeEvent  eee) {
+    public void onEntityDamageByEntity(EntityExplodeEvent eee) {
         eee.setCancelled(true);
     }
-    
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent edbee) {
         if (edbee.getEntity() instanceof Player) {
-            if ((LocationUtil.isInBox(edbee.getDamager().getLocation(), Kotl.BOX[0], Kotl.BOX[1]))) {
+            if ((LocationUtil.isInBox(edbee.getEntity().getLocation(), Kotl.BOX[0], Kotl.BOX[1]))) {
                 edbee.setDamage(0D);
                 return;
             }
@@ -77,7 +111,7 @@ public class WorldProtector implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent pie) {
         if (pie.getPlayer().getGameMode() == GameMode.ADVENTURE) {
-            pie.setCancelled(true);
+            pie.setCancelled(isBlockedBlock(pie.getClickedBlock()));
         }
     }
 
