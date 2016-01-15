@@ -37,10 +37,10 @@ public class PvPListener implements Listener {
             System.out.println(player.getVehicle());
             System.out.println(player.getPassenger());
             if(player.getVehicle() != null){
-                player.eject();
+                player.leaveVehicle();
             }
             if(player.getPassenger() != null){
-                player.getPassenger().eject();
+                player.getPassenger().leaveVehicle();
             }
             PvP.addPlayerToArena(player);
         } else {
