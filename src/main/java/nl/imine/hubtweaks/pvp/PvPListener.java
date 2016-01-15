@@ -165,7 +165,8 @@ public class PvPListener implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent evt) {
         if (PvP.getPlayerList().contains(evt.getPlayer())) {
-            evt.getPlayer().updateInventory();
+            evt.getPlayer().getInventory().addItem(new ItemStack(Material.ARROW, 1));
+            evt.getPlayer().getInventory().removeItem(new ItemStack(Material.ARROW, 1));
         }
     }
 }
