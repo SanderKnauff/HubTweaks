@@ -9,6 +9,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -37,7 +38,12 @@ public class WorldProtector implements Listener {
             ;
         } , 20L, 20L);
     }
-
+    
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onBlockChange(EntityChangeBlockEvent ecbe) {
+        ecbe.setCancelled(true);
+    }
+    
     @EventHandler(priority = EventPriority.LOWEST)
     public void onHangBreak(HangingBreakByEntityEvent hbbee) {
         if (hbbee.getRemover() instanceof Player && ((Player) hbbee.getRemover()).getGameMode() == GameMode.ADVENTURE
