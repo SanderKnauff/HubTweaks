@@ -2,6 +2,7 @@ package nl.imine.hubtweaks.world;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -39,19 +40,26 @@ public class WorldProtector implements Listener {
         } , 20L, 20L);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onBlockChange(EntityChangeBlockEvent ecbe) {
-        switch (ecbe.getBlock().getType()) {
+    private boolean isBlockedBlock(Block bl) {
+        if (bl == null) {
+            return false;
+        }
+        switch (bl.getType()) {
         case WOOD_BUTTON:
         case STONE_BUTTON:
         case WOOD_PLATE:
         case STONE_PLATE:
         case GOLD_PLATE:
         case IRON_PLATE:
-            ecbe.setCancelled(false);
+            return false;
         default:
-            ecbe.setCancelled(true);
+            return true;
         }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onBlockChange(EntityChangeBlockEvent ecbe) {
+        ecbe.setCancelled(isBlockedBlock(ecbe.getBlock()));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -103,7 +111,7 @@ public class WorldProtector implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent pie) {
         if (pie.getPlayer().getGameMode() == GameMode.ADVENTURE) {
-            pie.setCancelled(true);
+            pie.setCancelled(isBlockedBlock(pie.getClickedBlock()));
         }
     }
 
