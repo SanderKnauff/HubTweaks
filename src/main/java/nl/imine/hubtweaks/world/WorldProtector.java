@@ -38,12 +38,22 @@ public class WorldProtector implements Listener {
             ;
         } , 20L, 20L);
     }
-    
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockChange(EntityChangeBlockEvent ecbe) {
-        ecbe.setCancelled(true);
+        switch (ecbe.getBlock().getType()) {
+        case WOOD_BUTTON:
+        case STONE_BUTTON:
+        case WOOD_PLATE:
+        case STONE_PLATE:
+        case GOLD_PLATE:
+        case IRON_PLATE:
+            ecbe.setCancelled(false);
+        default:
+            ecbe.setCancelled(true);
+        }
     }
-    
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onHangBreak(HangingBreakByEntityEvent hbbee) {
         if (hbbee.getRemover() instanceof Player && ((Player) hbbee.getRemover()).getGameMode() == GameMode.ADVENTURE
