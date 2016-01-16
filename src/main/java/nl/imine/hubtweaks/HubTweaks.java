@@ -2,6 +2,7 @@ package nl.imine.hubtweaks;
 
 import net.md_5.bungee.api.ChatColor;
 import nl.imine.api.holotag.Tag;
+import nl.imine.api.holotag.TagAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
@@ -41,10 +42,10 @@ public class HubTweaks extends JavaPlugin {
         this.getConfig().addDefault("WarpItems", "[]");
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
-        Tag t = new Tag(new Location(Bukkit.getWorlds().get(0), 56.5, 34, -488.5));
-        t.addLine(ChatColor.GOLD + "Dit is " + ChatColor.RED + "Fred");
-        t.addLine(ChatColor.RED + "100" + ChatColor.GOLD + "punten");
-        t.addLine(ChatColor.RED + "Fred" + ChatColor.GOLD + " is een faggot. Net als " + ChatColor.RED + "Beauseant" + ChatColor.GOLD + ".");
+//        Tag t = TagAPI.createTag(new Location(Bukkit.getWorlds().get(0), 56.5, 34, -488.5));
+//        t.addLine(ChatColor.GOLD + "Dit is " + ChatColor.RED + "Fred");
+//        t.addLine(ChatColor.RED + "100" + ChatColor.GOLD + "punten");
+//        t.addLine(ChatColor.RED + "Fred" + ChatColor.GOLD + " is een faggot. Net als " + ChatColor.RED + "Beauseant" + ChatColor.GOLD + ".");
     }
 
     @Override

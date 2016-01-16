@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.Statistic;
 import nl.imine.hubtweaks.parkour.Parkour;
+import nl.imine.hubtweaks.pvp.PvP;
 
 public class EntityRide implements Listener {
 
@@ -49,8 +50,8 @@ public class EntityRide implements Listener {
             pl.eject();
         }
     }
-    
-    public static void removeFromTimeout(final Entity e){
+
+    public static void removeFromTimeout(final Entity e) {
         instance.timeOut.remove(e);
     }
 
@@ -71,13 +72,14 @@ public class EntityRide implements Listener {
     }
 
     @EventHandler
-    public void onPlayerInterct(final PlayerInteractEntityEvent piee) {
+    public void onPlayerInteract(final PlayerInteractEntityEvent piee) {
         final Player pl = piee.getPlayer();
         final Entity e = piee.getRightClicked();
         if (timeOut.containsKey(e) || e instanceof Villager || e.getLocation().getY() > 64) {
             return;
         }
         if (e instanceof LivingEntity && pl.hasPermission("iMine.hub.ride")
+                && !PvP.isPlayerInArena(pl)
                 && (!(e instanceof Player) || pl.hasPermission("iMine.hub.ride.player"))) {
             Entity oldPassenger = e.getPassenger();
             if (oldPassenger != null) {
