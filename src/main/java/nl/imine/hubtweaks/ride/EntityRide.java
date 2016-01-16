@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
@@ -72,14 +73,21 @@ public class EntityRide implements Listener {
     }
 
     @EventHandler
+    public void onPlayerHit(final EntityDamageByEntityEvent edbee) {
+        if (edbee.getDamager().getPassenger() != null) {
+            edbee.getDamager().eject();
+            addToTimeout(edbee.getDamager(), 100L);
+        }
+    }
+
+    @EventHandler
     public void onPlayerInteract(final PlayerInteractEntityEvent piee) {
         final Player pl = piee.getPlayer();
         final Entity e = piee.getRightClicked();
         if (timeOut.containsKey(e) || e instanceof Villager || e.getLocation().getY() > 64) {
             return;
         }
-        if (e instanceof LivingEntity && pl.hasPermission("iMine.hub.ride")
-                && !PvP.isPlayerInArena(pl)
+        if (e instanceof LivingEntity && pl.hasPermission("iMine.hub.ride") && !PvP.isPlayerInArena(pl)
                 && (!(e instanceof Player) || pl.hasPermission("iMine.hub.ride.player"))) {
             Entity oldPassenger = e.getPassenger();
             if (oldPassenger != null) {
@@ -108,5 +116,4 @@ public class EntityRide implements Listener {
             }
         }
     }
-
 }
