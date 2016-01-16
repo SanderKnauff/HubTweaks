@@ -84,6 +84,7 @@ public class WorldProtector implements Listener {
             case DROWNING:
             case ENTITY_EXPLOSION:
             case FALLING_BLOCK:
+            case SUFFOCATION:
                 ede.setCancelled(true);
                 break;
             default:
