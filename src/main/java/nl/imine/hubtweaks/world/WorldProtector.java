@@ -15,6 +15,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
@@ -54,6 +55,13 @@ public class WorldProtector implements Listener {
             return false;
         default:
             return true;
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onClickEntity(PlayerInteractAtEntityEvent piaee) {
+        if (piaee.getPlayer().getGameMode() == GameMode.ADVENTURE) {
+            piaee.setCancelled(true);
         }
     }
 
