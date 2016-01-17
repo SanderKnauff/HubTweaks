@@ -66,6 +66,13 @@ public class WorldProtector implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
+    public void onEntityHurt(EntityDamageByEntityEvent edbee) {
+        if (edbee.getDamager() instanceof Player && ((Player) edbee.getDamager()).getGameMode() == GameMode.ADVENTURE) {
+            edbee.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockChange(EntityChangeBlockEvent ecbe) {
         ecbe.setCancelled(isBlockedBlock(ecbe.getBlock()));
     }
