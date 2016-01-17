@@ -26,6 +26,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import nl.imine.api.util.ColorUtil;
+import nl.imine.api.util.LocationUtil;
 import nl.imine.api.util.PlayerUtil;
 import nl.imine.hubtweaks.HubTweaks;
 
@@ -114,7 +115,8 @@ public class KotlListener implements Listener {
             if ((damager.getItemInHand().getType() != null)
                     && (damager.getItemInHand().getType().equals(Material.GOLDEN_CARROT))) {
                 if (Kotl.getInstance().getKing() != null) {
-                    if (Kotl.getInstance().getKing().equals(damager)) {
+                    if (Kotl.getInstance().getKing().equals(damager)
+                            && LocationUtil.isInBox(evt.getEntity().getLocation(), Kotl.BOX[0], Kotl.BOX[1])) {
                         final Firework firework = (Firework) evt.getEntity().getWorld()
                                 .spawnEntity(evt.getEntity().getLocation(), EntityType.FIREWORK);
                         FireworkMeta fireworkMeta = firework.getFireworkMeta();

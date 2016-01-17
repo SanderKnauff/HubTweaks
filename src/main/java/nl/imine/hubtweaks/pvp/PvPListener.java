@@ -22,7 +22,6 @@ import nl.imine.api.util.LocationUtil;
 import nl.imine.hubtweaks.HubTweaks;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import nl.imine.hubtweaks.Statistic;
-import org.bukkit.event.player.PlayerInteractEvent;
 
 public class PvPListener implements Listener {
 
