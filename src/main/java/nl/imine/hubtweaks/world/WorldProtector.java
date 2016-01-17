@@ -67,7 +67,8 @@ public class WorldProtector implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityHurt(EntityDamageByEntityEvent edbee) {
-        if (edbee.getDamager() instanceof Player && ((Player) edbee.getDamager()).getGameMode() == GameMode.ADVENTURE) {
+        if (!(edbee.getEntity() instanceof Player) && edbee.getDamager() instanceof Player
+                && ((Player) edbee.getDamager()).getGameMode() == GameMode.ADVENTURE) {
             edbee.setCancelled(true);
         }
     }
@@ -113,11 +114,12 @@ public class WorldProtector implements Listener {
         eee.setCancelled(true);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent edbee) {
         if (edbee.getEntity() instanceof Player) {
             if ((LocationUtil.isInBox(edbee.getEntity().getLocation(), Kotl.BOX[0], Kotl.BOX[1]))) {
                 edbee.setDamage(0D);
+                edbee.setCancelled(false);
                 return;
             }
             edbee.setCancelled(true);
