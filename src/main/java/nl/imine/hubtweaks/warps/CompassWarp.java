@@ -36,7 +36,7 @@ public class CompassWarp implements Listener {
             inv.addButton(new ButtonTeleport(inv,
                     ItemUtil.getBuilder(Material.INK_SACK).setDurability((short) 5)
                     .setName(ChatColor.LIGHT_PURPLE + "Spawn").build(),
-                    0, new Location(HubTweaks.getMainWorld(), 52.5D, 36.1D, -503.5D, -90F, 0F)));
+                    0, new Location(HubTweaks.getMainWorld(), 47.5D, 36.0D, -509.5D, -45F, 0F)));
             inv.addButton(
                     new ButtonTeleport(inv, ItemUtil.getBuilder(Material.TNT).setName(ChatColor.YELLOW + "Outlaws").build(),
                             2, new Location(HubTweaks.getMainWorld(), 73.5D, 36.1D, -503.5D, -90F, 0F)));
