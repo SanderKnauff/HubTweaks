@@ -95,7 +95,7 @@ public class EntityRide implements Listener {
                     ((Player) oldPassenger).sendMessage("You get kicked off the "
                             + e.getType().toString().toLowerCase().replace("_", " ").replace("craft", ""));
                 }
-                oldPassenger.teleport(oldPassenger.getLocation().add(0D, -0.5D, 0D));
+                oldPassenger.teleport(oldPassenger.getLocation().add(0D, 0.1D, 0D));
             }
             addToTimeout(e, 100L);
             e.eject();
