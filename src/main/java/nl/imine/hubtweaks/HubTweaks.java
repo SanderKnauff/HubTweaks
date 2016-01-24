@@ -1,7 +1,5 @@
 package nl.imine.hubtweaks;
 
-import nl.imine.api.holotag.Tag;
-import nl.imine.api.holotag.TagAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
@@ -15,8 +13,6 @@ import nl.imine.hubtweaks.pvp.PvP;
 import nl.imine.hubtweaks.ride.EntityRide;
 import nl.imine.hubtweaks.warps.CompassWarp;
 import nl.imine.hubtweaks.world.WorldProtector;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
 
 public class HubTweaks extends JavaPlugin {
 
