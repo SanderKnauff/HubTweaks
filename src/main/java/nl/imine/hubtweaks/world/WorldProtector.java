@@ -23,6 +23,8 @@ import nl.imine.api.util.LocationUtil;
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.kotl.Kotl;
 import nl.imine.hubtweaks.pvp.PvP;
+import org.bukkit.entity.ItemFrame;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 public class WorldProtector implements Listener {
 
@@ -38,7 +40,7 @@ public class WorldProtector implements Listener {
                     .filter(pl -> !LocationUtil.isInBox(pl.getLocation(), PvP.BOX[0], PvP.BOX[1]))
                     .filter(pl -> !pl.isDead()).forEach(pl -> pl.setHealth(20D));
             ;
-        } , 20L, 20L);
+        }, 20L, 20L);
     }
 
     private boolean isBlockedBlock(Block bl) {
@@ -46,15 +48,15 @@ public class WorldProtector implements Listener {
             return false;
         }
         switch (bl.getType()) {
-        case WOOD_BUTTON:
-        case STONE_BUTTON:
-        case WOOD_PLATE:
-        case STONE_PLATE:
-        case GOLD_PLATE:
-        case IRON_PLATE:
-            return false;
-        default:
-            return true;
+            case WOOD_BUTTON:
+            case STONE_BUTTON:
+            case WOOD_PLATE:
+            case STONE_PLATE:
+            case GOLD_PLATE:
+            case IRON_PLATE:
+                return false;
+            default:
+                return true;
         }
     }
 
@@ -62,6 +64,13 @@ public class WorldProtector implements Listener {
     public void onClickEntity(PlayerInteractAtEntityEvent piaee) {
         if (piaee.getPlayer().getGameMode() == GameMode.ADVENTURE) {
             piaee.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onClickItemFrame(PlayerInteractEntityEvent piee) {
+        if (piee.getPlayer().getGameMode() == GameMode.ADVENTURE && piee.getRightClicked() instanceof ItemFrame) {
+            piee.setCancelled(true);
         }
     }
 
@@ -90,21 +99,21 @@ public class WorldProtector implements Listener {
     public void onEntityDamageByEntity(EntityDamageEvent ede) {
         if (ede.getEntity() instanceof Player) {
             switch (ede.getCause()) {
-            case FIRE:
-            case FIRE_TICK:
-            case LAVA:
-                ede.getEntity().setFireTicks(0);
-            case FALL:
-            case CONTACT:
-            case BLOCK_EXPLOSION:
-            case DROWNING:
-            case ENTITY_EXPLOSION:
-            case FALLING_BLOCK:
-            case SUFFOCATION:
-                ede.setCancelled(true);
-                break;
-            default:
-                break;
+                case FIRE:
+                case FIRE_TICK:
+                case LAVA:
+                    ede.getEntity().setFireTicks(0);
+                case FALL:
+                case CONTACT:
+                case BLOCK_EXPLOSION:
+                case DROWNING:
+                case ENTITY_EXPLOSION:
+                case FALLING_BLOCK:
+                case SUFFOCATION:
+                    ede.setCancelled(true);
+                    break;
+                default:
+                    break;
             }
         }
     }
