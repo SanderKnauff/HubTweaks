@@ -74,10 +74,14 @@ public class EntityRide implements Listener {
 
     @EventHandler
     public void onPlayerHit(final EntityDamageByEntityEvent edbee) {
-        if (edbee.getDamager().getPassenger() != null) {
-            edbee.getDamager().eject();
-            addToTimeout(edbee.getDamager(), 100L);
+        Entity e = edbee.getEntity();
+        if (e.getPassenger() != null) {
+            e.eject();
         }
+        if (e.getVehicle() != null) {
+            e.getVehicle().eject();
+        }
+        addToTimeout(e, 100L);
     }
 
     @EventHandler
