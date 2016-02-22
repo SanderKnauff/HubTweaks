@@ -60,7 +60,7 @@ public class EventListener implements Listener, Runnable {
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent evt) {
+    public void onInventoryClick(final InventoryClickEvent evt) {
         if (evt.getWhoClicked().getGameMode() == GameMode.ADVENTURE) {
             evt.setCancelled(true);
         }

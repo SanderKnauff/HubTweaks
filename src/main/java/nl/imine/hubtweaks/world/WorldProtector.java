@@ -2,6 +2,7 @@ package nl.imine.hubtweaks.world;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -40,7 +41,7 @@ public class WorldProtector implements Listener {
                     .filter(pl -> !LocationUtil.isInBox(pl.getLocation(), PvP.BOX[0], PvP.BOX[1]))
                     .filter(pl -> !pl.isDead()).forEach(pl -> pl.setHealth(20D));
             ;
-        }, 20L, 20L);
+        } , 20L, 20L);
     }
 
     private boolean isBlockedBlock(Block bl) {
@@ -48,15 +49,15 @@ public class WorldProtector implements Listener {
             return false;
         }
         switch (bl.getType()) {
-            case WOOD_BUTTON:
-            case STONE_BUTTON:
-            case WOOD_PLATE:
-            case STONE_PLATE:
-            case GOLD_PLATE:
-            case IRON_PLATE:
-                return false;
-            default:
-                return true;
+        case WOOD_BUTTON:
+        case STONE_BUTTON:
+        case WOOD_PLATE:
+        case STONE_PLATE:
+        case GOLD_PLATE:
+        case IRON_PLATE:
+            return false;
+        default:
+            return true;
         }
     }
 
@@ -99,21 +100,21 @@ public class WorldProtector implements Listener {
     public void onEntityDamageByEntity(EntityDamageEvent ede) {
         if (ede.getEntity() instanceof Player) {
             switch (ede.getCause()) {
-                case FIRE:
-                case FIRE_TICK:
-                case LAVA:
-                    ede.getEntity().setFireTicks(0);
-                case FALL:
-                case CONTACT:
-                case BLOCK_EXPLOSION:
-                case DROWNING:
-                case ENTITY_EXPLOSION:
-                case FALLING_BLOCK:
-                case SUFFOCATION:
-                    ede.setCancelled(true);
-                    break;
-                default:
-                    break;
+            case FIRE:
+            case FIRE_TICK:
+            case LAVA:
+                ede.getEntity().setFireTicks(0);
+            case FALL:
+            case CONTACT:
+            case BLOCK_EXPLOSION:
+            case DROWNING:
+            case ENTITY_EXPLOSION:
+            case FALLING_BLOCK:
+            case SUFFOCATION:
+                ede.setCancelled(true);
+                break;
+            default:
+                break;
             }
         }
     }
@@ -138,6 +139,9 @@ public class WorldProtector implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent pie) {
         if (pie.getPlayer().getGameMode() == GameMode.ADVENTURE) {
+            if (pie.getPlayer().getItemInHand().getType() == Material.BOW) {
+                return;
+            }
             pie.setCancelled(isBlockedBlock(pie.getClickedBlock()));
         }
     }
