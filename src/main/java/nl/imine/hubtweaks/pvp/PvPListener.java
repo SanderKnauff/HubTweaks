@@ -1,5 +1,6 @@
 package nl.imine.hubtweaks.pvp;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -34,10 +35,10 @@ public class PvPListener implements Listener {
     public void onPlayerJoinArena(PvPJoinEvent evt) {
         Player player = evt.getPlayer();
         if (!PvP.getSpawnList().isEmpty()) {
-            if(player.getVehicle() != null){
+            if (player.getVehicle() != null) {
                 player.leaveVehicle();
             }
-            if(player.getPassenger() != null){
+            if (player.getPassenger() != null) {
                 player.getPassenger().leaveVehicle();
             }
             PvP.addPlayerToArena(player);
@@ -111,9 +112,11 @@ public class PvPListener implements Listener {
     }
 
     @EventHandler
-    public void onProjectileHit(ProjectileHitEvent evt) {
+    public void onProjectileHit(final ProjectileHitEvent evt) {
         if (evt.getEntity().getShooter() instanceof Player) {
-            evt.getEntity().remove();
+            Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), () -> {
+                evt.getEntity().remove();
+            } , 100L);
         }
     }
 
