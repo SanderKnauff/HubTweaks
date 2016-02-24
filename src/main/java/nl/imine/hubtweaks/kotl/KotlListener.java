@@ -7,6 +7,7 @@ import org.bukkit.Color;
 import org.bukkit.Effect;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -107,7 +108,16 @@ public class KotlListener implements Listener {
             kotl.removeEntropiaWand(event.getPlayer());
         }
     }
-
+    
+    @EventHandler
+    public void onPlayerHit(EntityDamageByEntityEvent edbee) {
+        Entity e = edbee.getEntity();
+        if(LocationUtil.isInBox(e.getLocation(), Kotl.BOX[0], Kotl.BOX[1])){
+            if (e.getVehicle() != null) {
+                e.getVehicle().eject();
+            }
+        }
+    }
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent evt) {
         if (((evt.getDamager() instanceof Player)) && ((evt.getEntity() instanceof Player))) {
