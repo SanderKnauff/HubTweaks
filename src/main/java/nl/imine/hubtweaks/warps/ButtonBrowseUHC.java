@@ -18,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -47,7 +48,7 @@ public class ButtonBrowseUHC extends Button {
     }
 
     @Override
-    public void doAction(Player player) {
+    public void doAction(Player player, ClickType ct) {
         Bukkit.getScheduler().runTaskAsynchronously(HubTweaks.getInstance(), () -> {
             Container uhcContainer = GuiManager.getInstance().createContainer("Select a lobby", 9, true, false);
             for (int i : UHCRequester.getPortalIds()) {

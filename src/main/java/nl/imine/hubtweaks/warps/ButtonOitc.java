@@ -3,6 +3,7 @@ package nl.imine.hubtweaks.warps;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemFlag;
 
 import nl.imine.api.gui.Button;
@@ -19,7 +20,7 @@ public class ButtonOitc extends Button {
     }
 
     @Override
-    public void doAction(Player player) {
+    public void doAction(Player player, ClickType ct) {
         HubTweaks.getInstance().getServer().getPluginManager().callEvent(new PvPJoinEvent(player));
     }
 }

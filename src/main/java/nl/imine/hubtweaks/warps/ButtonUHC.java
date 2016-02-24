@@ -5,6 +5,7 @@ import nl.imine.api.gui.Container;
 import nl.makertim.uhchub.api.UHCRequester;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 public class ButtonUHC extends Button {
@@ -19,7 +20,7 @@ public class ButtonUHC extends Button {
     }
 
     @Override
-    public void doAction(Player player) {
+    public void doAction(Player player, ClickType ct) {
         if (!hasError) {
             UHCRequester.sendTo(id, player);
         } else {
