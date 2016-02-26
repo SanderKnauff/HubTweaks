@@ -178,7 +178,7 @@ public class ParkourListener implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent evt) {
         Parkour.getInstance().getPlayer(evt.getEntity()).setTouchedPlate(false);
-        Parkour.getInstance().getPlayer(evt.getPlayer()).setReachedTop(false);
+        Parkour.getInstance().getPlayer(evt.getEntity()).setReachedTop(false);
     }
 
     @EventHandler
