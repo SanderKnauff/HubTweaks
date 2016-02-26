@@ -110,6 +110,9 @@ public class EventListener implements Listener, Runnable {
         FileConfiguration config = HubTweaks.getInstance().getConfig();
         pl.setGameMode(GameMode.ADVENTURE);
         Parkour.getInstance().getPlayer(pl).setTouchedPlate(false);
+        for(ItemStack is : pl.getInventory().getArmorContents()){
+            is.setType(Material.AIR);
+        }
         final ItemStack item = new ItemStack(Material.COMPASS, 1);
         ItemMeta metadat = (ItemMeta) item.getItemMeta();
         List<String> list = new ArrayList<>();
