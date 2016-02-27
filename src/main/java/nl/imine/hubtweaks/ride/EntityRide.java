@@ -87,7 +87,7 @@ public class EntityRide implements Listener {
         if (timeOut.containsKey(e) || e instanceof Villager || e.getLocation().getY() > 64) {
             return;
         }
-        if (e instanceof LivingEntity && pl.hasPermission("iMine.hub.ride") && !PvP.isPlayerInArena(pl)
+        if (e instanceof LivingEntity && pl.hasPermission("iMine.hub.ride") && !PvP.isPlayerInArena(pl) && pl.getVehicle() == null
                 && (!(e instanceof Player) || pl.hasPermission("iMine.hub.ride.player"))) {
             Entity oldPassenger = e.getPassenger();
             if (oldPassenger != null) {
