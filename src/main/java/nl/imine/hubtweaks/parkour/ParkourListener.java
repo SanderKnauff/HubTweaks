@@ -86,13 +86,11 @@ public class ParkourListener implements Listener {
                                 player.save();
                                 for (int i = 0; i < 10; i++) {
                                     Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), () -> {
-                                        LocationUtil.firework(evt.getPlayer().getLocation(),
-                                                FireworkEffect.builder()
-                                                        .with(Type.BALL_LARGE).withColor(Color.PURPLE).withFade(Color.GREEN,
-                                                                Color.LIME, Color.YELLOW, Color.ORANGE, Color.RED)
-                                                        .build(),
-                                                20L);
-                                    } , 20 * i);
+                                        LocationUtil.firework(evt.getPlayer().getLocation(), FireworkEffect.builder()
+                                                .with(Type.BALL_LARGE).withColor(Color.PURPLE).withFade(Color.GREEN,
+                                                        Color.LIME, Color.YELLOW, Color.ORANGE, Color.RED)
+                                                .build(), 20L);
+                                    } , 20 * (i + 5));
                                 }
                             } else {
                                 mssg = "&c&l%s &r&6 has reached the end of the parkour!";
