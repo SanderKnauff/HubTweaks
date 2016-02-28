@@ -23,10 +23,10 @@ public class AntiFly {
     public AntiFly() {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(HubTweaks.getInstance(), () -> {
             flyMap.entrySet().stream().filter(map -> Bukkit.getPlayer(map.getKey()) != null).forEach(map -> {
-                if (map.getValue() > 15) {
+                if (map.getValue() >= 10) {
                     Player pl = Bukkit.getPlayer(map.getKey());
                     PlayerUtil.sendGlobalAdmin(ColorUtil.replaceColors(
-                            "&l[&5FLY LOG&r&l]&r &c%s &7is now flying in &e%s&7. [&ePackets: &c%d&7]", pl.getName(),
+                            "&l[&5&lFLY LOG&r&l]&r &c%s &7is now flying in &e%s&7. [&ePackets: &c%d&7]", pl.getName(),
                             pl.getWorld().getName(), map.getValue()));
                 }
             });
