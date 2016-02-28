@@ -84,14 +84,16 @@ public class ParkourListener implements Listener {
                                 player.setLevel(parkour.getLevel(DyeColor.MAGENTA));
                                 mssg = "&c&l%s &r&5 has reached the end of the parkour!";
                                 player.save();
-                                Bukkit.getScheduler().scheduleSyncRepeatingTask(HubTweaks.getInstance(), () -> {
-                                    LocationUtil.firework(
-                                            evt.getPlayer()
-                                                    .getLocation(),
-                                            FireworkEffect.builder().with(Type.BALL_LARGE).withColor(Color.GREEN).withFade(Color.LIME, Color.YELLOW,
-                                                    Color.ORANGE, Color.RED, Color.PURPLE).build(),
-                                            40L);
-                                } , 10, 20 * 10);
+                                for (int i = 0; i < 10; i++) {
+                                    Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), () -> {
+                                        LocationUtil.firework(evt.getPlayer().getLocation(),
+                                                FireworkEffect.builder()
+                                                        .with(Type.BALL_LARGE).withColor(Color.PURPLE).withFade(Color.GREEN,
+                                                                Color.LIME, Color.YELLOW, Color.ORANGE, Color.RED)
+                                                        .build(),
+                                                20L);
+                                    } , 20 * i);
+                                }
                             } else {
                                 mssg = "&c&l%s &r&6 has reached the end of the parkour!";
                             }
