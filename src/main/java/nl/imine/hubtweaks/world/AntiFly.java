@@ -25,7 +25,7 @@ public class AntiFly {
             flyMap.entrySet().stream().filter(map -> Bukkit.getPlayer(map.getKey()) != null).forEach(map -> {
                 Player pl = Bukkit.getPlayer(map.getKey());
                 // is falling
-                if (map.getValue()[1] - 30 > pl.getLocation().getY()) {
+                if (map.getValue()[1] > pl.getLocation().getY()) {
                     return;
                 }
                 // meer dan x ticks aan t vliegen
