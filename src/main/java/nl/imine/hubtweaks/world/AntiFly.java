@@ -41,8 +41,12 @@ public class AntiFly implements Listener {
             flyMap.clear();
         } , 0L, 20L * 3);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(HubTweaks.getInstance(), () -> {
-            Bukkit.getOnlinePlayers().stream().filter(pl -> isFlying(pl)).forEach(pl -> addFly(pl));
-        } , 0L, 20L / 10);
+            Bukkit.getOnlinePlayers().forEach(pl -> {
+                if (isFlying(pl)) {
+                    addFly(pl);
+                }
+            });
+        } , 0L, 2L);
     }
 
     private void addFly(Player pl) {
@@ -60,7 +64,7 @@ public class AntiFly implements Listener {
 
     private static boolean isFlying(Player pl) {
         for (int x = -1; x < 2; x++) {
-            for (int y = -1; y < 2; y++) {
+            for (int y = -1; y < 1; y++) {
                 for (int z = -1; z < 2; z++) {
                     if (pl.getLocation().clone().add(x, y, z).getBlock().getType() != Material.AIR) {
                         return false;
