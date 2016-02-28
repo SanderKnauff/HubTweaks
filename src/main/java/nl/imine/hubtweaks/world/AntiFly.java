@@ -54,7 +54,7 @@ public class AntiFly {
                 }
             }
         }
-        if (pl.getAllowFlight() || pl.getVehicle() == null) {
+        if (pl.getAllowFlight() || pl.getVehicle() != null) {
             return false;
         }
         return true;
