@@ -26,8 +26,8 @@ public class AntiFly {
                 if (map.getValue() >= 10) {
                     Player pl = Bukkit.getPlayer(map.getKey());
                     PlayerUtil.sendGlobalAdmin(ColorUtil.replaceColors(
-                            "&l[&5&lFLY LOG&r&l]&r &c%s &7is now flying in &e%s&7. [&ePackets: &c%d&7]", pl.getName(),
-                            pl.getWorld().getName(), map.getValue()));
+                            "&l[&5&lFLY LOG&r&l]&r &c%s &7is now flying in &e%s&7. [Packets: &c%d&7]", pl.getName(),
+                            pl.getWorld().getName(), map.getValue() * 4));
                 }
             });
             flyMap.clear();
@@ -53,6 +53,9 @@ public class AntiFly {
                     }
                 }
             }
+        }
+        if (pl.getAllowFlight() || pl.getVehicle() == null) {
+            return false;
         }
         return true;
     }
