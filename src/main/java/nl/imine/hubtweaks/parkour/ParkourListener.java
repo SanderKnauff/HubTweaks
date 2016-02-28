@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -87,7 +88,7 @@ public class ParkourListener implements Listener {
                                     LocationUtil.firework(
                                             evt.getPlayer()
                                                     .getLocation(),
-                                            FireworkEffect.builder().withFade(Color.GREEN, Color.LIME, Color.YELLOW,
+                                            FireworkEffect.builder().with(Type.BALL_LARGE).withColor(Color.GREEN).withFade(Color.LIME, Color.YELLOW,
                                                     Color.ORANGE, Color.RED, Color.PURPLE).build(),
                                             40L);
                                 } , 10, 20 * 10);
