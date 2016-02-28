@@ -6,14 +6,12 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import nl.imine.api.util.ColorUtil;
-import nl.imine.api.util.MktUtil;
 import nl.imine.api.util.PlayerUtil;
 import nl.imine.hubtweaks.HubTweaks;
 
@@ -62,7 +60,7 @@ public class AntiFly implements Listener {
 
     private static boolean isFlying(Player pl) {
         for (int x = -1; x < 2; x++) {
-            for (int y = -1; y < 1; y++) {
+            for (int y = -2; y < 0; y++) {
                 for (int z = -1; z < 2; z++) {
                     if (pl.getLocation().clone().add(x, y, z).getBlock().getType() != Material.AIR) {
                         return false;
@@ -73,7 +71,6 @@ public class AntiFly implements Listener {
         if (pl.getAllowFlight() || pl.getVehicle() != null) {
             return false;
         }
-        pl.getWorld().playSound(pl.getLocation(), MktUtil.randomItem(Sound.values()), 1, 1);
         return true;
     }
 
