@@ -28,6 +28,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import nl.imine.hubtweaks.parkour.Parkour;
 import nl.imine.hubtweaks.parkour.ParkourListener;
+import nl.imine.hubtweaks.world.AntiFly;
 
 public class EventListener implements Listener, Runnable {
 
@@ -57,6 +58,7 @@ public class EventListener implements Listener, Runnable {
             if (e instanceof Player) {
                 playerRespawn((Player) e);
                 ParkourListener.resetCheat((Player) e);
+                AntiFly.resetFly((Player) e);
             }
         }
     }

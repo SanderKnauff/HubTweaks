@@ -15,9 +15,10 @@ import nl.imine.hubtweaks.HubTweaks;
 public class AntiFly {
 
     private Map<UUID, Integer[]> flyMap = new HashMap<>();
+    private static AntiFly af;
 
     public static void init() {
-        new AntiFly();
+        af = new AntiFly();
     }
 
     public AntiFly() {
@@ -49,6 +50,10 @@ public class AntiFly {
         Integer[] map = flyMap.get(pl.getUniqueId());
         map[0] = map[0] + 1;
         flyMap.put(pl.getUniqueId(), map);
+    }
+
+    public static void resetFly(Player pl) {
+        af.flyMap.remove(pl.getUniqueId());
     }
 
     private static boolean isFlying(Player pl) {
