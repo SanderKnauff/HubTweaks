@@ -31,14 +31,14 @@ public class AntiFly implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent pme) {
-        if (pme.getFrom().getY() > pme.getTo().getY()
-                && pme.getFrom().add(0, -1, 0).getBlock().getType() != Material.AIR) {
+        if (pme.getFrom().getY() < pme.getTo().getY()
+                && pme.getFrom().add(0, -1, 0).getBlock().getType() == Material.AIR) {
             UUID uuid = pme.getPlayer().getUniqueId();
             if (!flyMap.containsKey(uuid)) {
                 flyMap.put(uuid, 0);
             }
             flyMap.put(uuid, flyMap.get(uuid) + 1);
-            if (flyMap.get(uuid) > 10) {
+            if (flyMap.get(uuid) > 5) {
                 PlayerUtil
                         .sendGlobalAdmin(ColorUtil.replaceColors("&l[&5FLY LOG&r&l]&r &c%s &7is now flying in &e%s&7.",
                                 pme.getPlayer().getName(), pme.getFrom().getWorld().getName()));
