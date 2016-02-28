@@ -14,7 +14,7 @@ import nl.imine.hubtweaks.HubTweaks;
 
 public class AntiFly {
 
-    private Map<UUID, Integer> flyMap = new HashMap<>();
+    private Map<UUID, Integer[]> flyMap = new HashMap<>();
 
     public static void init() {
         new AntiFly();
@@ -23,11 +23,16 @@ public class AntiFly {
     public AntiFly() {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(HubTweaks.getInstance(), () -> {
             flyMap.entrySet().stream().filter(map -> Bukkit.getPlayer(map.getKey()) != null).forEach(map -> {
-                if (map.getValue() >= 10) {
-                    Player pl = Bukkit.getPlayer(map.getKey());
+                Player pl = Bukkit.getPlayer(map.getKey());
+                // is falling
+                if (map.getValue()[1] - 30 > pl.getLocation().getY()) {
+                    return;
+                }
+                // meer dan 40ticks aan t vliegen
+                if (map.getValue()[0] >= 10) {
                     PlayerUtil.sendGlobalAdmin(ColorUtil.replaceColors(
                             "&l[&5&lFLY LOG&r&l]&r &c%s &7is now flying in &e%s&7. [Packets: &c%d&7]", pl.getName(),
-                            pl.getWorld().getName(), map.getValue() * 4));
+                            pl.getWorld().getName(), map.getValue()[0] * 4));
                 }
             });
             flyMap.clear();
@@ -39,9 +44,11 @@ public class AntiFly {
 
     private void addFly(Player pl) {
         if (!flyMap.containsKey(pl.getUniqueId())) {
-            flyMap.put(pl.getUniqueId(), 0);
+            flyMap.put(pl.getUniqueId(), new Integer[] { 0, pl.getLocation().getBlockY() });
         }
-        flyMap.put(pl.getUniqueId(), flyMap.get(pl.getUniqueId()) + 1);
+        Integer[] map = flyMap.get(pl.getUniqueId());
+        map[0] = map[0] + 1;
+        flyMap.put(pl.getUniqueId(), map);
     }
 
     private static boolean isFlying(Player pl) {
