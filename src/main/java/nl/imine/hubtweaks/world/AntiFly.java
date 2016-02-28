@@ -28,7 +28,7 @@ public class AntiFly implements Listener {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(HubTweaks.getInstance(), () -> {
             flyMap.clear();
             scan = true;
-        } , 0L, 20L);
+        } , 0L, 20L * 3);
     }
 
     @EventHandler
@@ -48,7 +48,7 @@ public class AntiFly implements Listener {
                 flyMap.put(uuid, 0);
             }
             flyMap.put(uuid, flyMap.get(uuid) + 1);
-            if (flyMap.get(uuid) > 5) {
+            if (flyMap.get(uuid) > 20) {
                 PlayerUtil
                         .sendGlobalAdmin(ColorUtil.replaceColors("&l[&5FLY LOG&r&l]&r &c%s &7is now flying in &e%s&7.",
                                 pme.getPlayer().getName(), pme.getFrom().getWorld().getName()));
