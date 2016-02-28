@@ -33,8 +33,12 @@ public class AntiFly implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent pme) {
-        if (pme.getFrom().getY() < pme.getTo().getY() && !pme.getPlayer().getAllowFlight() && scan
-                && pme.getFrom().add(0, -1, 0).getBlock().getType() == Material.AIR) {
+        if (pme.getFrom().getY() < pme.getTo().getY() && !pme.getPlayer().getAllowFlight() && scan) {
+            for (int i = -1; i < 1; i++) {
+                if (pme.getFrom().clone().add(0, i, 0).getBlock().getType() != Material.AIR) {
+                    return;
+                }
+            }
             UUID uuid = pme.getPlayer().getUniqueId();
             if (!flyMap.containsKey(uuid)) {
                 flyMap.put(uuid, 0);
