@@ -20,6 +20,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -172,6 +173,12 @@ public class ParkourListener implements Listener {
     }
 
     // PARKOUR ANTICHEAT DOWN HERE
+    public static void resetCheat(Player pl) {
+        ParkourPlayer pp = Parkour.getInstance().getPlayer(pl);
+        pp.setTouchedPlate(false);
+        pp.setReachedTop(false);
+    }
+
     @EventHandler
     public void onGameModeChange(PlayerGameModeChangeEvent evt) {
         if (!evt.getNewGameMode().equals(GameMode.ADVENTURE)) {
@@ -199,8 +206,7 @@ public class ParkourListener implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent evt) {
-        Parkour.getInstance().getPlayer(evt.getEntity()).setTouchedPlate(false);
-        Parkour.getInstance().getPlayer(evt.getEntity()).setReachedTop(false);
+        resetCheat(evt.getEntity());
     }
 
     @EventHandler
