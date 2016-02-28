@@ -8,8 +8,6 @@ import org.bukkit.Effect;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,8 +21,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import nl.imine.api.util.ColorUtil;
 import nl.imine.api.util.LocationUtil;
@@ -127,19 +123,9 @@ public class KotlListener implements Listener {
                 if (Kotl.getInstance().getKing() != null) {
                     if (Kotl.getInstance().getKing().equals(damager)
                             && LocationUtil.isInBox(evt.getEntity().getLocation(), Kotl.BOX[0], Kotl.BOX[1])) {
-                        final Firework firework = (Firework) evt.getEntity().getWorld()
-                                .spawnEntity(evt.getEntity().getLocation(), EntityType.FIREWORK);
-                        FireworkMeta fireworkMeta = firework.getFireworkMeta();
-                        fireworkMeta.addEffect(FireworkEffect.builder().withColor(Color.RED).withColor(Color.BLUE)
+                        LocationUtil.firework(evt.getEntity().getLocation(), FireworkEffect.builder().withColor(Color.RED).withColor(Color.BLUE)
                                 .withColor(Color.GREEN).withColor(Color.YELLOW).with(FireworkEffect.Type.BALL_LARGE)
-                                .build());
-                        firework.setFireworkMeta(fireworkMeta);
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                firework.detonate();
-                            }
-                        }.runTaskLater(HubTweaks.getInstance(), 5L);
+                                .build(), 5L);
                     } else {
                         Kotl.getInstance().removeEntropiaWand(damager);
                         damager.setHealth(0);

@@ -8,14 +8,11 @@ package nl.imine.hubtweaks.parkour;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import net.md_5.bungee.api.ChatColor;
-import nl.imine.api.util.ColorUtil;
-import nl.imine.api.util.PlayerUtil;
-import nl.imine.hubtweaks.HubTweaks;
-import nl.imine.hubtweaks.Statistic;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.DyeColor;
+import org.bukkit.FireworkEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,6 +32,13 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.material.Wool;
+
+import net.md_5.bungee.api.ChatColor;
+import nl.imine.api.util.ColorUtil;
+import nl.imine.api.util.LocationUtil;
+import nl.imine.api.util.PlayerUtil;
+import nl.imine.hubtweaks.HubTweaks;
+import nl.imine.hubtweaks.Statistic;
 
 /**
  *
@@ -71,18 +75,27 @@ public class ParkourListener implements Listener {
                                         .getColor())
                                 .getLevel() == 5) {
                             if (!player.hasReachedTop()) {
-                                Bukkit.getOnlinePlayers().stream()
-                                        .forEach(pl -> PlayerUtil.sendActionMessage(pl,
-                                                ColorUtil.replaceColors(
-                                                        "&c&l%s &r&6 has reached the end of the parkour!",
-                                                        evt.getPlayer().getName())));
                                 player.setReachedTop(true);
                                 Statistic.addToParkour(evt.getPlayer());
                             }
+                            String mssg;
                             if (!player.hasTouchedPlate()) {
                                 player.setLevel(parkour.getLevel(DyeColor.MAGENTA));
+                                mssg = "&c&l%s &r&5 has reached the end of the parkour!";
                                 player.save();
+                                Bukkit.getScheduler().scheduleSyncRepeatingTask(HubTweaks.getInstance(), () -> {
+                                    LocationUtil.firework(
+                                            evt.getPlayer()
+                                                    .getLocation(),
+                                            FireworkEffect.builder().withFade(Color.GREEN, Color.LIME, Color.YELLOW,
+                                                    Color.ORANGE, Color.RED, Color.PURPLE).build(),
+                                            40L);
+                                } , 10, 20 * 10);
+                            } else {
+                                mssg = "&c&l%s &r&6 has reached the end of the parkour!";
                             }
+                            Bukkit.getOnlinePlayers().stream().forEach(pl -> PlayerUtil.sendActionMessage(pl,
+                                    ColorUtil.replaceColors(mssg, evt.getPlayer().getName())));
                         }
                         ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
                         LeatherArmorMeta meta = (LeatherArmorMeta) boots.getItemMeta();
