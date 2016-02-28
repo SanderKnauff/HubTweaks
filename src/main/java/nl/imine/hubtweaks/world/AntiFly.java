@@ -7,18 +7,20 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import nl.imine.api.util.ColorUtil;
 import nl.imine.api.util.PlayerUtil;
 import nl.imine.hubtweaks.HubTweaks;
 
-public class AntiFly {
+public class AntiFly implements Listener {
 
     private Map<UUID, Integer[]> flyMap = new HashMap<>();
-    private static AntiFly af;
 
     public static void init() {
-        af = new AntiFly();
+        new AntiFly();
     }
 
     public AntiFly() {
@@ -30,7 +32,7 @@ public class AntiFly {
                     return;
                 }
                 // meer dan x ticks aan t vliegen
-                if (map.getValue()[0] >= 15) {
+                if (map.getValue()[0] > 15) {
                     PlayerUtil.sendGlobalAdmin(ColorUtil.replaceColors(
                             "&l[&5&lFLY LOG&r&l]&r &c%s &7is now flying in &e%s&7. [Packets: &c%d&7]", pl.getName(),
                             pl.getWorld().getName(), map.getValue()[0]));
@@ -52,8 +54,8 @@ public class AntiFly {
         flyMap.put(pl.getUniqueId(), map);
     }
 
-    public static void resetFly(Player pl) {
-        af.flyMap.remove(pl.getUniqueId());
+    public void resetFly(Player pl) {
+        flyMap.remove(pl.getUniqueId());
     }
 
     private static boolean isFlying(Player pl) {
@@ -70,6 +72,11 @@ public class AntiFly {
             return false;
         }
         return true;
+    }
+
+    @EventHandler
+    public void onTP(PlayerTeleportEvent pte) {
+        resetFly(pte.getPlayer());
     }
 
 }
