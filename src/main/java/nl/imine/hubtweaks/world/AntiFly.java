@@ -28,18 +28,18 @@ public class AntiFly {
                 if (map.getValue()[1] - 30 > pl.getLocation().getY()) {
                     return;
                 }
-                // meer dan 40ticks aan t vliegen
-                if (map.getValue()[0] >= 10) {
+                // meer dan x ticks aan t vliegen
+                if (map.getValue()[0] >= 15) {
                     PlayerUtil.sendGlobalAdmin(ColorUtil.replaceColors(
                             "&l[&5&lFLY LOG&r&l]&r &c%s &7is now flying in &e%s&7. [Packets: &c%d&7]", pl.getName(),
-                            pl.getWorld().getName(), map.getValue()[0] * 4));
+                            pl.getWorld().getName(), map.getValue()[0]));
                 }
             });
             flyMap.clear();
         } , 0L, 20L * 3);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(HubTweaks.getInstance(), () -> {
             Bukkit.getOnlinePlayers().stream().filter(pl -> isFlying(pl)).forEach(pl -> addFly(pl));
-        } , 0L, 20L / 4);
+        } , 0L, 20L / 10);
     }
 
     private void addFly(Player pl) {
