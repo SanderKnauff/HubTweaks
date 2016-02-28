@@ -175,20 +175,26 @@ public class ParkourListener implements Listener {
     @EventHandler
     public void onGameModeChange(PlayerGameModeChangeEvent evt) {
         if (!evt.getNewGameMode().equals(GameMode.ADVENTURE)) {
-            Parkour.getInstance().getPlayer(evt.getPlayer()).setTouchedPlate(true);
+            ParkourPlayer pp = Parkour.getInstance().getPlayer(evt.getPlayer());
+            pp.setTouchedPlate(true);
+            pp.setReachedTop(true);
         }
     }
 
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent evt) {
         if (evt.getTo().getBlockY() > 40) {
-            Parkour.getInstance().getPlayer(evt.getPlayer()).setTouchedPlate(true);
+            ParkourPlayer pp = Parkour.getInstance().getPlayer(evt.getPlayer());
+            pp.setTouchedPlate(true);
+            pp.setReachedTop(true);
         }
     }
 
     @EventHandler
     public void onPlayerToggleFlight(PlayerToggleFlightEvent evt) {
-        Parkour.getInstance().getPlayer(evt.getPlayer()).setTouchedPlate(true);
+        ParkourPlayer pp = Parkour.getInstance().getPlayer(evt.getPlayer());
+        pp.setTouchedPlate(true);
+        pp.setReachedTop(true);
     }
 
     @EventHandler
@@ -200,8 +206,9 @@ public class ParkourListener implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent evt) {
         if (!evt.getPlayer().getActivePotionEffects().isEmpty()) {
-            Parkour.getInstance().getPlayer(evt.getPlayer()).setTouchedPlate(false);
-            Parkour.getInstance().getPlayer(evt.getPlayer()).setReachedTop(false);
+            ParkourPlayer pp = Parkour.getInstance().getPlayer(evt.getPlayer());
+            pp.setTouchedPlate(true);
+            pp.setReachedTop(true);
         }
     }
 }
