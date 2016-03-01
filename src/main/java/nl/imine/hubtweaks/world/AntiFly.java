@@ -24,6 +24,7 @@ public class AntiFly implements Listener {
     }
 
     public AntiFly() {
+        Bukkit.getPluginManager().registerEvents(this, HubTweaks.getInstance());
         Bukkit.getScheduler().scheduleSyncRepeatingTask(HubTweaks.getInstance(), () -> {
             flyMap.entrySet().stream().filter(map -> Bukkit.getPlayer(map.getKey()) != null).forEach(map -> {
                 Player pl = Bukkit.getPlayer(map.getKey());
