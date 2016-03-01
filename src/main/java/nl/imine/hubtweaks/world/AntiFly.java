@@ -69,7 +69,7 @@ public class AntiFly implements Listener {
                 }
             }
         }
-        if (pl.getAllowFlight() || pl.getVehicle() != null) {
+        if (pl.getAllowFlight() || pl.getVehicle() != null || pl.getInventory().getChestplate().getType() == Material.ELYTRA) {
             return false;
         }
         return true;
