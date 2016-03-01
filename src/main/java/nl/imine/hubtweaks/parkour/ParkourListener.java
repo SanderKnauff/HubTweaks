@@ -106,8 +106,7 @@ public class ParkourListener implements Listener {
                         LeatherArmorMeta meta = (LeatherArmorMeta) boots.getItemMeta();
                         meta.setColor(player.getLevel().getColor().getColor());
                         if (player.getLevel().getColor() == DyeColor.MAGENTA) {
-                            player.getPlayer().getInventory()
-                                    .setChestplate(new ItemStack(ItemUtil.getBuilder(Material.ELYTRA).build()));
+                           //TODO: player.getPlayer().getInventory().setChestplate(new ItemStack(ItemUtil.getBuilder(Material.ELYTRA).build()));
                         }
                         boots.setItemMeta(meta);
                         if (player.getLevel().getLevel() != -1) {
