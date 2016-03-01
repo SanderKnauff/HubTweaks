@@ -139,7 +139,7 @@ public class WorldProtector implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent pie) {
         if (pie.getPlayer().getGameMode() == GameMode.ADVENTURE) {
-            if (pie.getPlayer().getItemInHand().getType() == Material.BOW) {
+            if (pie.getPlayer().getInventory().getItemInMainHand().getType() == Material.BOW) {
                 return;
             }
             pie.setCancelled(isBlockedBlock(pie.getClickedBlock()));

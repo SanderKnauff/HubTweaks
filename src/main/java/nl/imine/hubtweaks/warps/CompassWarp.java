@@ -59,7 +59,7 @@ public class CompassWarp implements Listener {
     @EventHandler
     public void onCompassClick(PlayerInteractEvent pie) {
         if ((pie.getAction() == Action.RIGHT_CLICK_AIR || pie.getAction() == Action.RIGHT_CLICK_BLOCK)
-                && pie.getPlayer().getItemInHand().getType() == Material.COMPASS) {
+                && pie.getPlayer().getInventory().getItemInMainHand().getType() == Material.COMPASS) {
             inv.open(pie.getPlayer());
         }
     }

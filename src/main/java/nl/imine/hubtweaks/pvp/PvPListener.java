@@ -91,7 +91,7 @@ public class PvPListener implements Listener {
             Player player = (Player) evt.getEntity();
             Player killer = (Player) evt.getEntity().getKiller();
             if (PvP.getPlayerList().contains(player) && PvP.getPlayerList().contains(killer)
-                    && killer.getItemInHand().getType() != null) {
+                    && killer.getInventory().getItemInMainHand().getType() != null) {
                 PvP.removePlayerFromArena(player);
                 if (killer.getInventory().all(Material.ARROW).isEmpty()) {
                     killer.getInventory().addItem(new ItemStack(Material.ARROW, 1));
