@@ -66,16 +66,16 @@ public class ParkourListener implements Listener {
                     if (!player.isBuilding()) {
                         if (parkour.getLevel(
                                 ((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData())
-                                .getColor())
+                                        .getColor())
                                 .getLevel() > player.getLevel().getLevel()) {
                             player.setLevel(parkour.getLevel(
                                     ((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData())
-                                    .getColor()));
+                                            .getColor()));
                             player.save();
                         }
                         if (parkour.getLevel(
                                 ((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData())
-                                .getColor())
+                                        .getColor())
                                 .getLevel() == 5) {
                             if (!player.hasReachedTop()) {
                                 player.setReachedTop(true);
@@ -89,23 +89,25 @@ public class ParkourListener implements Listener {
                                         Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), () -> {
                                             LocationUtil.firework(evt.getPlayer().getLocation(),
                                                     FireworkEffect.builder().with(Type.BALL_LARGE)
-                                                    .withColor(Color.PURPLE).withFade(Color.GREEN, Color.LIME,
-                                                            Color.YELLOW, Color.ORANGE, Color.RED)
-                                                    .build(),
+                                                            .withColor(Color.PURPLE).withFade(Color.GREEN, Color.LIME,
+                                                                    Color.YELLOW, Color.ORANGE, Color.RED)
+                                                            .build(),
                                                     20L);
-                                        }, 20 * (i + 5));
+                                        } , 20 * (i + 5));
                                     }
                                 } else {
                                     mssg = "&c&l%s &r&6 has reached the end of the parkour!";
                                 }
                                 Bukkit.getOnlinePlayers().stream().forEach(pl -> PlayerUtil.sendActionMessage(pl,
                                         ColorUtil.replaceColors(mssg, evt.getPlayer().getName())));
-                                player.getPlayer().getInventory().setChestplate(new ItemStack(ItemUtil.getBuilder(Material.ELYTRA).build()));
                             }
                         }
                         ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
                         LeatherArmorMeta meta = (LeatherArmorMeta) boots.getItemMeta();
                         meta.setColor(player.getLevel().getColor().getColor());
+                        if (player.getLevel().getColor() == DyeColor.MAGENTA) {
+                           player.getPlayer().getInventory().setChestplate(new ItemStack(ItemUtil.getBuilder(Material.ELYTRA).build()));
+                        }
                         boots.setItemMeta(meta);
                         if (player.getLevel().getLevel() != -1) {
                             evt.getPlayer().getInventory().setBoots(boots);
@@ -120,7 +122,7 @@ public class ParkourListener implements Listener {
                     } else {
                         if (parkour.getLevel(
                                 ((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData())
-                                .getColor())
+                                        .getColor())
                                 .equals(new ParkourLevel(-1, DyeColor.BLACK))) {
                             File f = new File(ParkourConfig.CONFIGPATH + "Levels.yml");
                             YamlConfiguration config = new YamlConfiguration();
@@ -128,7 +130,7 @@ public class ParkourListener implements Listener {
                                 config.load(f);
                                 config.set((parkour.getLevels().size() + 1) + ".Color",
                                         ((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData())
-                                        .getColor().toString());
+                                                .getColor().toString());
                                 config.set(-1 + ".Color", DyeColor.BLACK.name());
                                 config.save(f);
                             } catch (FileNotFoundException e) {
@@ -141,7 +143,7 @@ public class ParkourListener implements Listener {
                             }
                             parkour.addLevel(new ParkourLevel(parkour.getLevels().size() + 1,
                                     ((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData())
-                                    .getColor()));
+                                            .getColor()));
                         }
                     }
                 }
