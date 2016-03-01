@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffectType;
 
@@ -83,4 +84,8 @@ public class AntiFly implements Listener {
         resetFly(pte.getPlayer());
     }
 
+    @EventHandler
+    public void onTP(PlayerRespawnEvent pre) {
+        resetFly(pre.getPlayer());
+    }
 }
