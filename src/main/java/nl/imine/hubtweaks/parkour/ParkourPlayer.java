@@ -8,6 +8,7 @@ package nl.imine.hubtweaks.parkour;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -35,7 +36,7 @@ public class ParkourPlayer {
     }
     
     public Player getPlayer(){
-        return Bukkit.getPlayer(uuid);
+        return Bukkit.getPlayer(UUID.fromString(uuid));
     }
 
     public String getUUID() {
