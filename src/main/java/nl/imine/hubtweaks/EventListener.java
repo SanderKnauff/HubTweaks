@@ -19,7 +19,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -66,13 +65,6 @@ public class EventListener implements Listener, Runnable {
     public void onInventoryClick(final InventoryClickEvent evt) {
         if (evt.getWhoClicked().getGameMode() == GameMode.ADVENTURE) {
             evt.setCancelled(true);
-        }
-    }
-    
-    @EventHandler
-    public void onInventoryClick(final PlayerItemHeldEvent evt) {
-        if (evt.getPlayer().getGameMode() == GameMode.ADVENTURE) {
-            evt.getPlayer().sendMessage(evt.getNewSlot() + "");
         }
     }
 
