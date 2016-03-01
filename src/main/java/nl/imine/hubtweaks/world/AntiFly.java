@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.potion.PotionEffectType;
 
 import nl.imine.api.util.ColorUtil;
 import nl.imine.api.util.PlayerUtil;
@@ -69,8 +70,9 @@ public class AntiFly implements Listener {
                 }
             }
         }
-        if (pl.getAllowFlight() || pl.getVehicle() != null
-                || (pl.getInventory().getChestplate() != null && pl.getInventory().getChestplate().getType() == Material.ELYTRA)) {
+        if (pl.hasPotionEffect(PotionEffectType.LEVITATION) || pl.getAllowFlight() || pl.getVehicle() != null
+                || (pl.getInventory().getChestplate() != null
+                        && pl.getInventory().getChestplate().getType() == Material.ELYTRA)) {
             return false;
         }
         return true;
