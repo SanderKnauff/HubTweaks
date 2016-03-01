@@ -37,6 +37,7 @@ import org.bukkit.material.Wool;
 
 import net.md_5.bungee.api.ChatColor;
 import nl.imine.api.util.ColorUtil;
+import nl.imine.api.util.ItemUtil;
 import nl.imine.api.util.LocationUtil;
 import nl.imine.api.util.PlayerUtil;
 import nl.imine.hubtweaks.HubTweaks;
@@ -104,6 +105,10 @@ public class ParkourListener implements Listener {
                         ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
                         LeatherArmorMeta meta = (LeatherArmorMeta) boots.getItemMeta();
                         meta.setColor(player.getLevel().getColor().getColor());
+                        if (player.getLevel().getColor() == DyeColor.MAGENTA) {
+                            player.getPlayer().getInventory()
+                                    .setChestplate(new ItemStack(ItemUtil.getBuilder(Material.ELYTRA).build()));
+                        }
                         boots.setItemMeta(meta);
                         if (player.getLevel().getLevel() != -1) {
                             evt.getPlayer().getInventory().setBoots(boots);
