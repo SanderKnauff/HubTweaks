@@ -1,10 +1,14 @@
 package nl.imine.hubtweaks.world;
 
+import java.io.File;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,13 +17,23 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffectType;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import nl.imine.api.util.ColorUtil;
+import nl.imine.api.util.LocationUtil.Position;
 import nl.imine.api.util.PlayerUtil;
 import nl.imine.hubtweaks.HubTweaks;
 
 public class AntiFly implements Listener {
 
-    private Map<UUID, Integer[]> flyMap = new HashMap<>();
+    private static final int TIME_FLYING_SEC = 3;
+    private static final int CHECK_TIMES_SEC = 10;
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final String TEMP = HubTweaks.getInstance().getDataFolder().getAbsolutePath() + File.separator
+            + "tmp" + File.separator;
+
+    private Map<UUID, Path> flyMap = new HashMap<>();
 
     public static void init() {
         new AntiFly();
@@ -31,30 +45,34 @@ public class AntiFly implements Listener {
             flyMap.entrySet().stream().filter(map -> Bukkit.getPlayer(map.getKey()) != null).forEach(map -> {
                 Player pl = Bukkit.getPlayer(map.getKey());
                 // is falling
-                if (map.getValue()[1] > pl.getLocation().getY()) {
+                if (map.getValue().getFirstPosition().getY() > pl.getLocation().getY()) {
                     return;
                 }
                 // meer dan x ticks aan t vliegen
-                if (map.getValue()[0] > 15) {
+                if (map.getValue().getTimes() > 15) {
                     PlayerUtil.sendGlobalAdmin(ColorUtil.replaceColors(
                             "&l[&5&lFLY LOG&r&l]&r &c%s &7is now flying in &e%s&7. [Packets: &c%d&7]", pl.getName(),
-                            pl.getWorld().getName(), map.getValue()[0]));
+                            pl.getWorld().getName(), map.getValue().getTimes()));
+                    try {
+                        FileUtils.write(new File(TEMP + "FLY" + new Date().toString() + " FROM "
+                                + map.getKey().toString() + ".Path.gson"), GSON.toJson(map.getValue()));
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
             flyMap.clear();
-        } , 0L, 20L * 3);
+        } , 0L, 20L * TIME_FLYING_SEC);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(HubTweaks.getInstance(), () -> {
             Bukkit.getOnlinePlayers().stream().filter(pl -> isFlying(pl)).forEach(pl -> addFly(pl));
-        } , 0L, 20L / 10);
+        } , 0L, 20L / CHECK_TIMES_SEC);
     }
 
     private void addFly(Player pl) {
         if (!flyMap.containsKey(pl.getUniqueId())) {
-            flyMap.put(pl.getUniqueId(), new Integer[] { 0, pl.getLocation().getBlockY() });
+            flyMap.put(pl.getUniqueId(), new Path());
         }
-        Integer[] map = flyMap.get(pl.getUniqueId());
-        map[0] = map[0] + 1;
-        flyMap.put(pl.getUniqueId(), map);
+        flyMap.get(pl.getUniqueId()).addPos(pl.getLocation());
     }
 
     public void resetFly(Player pl) {
@@ -87,5 +105,23 @@ public class AntiFly implements Listener {
     @EventHandler
     public void onTP(PlayerRespawnEvent pre) {
         resetFly(pre.getPlayer());
+    }
+
+    private static class Path {
+        // Because lagg, 1 sec more time
+        private Position[] positions = new Position[AntiFly.CHECK_TIMES_SEC * (AntiFly.TIME_FLYING_SEC + 1)];
+        private int index = 0;
+
+        public void addPos(Location loc) {
+            positions[index++] = new Position(loc);
+        }
+
+        public int getTimes() {
+            return index;
+        }
+
+        public Position getFirstPosition() {
+            return positions[0];
+        }
     }
 }
