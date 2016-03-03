@@ -89,7 +89,7 @@ public class AntiFly implements Listener {
                 }
             }
         }
-        if (pl.hasPotionEffect(PotionEffectType.LEVITATION) || pl.getAllowFlight() || pl.getVehicle() != null
+        if (pl.hasPotionEffect(PotionEffectType.LEVITATION) || /*pl.getAllowFlight() || */pl.getVehicle() != null
                 || (pl.getInventory().getChestplate() != null
                         && pl.getInventory().getChestplate().getType() == Material.ELYTRA)) {
             return false;
