@@ -54,7 +54,7 @@ public class AntiFly implements Listener {
                             "&l[&5&lFLY LOG&r&l]&r &c%s &7is now flying in &e%s&7. [Packets: &c%d&7]", pl.getName(),
                             pl.getWorld().getName(), map.getValue().getTimes()));
                     try {
-                        FileUtils.write(new File(TEMP + "FLY" + new Date().toString() + " FROM "
+                        FileUtils.write(new File(TEMP + "FLY" + new Date().toString() + " FROM."
                                 + map.getKey().toString() + ".Path.gson"), GSON.toJson(map.getValue()));
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -89,7 +89,7 @@ public class AntiFly implements Listener {
                 }
             }
         }
-        if (pl.hasPotionEffect(PotionEffectType.LEVITATION) || /*pl.getAllowFlight() || */pl.getVehicle() != null
+        if (pl.hasPotionEffect(PotionEffectType.LEVITATION) || pl.getAllowFlight() || pl.getVehicle() != null
                 || (pl.getInventory().getChestplate() != null
                         && pl.getInventory().getChestplate().getType() == Material.ELYTRA)) {
             return false;
