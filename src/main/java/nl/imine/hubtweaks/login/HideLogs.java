@@ -1,5 +1,6 @@
 package nl.imine.hubtweaks.login;
 
+import nl.imine.hubtweaks.HubTweaks;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -7,25 +8,23 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import nl.imine.hubtweaks.HubTweaks;
-
 public class HideLogs implements Listener {
 
-    public static void init(){
+    public static void init() {
         new HideLogs();
     }
-    
+
     public HideLogs() {
         Bukkit.getPluginManager().registerEvents(this, HubTweaks.getInstance());
     }
 
-    @EventHandler(priority=EventPriority.HIGHEST)
-    public void onLogin(PlayerJoinEvent pje){
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onLogin(PlayerJoinEvent pje) {
         pje.setJoinMessage(null);
     }
-    
-    @EventHandler(priority=EventPriority.HIGHEST)
-    public void onQuit(PlayerQuitEvent pqe){
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onQuit(PlayerQuitEvent pqe) {
         pqe.setQuitMessage(null);
     }
 }

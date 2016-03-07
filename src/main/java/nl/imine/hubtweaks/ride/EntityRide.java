@@ -18,7 +18,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.Statistic;
-import nl.imine.hubtweaks.parkour.Parkour;
+import nl.imine.hubtweaks.parkour_old.Parkour;
 import nl.imine.hubtweaks.pvp.PvP;
 
 public class EntityRide implements Listener {

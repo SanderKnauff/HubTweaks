@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.imine.hubtweaks.parkour;
+package nl.imine.hubtweaks.parkour_old;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,13 +20,16 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public class ParkourConfig {
 
-    public static final String CONFIGPATH = HubTweaks.getInstance().getDataFolder().getPath() + File.separator + "Parkour" + File.separator;
+    public static final String CONFIGPATH = HubTweaks.getInstance().getDataFolder().getPath() + File.separator
+            + "Parkour" + File.separator;
 
     public static void getLevels(Parkour parkour) {
-        if(!new File(ParkourConfig.CONFIGPATH).exists()) new File(ParkourConfig.CONFIGPATH).mkdir();
+        if (!new File(ParkourConfig.CONFIGPATH).exists()) {
+            new File(ParkourConfig.CONFIGPATH).mkdir();
+        }
         File f = new File(ParkourConfig.CONFIGPATH + "Levels.yml");
         try {
-            f.createNewFile(); 
+            f.createNewFile();
         } catch (IOException e) {
             System.err.println("Cannot create file || " + e.getMessage());
         }
@@ -48,13 +51,18 @@ public class ParkourConfig {
 
     public static void getPlayers(Parkour parkour) {
         System.out.println("Loading Parkour");
-        if(!new File(ParkourConfig.CONFIGPATH).exists()) new File(ParkourConfig.CONFIGPATH).mkdir();
-        if(!new File(ParkourConfig.CONFIGPATH + "Players").exists()) new File(ParkourConfig.CONFIGPATH + "Players").mkdir();
+        if (!new File(ParkourConfig.CONFIGPATH).exists()) {
+            new File(ParkourConfig.CONFIGPATH).mkdir();
+        }
+        if (!new File(ParkourConfig.CONFIGPATH + "Players").exists()) {
+            new File(ParkourConfig.CONFIGPATH + "Players").mkdir();
+        }
         for (File f : new File(ParkourConfig.CONFIGPATH + "Players").listFiles()) {
             YamlConfiguration config = new YamlConfiguration();
             try {
                 config.load(f);
-                parkour.addPlayer(new ParkourPlayer(f.getName().split("\\.")[0], parkour.getLevel(config.getString("Level"))));
+                parkour.addPlayer(
+                        new ParkourPlayer(f.getName().split("\\.")[0], parkour.getLevel(config.getString("Level"))));
             } catch (FileNotFoundException e) {
                 System.err.println("Exception finding file: " + f.getPath() + " || " + e.getMessage());
                 break;

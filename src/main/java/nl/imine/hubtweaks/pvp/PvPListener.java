@@ -1,5 +1,8 @@
 package nl.imine.hubtweaks.pvp;
 
+import nl.imine.api.util.LocationUtil;
+import nl.imine.hubtweaks.HubTweaks;
+import nl.imine.hubtweaks.Statistic;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -12,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -19,10 +23,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import nl.imine.api.util.LocationUtil;
-import nl.imine.hubtweaks.HubTweaks;
-import org.bukkit.event.entity.ProjectileHitEvent;
-import nl.imine.hubtweaks.Statistic;
 
 public class PvPListener implements Listener {
 
@@ -116,7 +116,7 @@ public class PvPListener implements Listener {
         if (evt.getEntity().getShooter() instanceof Player) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), () -> {
                 evt.getEntity().remove();
-            } , 100L);
+            }, 100L);
         }
     }
 

@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.Statistic;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -19,8 +18,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class Kotl {
 
-    public static final Location[] BOX = new Location[] { new Location(Bukkit.getWorlds().get(0), 58, 44, -513),
-            new Location(Bukkit.getWorlds().get(0), 63, 34, -508) };
+    public static final Location[] BOX = new Location[]{new Location(Bukkit.getWorlds().get(0), 58, 44, -513),
+        new Location(Bukkit.getWorlds().get(0), 63, 34, -508)};
 
     private static Kotl kotl;
 
@@ -67,7 +66,7 @@ public class Kotl {
         EWStack.setItemMeta(EWMeta);
         ItemStack EntropiaWand = EWStack;
 
-        p.getInventory().addItem(new ItemStack[] { EntropiaWand });
+        p.getInventory().addItem(new ItemStack[]{EntropiaWand});
         p.getInventory().setHelmet(new ItemStack(Material.GOLD_HELMET));
     }
 

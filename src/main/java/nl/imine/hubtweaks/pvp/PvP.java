@@ -1,13 +1,12 @@
 package nl.imine.hubtweaks.pvp;
 
+import com.google.common.collect.Lists;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import nl.imine.hubtweaks.HubTweaks;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,12 +19,10 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import com.google.common.collect.Lists;
-
 public class PvP {
 
-    public static final Location[] BOX = new Location[] { new Location(Bukkit.getWorlds().get(0), 50, 0, -450),
-            new Location(Bukkit.getWorlds().get(0), -15, 60, -400) };
+    public static final Location[] BOX = new Location[]{new Location(Bukkit.getWorlds().get(0), 50, 0, -450),
+        new Location(Bukkit.getWorlds().get(0), -15, 60, -400)};
     private static final List<Player> PVP_LIST = Lists.newArrayList();
     private static final List<Location> SPAWN_ARENA = new ArrayList<>();
     private static File pvpConfigFile = null;

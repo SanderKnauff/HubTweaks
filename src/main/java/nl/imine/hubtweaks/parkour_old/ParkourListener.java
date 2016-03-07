@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.imine.hubtweaks.parkour;
+package nl.imine.hubtweaks.parkour_old;
 
 import java.io.File;
 import java.io.FileNotFoundException;

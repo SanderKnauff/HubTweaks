@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.imine.hubtweaks.parkour;
+package nl.imine.hubtweaks.parkour_old;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -25,7 +24,7 @@ public class ParkourPlayer {
     private ParkourLevel level;
     private boolean isBuilding;
 
-    //Not stored between reboots
+    // Not stored between reboots
     private boolean hasReachedTop = false;
     private boolean hasTouchedPlate = false;
 
@@ -34,8 +33,8 @@ public class ParkourPlayer {
         this.level = level;
         this.save();
     }
-    
-    public Player getPlayer(){
+
+    public Player getPlayer() {
         return Bukkit.getPlayer(UUID.fromString(uuid));
     }
 

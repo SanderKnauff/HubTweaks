@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.imine.hubtweaks.parkour.util;
+package nl.imine.hubtweaks.parkour_old.util;
 
 /**
  *
  * @author Sander
  */
 public class Lang {
-    
+
 }

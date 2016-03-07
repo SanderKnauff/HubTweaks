@@ -15,18 +15,18 @@ import org.bukkit.entity.Player;
  */
 public class TestCmd extends Command {
 
-    public TestCmd(){
+    public TestCmd() {
         super("TestCmd");
     }
-    
+
     @Override
     public boolean execute(CommandSender cs, String string, String[] strings) {
-        if(cs instanceof Player){
+        if (cs instanceof Player) {
             ((Player) cs).sendMessage("LolCmd");
         } else {
             System.out.println("LolnoCmd");
         }
         return true;
     }
-    
+
 }

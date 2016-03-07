@@ -3,7 +3,9 @@ package nl.imine.hubtweaks.world;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
+import nl.imine.api.util.ColorUtil;
+import nl.imine.api.util.PlayerUtil;
+import nl.imine.hubtweaks.HubTweaks;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,10 +13,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffectType;
-
-import nl.imine.api.util.ColorUtil;
-import nl.imine.api.util.PlayerUtil;
-import nl.imine.hubtweaks.HubTweaks;
 
 public class AntiFly implements Listener {
 
@@ -41,15 +39,15 @@ public class AntiFly implements Listener {
                 }
             });
             flyMap.clear();
-        } , 0L, 20L * 3);
+        }, 0L, 20L * 3);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(HubTweaks.getInstance(), () -> {
             Bukkit.getOnlinePlayers().stream().filter(pl -> isFlying(pl)).forEach(pl -> addFly(pl));
-        } , 0L, 20L / 10);
+        }, 0L, 20L / 10);
     }
 
     private void addFly(Player pl) {
         if (!flyMap.containsKey(pl.getUniqueId())) {
-            flyMap.put(pl.getUniqueId(), new Integer[] { 0, pl.getLocation().getBlockY() });
+            flyMap.put(pl.getUniqueId(), new Integer[]{0, pl.getLocation().getBlockY()});
         }
         Integer[] map = flyMap.get(pl.getUniqueId());
         map[0] = map[0] + 1;
@@ -72,7 +70,7 @@ public class AntiFly implements Listener {
         }
         if (pl.hasPotionEffect(PotionEffectType.LEVITATION) || pl.getAllowFlight() || pl.getVehicle() != null
                 || (pl.getInventory().getChestplate() != null
-                        && pl.getInventory().getChestplate().getType() == Material.ELYTRA)) {
+                && pl.getInventory().getChestplate().getType() == Material.ELYTRA)) {
             return false;
         }
         return true;

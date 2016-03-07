@@ -1,7 +1,10 @@
 package nl.imine.hubtweaks.kotl;
 
 import java.util.ArrayList;
-
+import nl.imine.api.util.ColorUtil;
+import nl.imine.api.util.LocationUtil;
+import nl.imine.api.util.PlayerUtil;
+import nl.imine.hubtweaks.HubTweaks;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Effect;
@@ -22,11 +25,6 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
-import nl.imine.api.util.ColorUtil;
-import nl.imine.api.util.LocationUtil;
-import nl.imine.api.util.PlayerUtil;
-import nl.imine.hubtweaks.HubTweaks;
-
 public class KotlListener implements Listener {
 
     private final Kotl kotl;
@@ -45,7 +43,7 @@ public class KotlListener implements Listener {
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         if ((event.getItemDrop().getItemStack() != null) && (event.getItemDrop().getItemStack().getType() != null)
                 && ((event.getItemDrop().getItemStack().getType().equals(Material.GOLD_HELMET))
-                        || (event.getItemDrop().getItemStack().getType().equals(Material.GOLDEN_CARROT)))) {
+                || (event.getItemDrop().getItemStack().getType().equals(Material.GOLDEN_CARROT)))) {
             event.setCancelled(true);
         }
     }
@@ -104,16 +102,17 @@ public class KotlListener implements Listener {
             kotl.removeEntropiaWand(event.getPlayer());
         }
     }
-    
+
     @EventHandler
     public void onPlayerHit(EntityDamageByEntityEvent edbee) {
         Entity e = edbee.getEntity();
-        if(LocationUtil.isInBox(e.getLocation(), Kotl.BOX[0], Kotl.BOX[1])){
+        if (LocationUtil.isInBox(e.getLocation(), Kotl.BOX[0], Kotl.BOX[1])) {
             if (e.getVehicle() != null) {
                 e.getVehicle().eject();
             }
         }
     }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent evt) {
         if (((evt.getDamager() instanceof Player)) && ((evt.getEntity() instanceof Player))) {
@@ -123,9 +122,10 @@ public class KotlListener implements Listener {
                 if (Kotl.getInstance().getKing() != null) {
                     if (Kotl.getInstance().getKing().equals(damager)
                             && LocationUtil.isInBox(evt.getEntity().getLocation(), Kotl.BOX[0], Kotl.BOX[1])) {
-                        LocationUtil.firework(evt.getEntity().getLocation(), FireworkEffect.builder().withColor(Color.RED).withColor(Color.BLUE)
-                                .withColor(Color.GREEN).withColor(Color.YELLOW).with(FireworkEffect.Type.BALL_LARGE)
-                                .build(), 5L);
+                        LocationUtil.firework(evt.getEntity().getLocation(),
+                                FireworkEffect.builder().withColor(Color.RED).withColor(Color.BLUE).withColor(Color.GREEN)
+                                .withColor(Color.YELLOW).with(FireworkEffect.Type.BALL_LARGE).build(),
+                                5L);
                     } else {
                         Kotl.getInstance().removeEntropiaWand(damager);
                         damager.setHealth(0);

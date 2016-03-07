@@ -1,9 +1,14 @@
 package nl.imine.hubtweaks.world;
 
+import nl.imine.api.util.LocationUtil;
+import nl.imine.hubtweaks.HubTweaks;
+import nl.imine.hubtweaks.kotl.Kotl;
+import nl.imine.hubtweaks.pvp.PvP;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -17,15 +22,9 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
-
-import nl.imine.api.util.LocationUtil;
-import nl.imine.hubtweaks.HubTweaks;
-import nl.imine.hubtweaks.kotl.Kotl;
-import nl.imine.hubtweaks.pvp.PvP;
-import org.bukkit.entity.ItemFrame;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 public class WorldProtector implements Listener {
 
@@ -39,9 +38,8 @@ public class WorldProtector implements Listener {
             Bukkit.getOnlinePlayers().stream().forEach(pl -> pl.setSaturation(20F));
             Bukkit.getOnlinePlayers().stream()
                     .filter(pl -> !LocationUtil.isInBox(pl.getLocation(), PvP.BOX[0], PvP.BOX[1]) && !pl.isDead())
-                    .forEach(pl -> pl.setHealth(20D));
-            ;
-        } , 20L, 20L);
+                    .forEach(pl -> pl.setHealth(20D));;
+        }, 20L, 20L);
     }
 
     private boolean isBlockedBlock(Block bl) {
@@ -49,15 +47,15 @@ public class WorldProtector implements Listener {
             return false;
         }
         switch (bl.getType()) {
-        case WOOD_BUTTON:
-        case STONE_BUTTON:
-        case WOOD_PLATE:
-        case STONE_PLATE:
-        case GOLD_PLATE:
-        case IRON_PLATE:
-            return false;
-        default:
-            return true;
+            case WOOD_BUTTON:
+            case STONE_BUTTON:
+            case WOOD_PLATE:
+            case STONE_PLATE:
+            case GOLD_PLATE:
+            case IRON_PLATE:
+                return false;
+            default:
+                return true;
         }
     }
 
@@ -100,21 +98,21 @@ public class WorldProtector implements Listener {
     public void onEntityDamageByEntity(EntityDamageEvent ede) {
         if (ede.getEntity() instanceof Player) {
             switch (ede.getCause()) {
-            case FIRE:
-            case FIRE_TICK:
-            case LAVA:
-                ede.getEntity().setFireTicks(0);
-            case FALL:
-            case CONTACT:
-            case BLOCK_EXPLOSION:
-            case DROWNING:
-            case ENTITY_EXPLOSION:
-            case FALLING_BLOCK:
-            case SUFFOCATION:
-                ede.setCancelled(true);
-                break;
-            default:
-                break;
+                case FIRE:
+                case FIRE_TICK:
+                case LAVA:
+                    ede.getEntity().setFireTicks(0);
+                case FALL:
+                case CONTACT:
+                case BLOCK_EXPLOSION:
+                case DROWNING:
+                case ENTITY_EXPLOSION:
+                case FALLING_BLOCK:
+                case SUFFOCATION:
+                    ede.setCancelled(true);
+                    break;
+                default:
+                    break;
             }
         }
     }

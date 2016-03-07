@@ -8,7 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import nl.imine.hubtweaks.entity.Spawner;
 import nl.imine.hubtweaks.kotl.Kotl;
 import nl.imine.hubtweaks.login.HideLogs;
-import nl.imine.hubtweaks.parkour.Parkour;
+import nl.imine.hubtweaks.parkour_old.Parkour;
 import nl.imine.hubtweaks.pvp.PvP;
 import nl.imine.hubtweaks.ride.EntityRide;
 import nl.imine.hubtweaks.warps.CompassWarp;

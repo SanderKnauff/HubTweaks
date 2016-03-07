@@ -2,7 +2,8 @@ package nl.imine.hubtweaks;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import nl.imine.hubtweaks.parkour_old.Parkour;
+import nl.imine.hubtweaks.parkour_old.ParkourListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -25,9 +26,6 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import nl.imine.hubtweaks.parkour.Parkour;
-import nl.imine.hubtweaks.parkour.ParkourListener;
 
 public class EventListener implements Listener, Runnable {
 
@@ -88,7 +86,7 @@ public class EventListener implements Listener, Runnable {
     public void onPlayerDisconnect(final PlayerQuitEvent pqe) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), () -> {
             PlayerDataManager.RemovePlayerData(pqe.getPlayer());
-        } , 10);
+        }, 10);
     }
 
     @EventHandler
