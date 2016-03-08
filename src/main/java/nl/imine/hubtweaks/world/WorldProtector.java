@@ -1,5 +1,7 @@
 package nl.imine.hubtweaks.world;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -67,21 +69,24 @@ public class WorldProtector implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onClickEntity(PlayerLoginEvent ple) {
-        Player pl = ple.getPlayer();
+        UUID uuid = ple.getPlayer().getUniqueId();
         Bukkit.getScheduler().runTaskAsynchronously(HubTweaks.getInstance(), () -> {
+            Player pl;
             int max = 100;
             do {
+                pl = Bukkit.getPlayer(uuid);
+                Player plT = pl;
                 try {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(),
-                            () -> LocationUtil.firework(pl.getLocation(),
+                            () -> LocationUtil.firework(plT.getLocation(),
                                     FireworkEffect.builder().withColor(Color.AQUA, Color.YELLOW, Color.PURPLE)
                                             .flicker(true).trail(true).with(Type.BURST).withFade(Color.MAROON).build(),
                                     20L));
-                    Thread.sleep((long) (100000 * Math.random()));
+                    Thread.sleep((long) ((50 * 1000) * Math.random()));
                 } catch (Exception ex) {
                     System.err.println(ex);
                 }
-            } while (pl.isOnline() && max-- > 0);
+            } while (pl != null && pl.isOnline() && max-- > 0);
         });
     }
 
