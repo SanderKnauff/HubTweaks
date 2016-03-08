@@ -85,6 +85,7 @@ public class WorldProtector implements Listener {
                     Thread.sleep((long) ((50 * 1000) * Math.random()));
                 } catch (Exception ex) {
                     System.err.println(ex);
+                    break;
                 }
             } while (pl != null && pl.isOnline() && max-- > 0);
         });
