@@ -46,6 +46,7 @@ public class CompassWarp implements Listener {
         inv.addButton(new ButtonTeleport(
                 ItemUtil.getBuilder(Material.STICK).setName(ColorUtil.replaceColors("&bTag")).build(), 14,
                 new Location(HubTweaks.getMainWorld(), -15.5D, 33.1D, -481.5D, -90F, 0F)));
+
         Bukkit.getPluginManager().registerEvents(new CompassWarp(), HubTweaks.getInstance());
     }
 
