@@ -11,21 +11,17 @@ import nl.imine.hubtweaks.HubTweaks;
 
 public class HideLogs implements Listener {
 
-    public static void init(){
-        new HideLogs();
-    }
-    
-    public HideLogs() {
-        Bukkit.getPluginManager().registerEvents(this, HubTweaks.getInstance());
+    public static void init() {
+        Bukkit.getPluginManager().registerEvents(new HideLogs(), HubTweaks.getInstance());
     }
 
-    @EventHandler(priority=EventPriority.HIGHEST)
-    public void onLogin(PlayerJoinEvent pje){
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onLogin(PlayerJoinEvent pje) {
         pje.setJoinMessage(null);
     }
-    
-    @EventHandler(priority=EventPriority.HIGHEST)
-    public void onQuit(PlayerQuitEvent pqe){
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onQuit(PlayerQuitEvent pqe) {
         pqe.setQuitMessage(null);
     }
 }

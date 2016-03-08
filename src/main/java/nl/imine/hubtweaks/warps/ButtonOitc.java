@@ -7,15 +7,14 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemFlag;
 
 import nl.imine.api.gui.Button;
-import nl.imine.api.gui.Container;
 import nl.imine.api.util.ItemUtil;
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.pvp.PvPJoinEvent;
 
 public class ButtonOitc extends Button {
 
-    public ButtonOitc(Container container, int slot) {
-        super(container, ItemUtil.getBuilder(Material.IRON_SWORD).setName(ChatColor.RED + "One in the Chamber")
+    public ButtonOitc(int slot) {
+        super(ItemUtil.getBuilder(Material.IRON_SWORD).setName(ChatColor.RED + "One in the Chamber")
                 .addFlag(ItemFlag.HIDE_ATTRIBUTES).build(), slot);
     }
 
