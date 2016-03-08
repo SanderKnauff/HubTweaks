@@ -1,6 +1,8 @@
 package nl.imine.hubtweaks.world;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -18,6 +20,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
 import nl.imine.api.util.LocationUtil;
@@ -59,6 +62,24 @@ public class WorldProtector implements Listener {
         default:
             return true;
         }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onClickEntity(PlayerLoginEvent ple) {
+        Player pl = ple.getPlayer();
+        Bukkit.getScheduler().runTaskAsynchronously(HubTweaks.getInstance(), () -> {
+            while (pl.isOnline()) {
+                try {
+                    LocationUtil.firework(pl.getLocation(),
+                            FireworkEffect.builder().withColor(Color.AQUA, Color.YELLOW, Color.PURPLE).flicker(true)
+                                    .withFade(Color.MAROON).build(),
+                            20L);
+                    Thread.sleep((long) (10000 * Math.random()));
+                } catch (Exception ex) {
+                    System.err.println(ex);
+                }
+            }
+        });
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
