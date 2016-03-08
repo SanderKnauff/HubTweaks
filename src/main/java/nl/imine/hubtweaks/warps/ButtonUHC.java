@@ -29,7 +29,7 @@ public class ButtonUHC extends Button {
         ItemUtil.Builder item = ItemUtil.getBuilder(Material.GOLDEN_APPLE);
         String name;
         if (request.hasError()) {
-            name = ColorUtil.replaceColors("&c&lGame %s is unavalible.", id + 1);
+            name = ColorUtil.replaceColors("&c&lGame %s.", id + 1);
         } else {
             name = ColorUtil.replaceColors((request.isOpen() ? "&a" : "&c") + "&lGame %s is unavalible.", id + 1);
             String players = ColorUtil.replaceColors("&bPlayers currently in the game: &c%d&b.",

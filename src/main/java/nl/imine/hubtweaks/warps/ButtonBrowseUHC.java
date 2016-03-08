@@ -42,6 +42,7 @@ public class ButtonBrowseUHC extends Button {
         for (int i : UHCRequester.getPortalIds()) {
             uhcContainer.addButton(new ButtonUHC(i, i + 2));
         }
+        uhcContainer.setRefreshRate(20L);
         uhcContainer.open(player);
     }
 }

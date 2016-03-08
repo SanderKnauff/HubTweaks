@@ -22,7 +22,7 @@ public class CompassWarp implements Listener {
     private static Container inv;
 
     public static void init() {
-        inv = GuiManager.getInstance().createContainer(ColorUtil.replaceColors("&bSelect your destination:"), 18, false,
+        inv = GuiManager.getInstance().createContainer(ColorUtil.replaceColors("&9Select your destination:"), 18, false,
                 false);
 
         inv.addButton(new ButtonTeleport(
