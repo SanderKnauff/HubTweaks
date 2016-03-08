@@ -68,17 +68,18 @@ public class WorldProtector implements Listener {
     public void onClickEntity(PlayerLoginEvent ple) {
         Player pl = ple.getPlayer();
         Bukkit.getScheduler().runTaskAsynchronously(HubTweaks.getInstance(), () -> {
-            while (pl.isOnline()) {
+            do {
                 try {
-                    LocationUtil.firework(pl.getLocation(),
-                            FireworkEffect.builder().withColor(Color.AQUA, Color.YELLOW, Color.PURPLE).flicker(true)
-                                    .withFade(Color.MAROON).build(),
-                            20L);
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(),
+                            () -> LocationUtil.firework(pl.getLocation(),
+                                    FireworkEffect.builder().withColor(Color.AQUA, Color.YELLOW, Color.PURPLE)
+                                            .flicker(true).withFade(Color.MAROON).build(),
+                                    20L));
                     Thread.sleep((long) (10000 * Math.random()));
                 } catch (Exception ex) {
                     System.err.println(ex);
                 }
-            }
+            } while (pl.isOnline());
         });
     }
 
