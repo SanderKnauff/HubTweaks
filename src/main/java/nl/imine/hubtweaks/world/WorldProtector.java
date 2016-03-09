@@ -42,7 +42,10 @@ public class WorldProtector implements Listener {
     public WorldProtector() {
         Bukkit.getPluginManager().registerEvents(this, HubTweaks.getInstance());
         Bukkit.getScheduler().scheduleSyncRepeatingTask(HubTweaks.getInstance(), () -> {
-            Bukkit.getOnlinePlayers().stream().forEach(pl -> pl.setSaturation(5F));
+            Bukkit.getOnlinePlayers().stream().forEach(pl -> {
+                pl.setFoodLevel(20);
+                pl.setSaturation(1F);
+            });
             Bukkit.getOnlinePlayers().stream()
                     .filter(pl -> !LocationUtil.isInBox(pl.getLocation(), PvP.BOX[0], PvP.BOX[1]) && !pl.isDead())
                     .forEach(pl -> pl.setHealth(20D));
