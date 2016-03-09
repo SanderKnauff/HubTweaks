@@ -36,6 +36,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.material.Wool;
 
 import net.md_5.bungee.api.ChatColor;
+import nl.imine.api.event.FlightDetectEvent;
 import nl.imine.api.util.ColorUtil;
 import nl.imine.api.util.ItemUtil;
 import nl.imine.api.util.LocationUtil;
@@ -52,6 +53,13 @@ public class ParkourListener implements Listener {
     public static void init() {
         HubTweaks.getInstance().getServer().getPluginManager().registerEvents(new ParkourListener(),
                 HubTweaks.getInstance());
+    }
+    
+    @EventHandler
+    public void onFlyDetect(FlightDetectEvent evt){
+        ParkourPlayer player = Parkour.getInstance().getPlayer(evt.getPlayer());
+        player.setTouchedPlate(true);
+        player.setReachedTop(true);
     }
 
     @EventHandler
