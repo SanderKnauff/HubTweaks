@@ -54,9 +54,9 @@ public class ParkourListener implements Listener {
         HubTweaks.getInstance().getServer().getPluginManager().registerEvents(new ParkourListener(),
                 HubTweaks.getInstance());
     }
-    
+
     @EventHandler
-    public void onFlyDetect(FlightDetectEvent evt){
+    public void onFlyDetect(FlightDetectEvent evt) {
         ParkourPlayer player = Parkour.getInstance().getPlayer(evt.getPlayer());
         player.setTouchedPlate(true);
         player.setReachedTop(true);
@@ -113,8 +113,12 @@ public class ParkourListener implements Listener {
                         ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
                         LeatherArmorMeta meta = (LeatherArmorMeta) boots.getItemMeta();
                         meta.setColor(player.getLevel().getColor().getColor());
-                        if (player.getLevel().getColor() == DyeColor.MAGENTA) {
-                           player.getPlayer().getInventory().setChestplate(new ItemStack(ItemUtil.getBuilder(Material.ELYTRA).build()));
+                        DyeColor wool = ((Wool) evt.getClickedBlock().getRelative(BlockFace.DOWN).getState().getData())
+                                .getColor();
+                        if (player.getLevel().getColor() == DyeColor.MAGENTA
+                                && (wool == DyeColor.BLACK || parkour.getLevel(wool).getLevel() == 5)) {
+                            player.getPlayer().getInventory()
+                                    .setChestplate(new ItemStack(ItemUtil.getBuilder(Material.ELYTRA).build()));
                         }
                         boots.setItemMeta(meta);
                         if (player.getLevel().getLevel() != -1) {
