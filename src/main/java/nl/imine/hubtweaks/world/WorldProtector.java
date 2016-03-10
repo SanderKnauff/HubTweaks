@@ -1,14 +1,10 @@
 package nl.imine.hubtweaks.world;
 
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.FireworkEffect.Type;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -22,16 +18,14 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
 import nl.imine.api.util.LocationUtil;
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.kotl.Kotl;
 import nl.imine.hubtweaks.pvp.PvP;
-import org.bukkit.entity.ItemFrame;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 public class WorldProtector implements Listener {
 
@@ -68,30 +62,6 @@ public class WorldProtector implements Listener {
         default:
             return true;
         }
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onClickEntity(PlayerLoginEvent ple) {
-        UUID uuid = ple.getPlayer().getUniqueId();
-        Bukkit.getScheduler().runTaskAsynchronously(HubTweaks.getInstance(), () -> {
-            Player pl;
-            int max = 100;
-            do {
-                pl = Bukkit.getPlayer(uuid);
-                Player plT = pl;
-                try {
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(),
-                            () -> LocationUtil.firework(plT.getLocation(),
-                                    FireworkEffect.builder().withColor(Color.AQUA, Color.YELLOW, Color.PURPLE)
-                                            .flicker(true).trail(true).with(Type.BURST).withFade(Color.MAROON).build(),
-                                    20L));
-                    Thread.sleep((long) ((50 * 1000) * Math.random()));
-                } catch (Exception ex) {
-                    System.err.println(ex);
-                    break;
-                }
-            } while (pl != null && pl.isOnline() && max-- > 0);
-        });
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
