@@ -26,7 +26,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import nl.imine.api.event.OffhandChangeEvent;
 import nl.imine.hubtweaks.parkour.Parkour;
 import nl.imine.hubtweaks.parkour.ParkourListener;
 
@@ -59,13 +58,6 @@ public class EventListener implements Listener, Runnable {
 				playerRespawn((Player) e);
 				ParkourListener.resetCheat((Player) e);
 			}
-		}
-	}
-
-	@EventHandler
-	public void onSwitchItem(final OffhandChangeEvent evt) {
-		if (evt.getPlayer().getGameMode() == GameMode.ADVENTURE) {
-			evt.setCancelled(true);
 		}
 	}
 

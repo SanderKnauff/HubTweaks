@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Effect;
 import org.bukkit.FireworkEffect;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -22,6 +23,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
+import nl.imine.api.event.OffhandChangeEvent;
 import nl.imine.api.util.ColorUtil;
 import nl.imine.api.util.LocationUtil;
 import nl.imine.api.util.PlayerUtil;
@@ -38,7 +40,14 @@ public class KotlListener implements Listener {
 
 	private KotlListener(Kotl kotl) {
 		this.kotl = kotl;
+	}
 
+	@EventHandler
+	public void onSwitchItem(final OffhandChangeEvent evt) {
+		if (evt.getPlayer().getGameMode() == GameMode.ADVENTURE
+				&& LocationUtil.isInBox(evt.getPlayer().getLocation(), Kotl.BOX[0], Kotl.BOX[1])) {
+			evt.setCancelled(true);
+		}
 	}
 
 	@EventHandler
