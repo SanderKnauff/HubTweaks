@@ -63,6 +63,13 @@ public class EventListener implements Listener, Runnable {
 	}
 
 	@EventHandler
+	public void onSwitchItem(final OffhandChangeEvent evt) {
+		if (evt.getPlayer().getGameMode() == GameMode.ADVENTURE) {
+			evt.setCancelled(true);
+		}
+	}
+
+	@EventHandler
 	public void onInventoryClick(final InventoryClickEvent evt) {
 		if (evt.getWhoClicked().getGameMode() == GameMode.ADVENTURE) {
 			evt.setCancelled(true);
