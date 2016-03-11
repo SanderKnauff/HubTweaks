@@ -13,13 +13,13 @@ import nl.imine.hubtweaks.pvp.PvPJoinEvent;
 
 public class ButtonOitc extends Button {
 
-    public ButtonOitc(int slot) {
-        super(ItemUtil.getBuilder(Material.IRON_SWORD).setName(ChatColor.RED + "One in the Chamber")
-                .addFlag(ItemFlag.HIDE_ATTRIBUTES).build(), slot);
-    }
+	public ButtonOitc(int slot) {
+		super(ItemUtil.getBuilder(Material.IRON_SWORD).setName(ChatColor.RED + "One in the Chamber")
+				.addFlag(ItemFlag.HIDE_ATTRIBUTES).build(), slot);
+	}
 
-    @Override
-    public void doAction(Player player, ClickType ct) {
-        HubTweaks.getInstance().getServer().getPluginManager().callEvent(new PvPJoinEvent(player));
-    }
+	@Override
+	public void doAction(Player player, ClickType ct) {
+		HubTweaks.getInstance().getServer().getPluginManager().callEvent(new PvPJoinEvent(player));
+	}
 }

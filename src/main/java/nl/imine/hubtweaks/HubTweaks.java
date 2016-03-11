@@ -17,42 +17,42 @@ import nl.imine.hubtweaks.world.WorldProtector;
 
 public class HubTweaks extends JavaPlugin {
 
-    private static HubTweaks plugin;
+	private static HubTweaks plugin;
 
-    @Override
-    public void onEnable() {
-        plugin = this;
-        HideLogs.init();
-        EventListener.init();
-        WorldProtector.init();
-        PvP.init();
-        Kotl.init();
-        CompassWarp.init();
-        Parkour.init();
-        EntityRide.init();
-        Spawner.init();
-        FlyUtil.init(this);
-        Statistic.init();
-        Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
-        getCommand("HubTweaks").setExecutor(new CommandHandler(this));
-        getCommand("kotl").setExecutor(new CommandHandler(this));
-        PlayerDataManager.RemoveAllPlayerData();
-        this.getConfig().addDefault("WarpItems", "[]");
-        this.getConfig().options().copyDefaults(true);
-        this.saveConfig();
-    }
+	@Override
+	public void onEnable() {
+		plugin = this;
+		HideLogs.init();
+		EventListener.init();
+		WorldProtector.init();
+		PvP.init();
+		Kotl.init();
+		CompassWarp.init();
+		Parkour.init();
+		EntityRide.init();
+		Spawner.init();
+		FlyUtil.init(this);
+		Statistic.init();
+		Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
+		getCommand("HubTweaks").setExecutor(new CommandHandler(this));
+		getCommand("kotl").setExecutor(new CommandHandler(this));
+		PlayerDataManager.RemoveAllPlayerData();
+		this.getConfig().addDefault("WarpItems", "[]");
+		this.getConfig().options().copyDefaults(true);
+		this.saveConfig();
+	}
 
-    @Override
-    public void onDisable() {
-        PlayerDataManager.RemoveAllPlayerData();
-        plugin = null;
-    }
+	@Override
+	public void onDisable() {
+		PlayerDataManager.RemoveAllPlayerData();
+		plugin = null;
+	}
 
-    public static Plugin getInstance() {
-        return plugin;
-    }
+	public static Plugin getInstance() {
+		return plugin;
+	}
 
-    public static World getMainWorld() {
-        return Bukkit.getWorlds().get(0);
-    }
+	public static World getMainWorld() {
+		return Bukkit.getWorlds().get(0);
+	}
 }

@@ -21,97 +21,99 @@ import org.bukkit.entity.Player;
  */
 public class ParkourPlayer {
 
-    private final String uuid;
-    private ParkourLevel level;
-    private boolean isBuilding;
+	private final String uuid;
+	private ParkourLevel level;
+	private boolean isBuilding;
 
-    //Not stored between reboots
-    private boolean hasReachedTop = false;
-    private boolean hasTouchedPlate = false;
+	// Not stored between reboots
+	private boolean hasReachedTop = false;
+	private boolean hasTouchedPlate = false;
 
-    public ParkourPlayer(String uuid, ParkourLevel level) {
-        this.uuid = uuid;
-        this.level = level;
-        this.save();
-    }
-    
-    public Player getPlayer(){
-        return Bukkit.getPlayer(UUID.fromString(uuid));
-    }
+	public ParkourPlayer(String uuid, ParkourLevel level) {
+		this.uuid = uuid;
+		this.level = level;
+		this.save();
+	}
 
-    public String getUUID() {
-        return this.uuid;
-    }
+	public Player getPlayer() {
+		return Bukkit.getPlayer(UUID.fromString(uuid));
+	}
 
-    public void setLevel(ParkourLevel level) {
-        this.level = level;
-    }
+	public String getUUID() {
+		return this.uuid;
+	}
 
-    public ParkourLevel getLevel() {
-        return level;
-    }
+	public void setLevel(ParkourLevel level) {
+		this.level = level;
+	}
 
-    public void setBuilding(boolean isBuilding) {
-        this.isBuilding = isBuilding;
-    }
+	public ParkourLevel getLevel() {
+		return level;
+	}
 
-    public boolean isBuilding() {
-        return isBuilding;
-    }
+	public void setBuilding(boolean isBuilding) {
+		this.isBuilding = isBuilding;
+	}
 
-    public void save() {
-        File f = new File(ParkourConfig.CONFIGPATH + "Players" + File.separator + uuid + ".yml");
-        try {
-            f.createNewFile();
-        } catch (IOException e) {
-            System.err.println("Cannot create file || " + e.getMessage());
-        }
-        if (this.level != null) {
-            YamlConfiguration config = new YamlConfiguration();
-            try {
-                config.load(f);
-                config.set("Level", this.level.getColor().toString());
-                config.save(f);
-            } catch (FileNotFoundException e) {
-                System.err.println("Exception finding file: " + f.getPath() + " || " + e.getMessage());
-            } catch (IOException e) {
-                System.err.println("Exception opening file: " + f.getPath() + " || " + e.getMessage());
-            } catch (InvalidConfigurationException e) {
-                System.err.println("Exception saving ymlfile: " + f.getPath() + " || " + e.getMessage());
-            }
-        }
-    }
+	public boolean isBuilding() {
+		return isBuilding;
+	}
 
-    @Override
-    public String toString() {
-        return uuid + " || " + this.level.toString();
-    }
+	public void save() {
+		File f = new File(ParkourConfig.CONFIGPATH + "Players" + File.separator + uuid + ".yml");
+		try {
+			f.createNewFile();
+		} catch (IOException e) {
+			System.err.println("Cannot create file || " + e.getMessage());
+		}
+		if (this.level != null) {
+			YamlConfiguration config = new YamlConfiguration();
+			try {
+				config.load(f);
+				config.set("Level", this.level.getColor().toString());
+				config.save(f);
+			} catch (FileNotFoundException e) {
+				System.err.println("Exception finding file: " + f.getPath() + " || " + e.getMessage());
+			} catch (IOException e) {
+				System.err.println("Exception opening file: " + f.getPath() + " || " + e.getMessage());
+			} catch (InvalidConfigurationException e) {
+				System.err.println("Exception saving ymlfile: " + f.getPath() + " || " + e.getMessage());
+			}
+		}
+	}
 
-    /**
-     * @return the hasReachedTop
-     */
-    public boolean hasReachedTop() {
-        return hasReachedTop;
-    }
+	@Override
+	public String toString() {
+		return uuid + " || " + this.level.toString();
+	}
 
-    /**
-     * @param hasReachedTop the hasReachedTop to set
-     */
-    public void setReachedTop(boolean hasReachedTop) {
-        this.hasReachedTop = hasReachedTop;
-    }
+	/**
+	 * @return the hasReachedTop
+	 */
+	public boolean hasReachedTop() {
+		return hasReachedTop;
+	}
 
-    /**
-     * @return the hasTouchedPlate
-     */
-    public boolean hasTouchedPlate() {
-        return hasTouchedPlate;
-    }
+	/**
+	 * @param hasReachedTop
+	 *            the hasReachedTop to set
+	 */
+	public void setReachedTop(boolean hasReachedTop) {
+		this.hasReachedTop = hasReachedTop;
+	}
 
-    /**
-     * @param hasTouchedPlate the hasTouchedPlate to set
-     */
-    public void setTouchedPlate(boolean hasTouchedPlate) {
-        this.hasTouchedPlate = hasTouchedPlate;
-    }
+	/**
+	 * @return the hasTouchedPlate
+	 */
+	public boolean hasTouchedPlate() {
+		return hasTouchedPlate;
+	}
+
+	/**
+	 * @param hasTouchedPlate
+	 *            the hasTouchedPlate to set
+	 */
+	public void setTouchedPlate(boolean hasTouchedPlate) {
+		this.hasTouchedPlate = hasTouchedPlate;
+	}
 }

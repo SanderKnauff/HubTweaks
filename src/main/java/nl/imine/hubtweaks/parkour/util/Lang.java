@@ -10,5 +10,5 @@ package nl.imine.hubtweaks.parkour.util;
  * @author Sander
  */
 public class Lang {
-    
+
 }

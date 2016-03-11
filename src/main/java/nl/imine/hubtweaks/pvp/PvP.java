@@ -24,106 +24,106 @@ import com.google.common.collect.Lists;
 
 public class PvP {
 
-    public static final Location[] BOX = new Location[] { new Location(Bukkit.getWorlds().get(0), 50, 0, -450),
-            new Location(Bukkit.getWorlds().get(0), -15, 60, -400) };
-    private static final List<Player> PVP_LIST = Lists.newArrayList();
-    private static final List<Location> SPAWN_ARENA = new ArrayList<>();
-    private static File pvpConfigFile = null;
-    private static FileConfiguration pvpConfig = null;
+	public static final Location[] BOX = new Location[]{new Location(Bukkit.getWorlds().get(0), 50, 0, -450),
+			new Location(Bukkit.getWorlds().get(0), -15, 60, -400)};
+	private static final List<Player> PVP_LIST = Lists.newArrayList();
+	private static final List<Location> SPAWN_ARENA = new ArrayList<>();
+	private static File pvpConfigFile = null;
+	private static FileConfiguration pvpConfig = null;
 
-    public static void init() {
-        PvPListener.init();
-        loadArena();
-    }
+	public static void init() {
+		PvPListener.init();
+		loadArena();
+	}
 
-    public PvP(Plugin plugin) {
-    }
+	public PvP(Plugin plugin) {
+	}
 
-    public static boolean isPlayerInArena(Player player) {
-        if (PVP_LIST.contains(player)) {
-            return true;
-        }
-        return false;
-    }
+	public static boolean isPlayerInArena(Player player) {
+		if (PVP_LIST.contains(player)) {
+			return true;
+		}
+		return false;
+	}
 
-    public static void addPlayerToArena(Player player) {
-        PVP_LIST.add(player);
-        PvP.addGear(player);
-        player.setFireTicks(0);
-        player.setFallDistance(0);
-        player.setVelocity(new Vector());
-        player.setHealth(player.getMaxHealth());
-        player.getActivePotionEffects().clear();
-        player.teleport(PvP.getRandomSpawn());
-        player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect((int) 100, 0));
-    }
+	public static void addPlayerToArena(Player player) {
+		PVP_LIST.add(player);
+		PvP.addGear(player);
+		player.setFireTicks(0);
+		player.setFallDistance(0);
+		player.setVelocity(new Vector());
+		player.setHealth(player.getMaxHealth());
+		player.getActivePotionEffects().clear();
+		player.teleport(PvP.getRandomSpawn());
+		player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect((int) 100, 0));
+	}
 
-    public static void removePlayerFromArena(Player player) {
-        if (PVP_LIST.contains(player)) {
-            PVP_LIST.remove(player);
-            player.getInventory().clear();
-        }
-    }
+	public static void removePlayerFromArena(Player player) {
+		if (PVP_LIST.contains(player)) {
+			PVP_LIST.remove(player);
+			player.getInventory().clear();
+		}
+	}
 
-    public static void loadArena() {
-        pvpConfigFile = new File(HubTweaks.getInstance().getDataFolder().getPath() + File.separatorChar + "PvP.yml");
-        if (!pvpConfigFile.exists()) {
-            try {
-                pvpConfigFile.createNewFile();
-            } catch (IOException e) {
-                System.err.println("ERROR: PVP FILE COULD NOT BE CREATED");
-                return;
-            }
-        } else {
-            System.out.println("PVPCONFIG Exists");
-        }
-        pvpConfig = YamlConfiguration.loadConfiguration(pvpConfigFile);
-        if (pvpConfig.getConfigurationSection("Spawns") != null) {
-            for (String key : pvpConfig.getConfigurationSection("Spawns").getKeys(false)) {
-                World world = HubTweaks.getInstance().getServer()
-                        .getWorld(pvpConfig.getString("Spawns." + key + ".world"));
-                double x = pvpConfig.getDouble("Spawns." + key + ".x");
-                double y = pvpConfig.getDouble("Spawns." + key + ".y");
-                double z = pvpConfig.getDouble("Spawns." + key + ".z");
-                SPAWN_ARENA.add(new Location(world, x, y, z));
-            }
-        }
-    }
+	public static void loadArena() {
+		pvpConfigFile = new File(HubTweaks.getInstance().getDataFolder().getPath() + File.separatorChar + "PvP.yml");
+		if (!pvpConfigFile.exists()) {
+			try {
+				pvpConfigFile.createNewFile();
+			} catch (IOException e) {
+				System.err.println("ERROR: PVP FILE COULD NOT BE CREATED");
+				return;
+			}
+		} else {
+			System.out.println("PVPCONFIG Exists");
+		}
+		pvpConfig = YamlConfiguration.loadConfiguration(pvpConfigFile);
+		if (pvpConfig.getConfigurationSection("Spawns") != null) {
+			for (String key : pvpConfig.getConfigurationSection("Spawns").getKeys(false)) {
+				World world = HubTweaks.getInstance().getServer()
+						.getWorld(pvpConfig.getString("Spawns." + key + ".world"));
+				double x = pvpConfig.getDouble("Spawns." + key + ".x");
+				double y = pvpConfig.getDouble("Spawns." + key + ".y");
+				double z = pvpConfig.getDouble("Spawns." + key + ".z");
+				SPAWN_ARENA.add(new Location(world, x, y, z));
+			}
+		}
+	}
 
-    public static Location getRandomSpawn() {
-        Random r = new Random();
-        return SPAWN_ARENA.get(r.nextInt(SPAWN_ARENA.size()));
-    }
+	public static Location getRandomSpawn() {
+		Random r = new Random();
+		return SPAWN_ARENA.get(r.nextInt(SPAWN_ARENA.size()));
+	}
 
-    public static List<Player> getPlayerList() {
-        return PVP_LIST;
-    }
+	public static List<Player> getPlayerList() {
+		return PVP_LIST;
+	}
 
-    public static List<Location> getSpawnList() {
-        return SPAWN_ARENA;
-    }
+	public static List<Location> getSpawnList() {
+		return SPAWN_ARENA;
+	}
 
-    public static void addSpawn(Location spawn) {
-        SPAWN_ARENA.add(spawn);
-        System.out.println(SPAWN_ARENA.size());
-        pvpConfig.set("Spawns." + SPAWN_ARENA.size() + ".world", spawn.getWorld().getName());
-        pvpConfig.set("Spawns." + SPAWN_ARENA.size() + ".x", spawn.getX());
-        pvpConfig.set("Spawns." + SPAWN_ARENA.size() + ".y", spawn.getY());
-        pvpConfig.set("Spawns." + SPAWN_ARENA.size() + ".z", spawn.getZ());
-        try {
-            pvpConfig.save(pvpConfigFile);
-        } catch (IOException e) {
-            System.err.println("IOException loading hubtweaks PvP spawns: " + e.getMessage());
-        }
-    }
+	public static void addSpawn(Location spawn) {
+		SPAWN_ARENA.add(spawn);
+		System.out.println(SPAWN_ARENA.size());
+		pvpConfig.set("Spawns." + SPAWN_ARENA.size() + ".world", spawn.getWorld().getName());
+		pvpConfig.set("Spawns." + SPAWN_ARENA.size() + ".x", spawn.getX());
+		pvpConfig.set("Spawns." + SPAWN_ARENA.size() + ".y", spawn.getY());
+		pvpConfig.set("Spawns." + SPAWN_ARENA.size() + ".z", spawn.getZ());
+		try {
+			pvpConfig.save(pvpConfigFile);
+		} catch (IOException e) {
+			System.err.println("IOException loading hubtweaks PvP spawns: " + e.getMessage());
+		}
+	}
 
-    public static void addGear(Player p) {
-        p.getInventory().clear();
-        ItemStack sword = new ItemStack(Material.IRON_SWORD, 1);
-        ItemStack bow = new ItemStack(Material.BOW, 1);
-        ItemStack arrow = new ItemStack(Material.ARROW, 1);
-        p.getInventory().setItem(0, sword);
-        p.getInventory().setItem(1, bow);
-        p.getInventory().setItem(2, arrow);
-    }
+	public static void addGear(Player p) {
+		p.getInventory().clear();
+		ItemStack sword = new ItemStack(Material.IRON_SWORD, 1);
+		ItemStack bow = new ItemStack(Material.BOW, 1);
+		ItemStack arrow = new ItemStack(Material.ARROW, 1);
+		p.getInventory().setItem(0, sword);
+		p.getInventory().setItem(1, bow);
+		p.getInventory().setItem(2, arrow);
+	}
 }
