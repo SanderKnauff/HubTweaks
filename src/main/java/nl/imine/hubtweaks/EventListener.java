@@ -22,6 +22,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -53,7 +54,7 @@ public class EventListener implements Listener, Runnable {
 			Location spawn = e.getWorld().getSpawnLocation().getBlock().getLocation();
 			spawn.add(0.5D, 0.1D, 0.5D);
 			spawn.setDirection(e.getLocation().getDirection());
-			e.teleport(spawn);
+			e.teleport(spawn,PlayerTeleportEvent.TeleportCause.END_PORTAL);
 			if (e instanceof Player) {
 				playerRespawn((Player) e);
 				ParkourListener.resetCheat((Player) e);
