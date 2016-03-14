@@ -79,6 +79,7 @@ public class ParkourManager implements Listener {
 				// Create new timings.
 				ParkourLevel lastLevel = parkour.getLevels().stream().filter(l -> !l.isBonusLevel())
 						.sorted((ParkourLevel p1, ParkourLevel p2) -> p1.getLevel() - p2.getLevel()).findFirst().get();
+				System.out.println("Last Level: " + lastLevel.getLevel());
 				// Time between levels
 				if (goal.getLevel().getLevel() < lastLevel.getLevel()) {
 					player.addPendingTime(new ParkourTiming(null, goal.getLevel(),
