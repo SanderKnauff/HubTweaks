@@ -6,6 +6,7 @@ import java.util.UUID;
 import nl.imine.api.Credentials;
 import nl.imine.api.db.DatabaseManager;
 import nl.imine.api.util.ColorUtil;
+import nl.imine.api.util.PlayerUtil;
 import nl.imine.api.util.StringUtil;
 import org.bukkit.Bukkit;
 
@@ -39,14 +40,24 @@ public class ParkourPlayer {
 	}
 
 	public void addTiming(ParkourTiming timing) {
-		timings.add(timing);
 		DM.insertQuery("INSERT INTO parkour_timing VALUES ('%s','%s',%d,%d,%d)", uuid,
 			timing.getDateObtained().toString(), timing.getStartLevel().getLevel(), timing.getDestLevel().getLevel(),
 			timing.getTimeMiliseconds());
-		nl.imine.api.util.PlayerUtil.sendActionMessage(Bukkit.getPlayer(uuid),
-			ColorUtil.replaceColors("&7New Timing! From: &e%s &7To: &e%s, &7Time: &e%s",
-				timing.getStartLevel().getLevel(), timing.getDestLevel().getLevel(),
+		long recordTime = timings.stream().filter(t -> t.getDestLevel().equals(timing.getDestLevel()))
+				.filter(t -> t.getStartLevel().equals(timing.getStartLevel()))
+				.sorted(
+					(ParkourTiming t1, ParkourTiming t2) -> (int) (t1.getTimeMiliseconds() - t2.getTimeMiliseconds()))
+				.findFirst().get().getTimeMiliseconds();
+
+		if (recordTime > timing.getTimeMiliseconds()) {
+			PlayerUtil.sendTitleMessage(Bukkit.getPlayer(uuid), null, ColorUtil.replaceColors("&7New Record: &c%s",
+				StringUtil.readableMiliseconds(timing.getTimeMiliseconds())), 40l);
+		}
+		PlayerUtil.sendActionMessage(Bukkit.getPlayer(uuid),
+			ColorUtil.replaceColors("&7Old time: &c%s &8|| &7New Time: &c%s",
+				StringUtil.readableMiliseconds(recordTime),
 				StringUtil.readableMiliseconds(timing.getTimeMiliseconds())));
+		timings.add(timing);
 	}
 
 	public List<ParkourTiming> getTimings() {
