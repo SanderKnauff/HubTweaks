@@ -40,8 +40,9 @@ public class ParkourPlayer {
 
 	public void addTiming(ParkourTiming timing) {
 		timings.add(timing);
-		DM.insertQuery("INSERT INTO parkour_timings VALUES (%s,%s,%d,%d,%d)", uuid, timing.getDateObtained().toString(),
-			timing.getStartLevel().getLevel(), timing.getDestLevel().getLevel(), timing.getTimeMiliseconds());
+		DM.insertQuery("INSERT INTO parkour_timings VALUES ('%s','%s',%d,%d,%d)", uuid,
+			timing.getDateObtained().toString(), timing.getStartLevel().getLevel(), timing.getDestLevel().getLevel(),
+			timing.getTimeMiliseconds());
 		nl.imine.api.util.PlayerUtil.sendActionMessage(Bukkit.getPlayer(uuid),
 			ColorUtil.replaceColors("&7New Timing! From: &e%s &7To: &e%s, &7Time: &e%s",
 				timing.getStartLevel().getLevel(), timing.getDestLevel().getLevel(),
