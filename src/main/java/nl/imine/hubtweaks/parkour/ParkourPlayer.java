@@ -22,6 +22,8 @@ public class ParkourPlayer {
 
 	private final List<ParkourTiming> pendingTimes = new ArrayList<>();
 
+	private ParkourGoal lastGoal = null;
+
 	public ParkourPlayer(UUID uuid, ParkourLevel highestLevel, List<ParkourTiming> timings) {
 		this.uuid = uuid;
 		this.highestLevel = highestLevel;
@@ -50,18 +52,29 @@ public class ParkourPlayer {
 				.sorted(
 					(ParkourTiming t1, ParkourTiming t2) -> (int) (t1.getTimeMiliseconds() - t2.getTimeMiliseconds()))
 				.findFirst();
+		ParkourLevel lastLevel = ParkourManager.getParkourInstance().getLevels().stream().filter(l -> !l.isBonusLevel())
+				.sorted((ParkourLevel p1, ParkourLevel p2) -> p2.getLevel() - p1.getLevel()).findFirst().get();
 		long recordTime = -1;
+		boolean isEnd = (timing.getStartLevel().getLevel() != 0 && timing.getDestLevel().equals(lastLevel));
 		if (oRecordTime.isPresent()) {
 			recordTime = oRecordTime.get().getTimeMiliseconds();
 		}
 		if (recordTime > timing.getTimeMiliseconds() || recordTime == -1) {
-			PlayerUtil.sendTitleMessage(Bukkit.getPlayer(uuid), "", ColorUtil.replaceColors("&7New Record: &c%s",
-				StringUtil.readableMiliseconds(timing.getTimeMiliseconds())), 40l);
+			if (!isEnd) {
+				PlayerUtil.sendTitleMessage(Bukkit.getPlayer(uuid), "", ColorUtil.replaceColors("&7New Record: &c%s",
+					StringUtil.readableMiliseconds(timing.getTimeMiliseconds())), 40l);
+			} else {
+				PlayerUtil.sendTitleMessage(Bukkit.getPlayer(uuid),
+					ColorUtil.replaceColors("&7New overall Record: &c%s",
+						StringUtil.readableMiliseconds(timing.getTimeMiliseconds())),
+					ColorUtil.replaceColors("&7Sum of best segments: &c%s", getSumOfBest()), 40l);
+			}
 		}
 		String oldTime = (recordTime == -1) ? "--:--:--" : StringUtil.readableMiliseconds(recordTime);
 		PlayerUtil.sendActionMessage(Bukkit.getPlayer(uuid),
 			ColorUtil.replaceColors("&7Old time: &c%s &8|| &7New Time: &c%s", oldTime,
 				StringUtil.readableMiliseconds(timing.getTimeMiliseconds())));
+
 		timings.add(timing);
 	}
 
@@ -83,6 +96,35 @@ public class ParkourPlayer {
 
 	public void resetPendingTimes() {
 		pendingTimes.clear();
+	}
+
+	public void setLastGoal(ParkourGoal lastGoal) {
+		this.lastGoal = lastGoal;
+	}
+
+	public ParkourGoal getLastGoal() {
+		return lastGoal;
+	}
+
+	public long getSumOfBest() {
+		long sumOfBest = 0;
+		for (ParkourTiming t : timings) {
+			List<ParkourTiming> bestSegment = new ArrayList<>();
+			if (t.getStartLevel().getLevel() + 1 == t.getDestLevel().getLevel()) {
+				Optional<ParkourTiming> best = bestSegment.stream()
+						.filter(s -> (s.getStartLevel() == t.getStartLevel()) && (s.getDestLevel() == t.getDestLevel()))
+						.sorted((ParkourTiming p1, ParkourTiming p2) -> (int) (p1.getTimeMiliseconds()
+								- p2.getTimeMiliseconds()))
+						.findFirst();
+				if (best.isPresent()) {
+					bestSegment.add(best.get());
+				}
+			}
+			for (ParkourTiming best : bestSegment) {
+				sumOfBest += best.getTimeMiliseconds();
+			}
+		}
+		return sumOfBest;
 	}
 
 	public void save() {

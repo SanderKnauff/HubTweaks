@@ -52,7 +52,10 @@ public class ParkourManager implements Listener {
 			if (parkour.isParkourGoal(evt.getClickedBlock().getLocation())) {
 				ParkourPlayer player = parkour.getParkourPlayer(evt.getPlayer());
 				ParkourGoal goal = parkour.getParkourGoal(evt.getClickedBlock().getLocation());
-
+				if (goal.equals(player.getLastGoal())) {
+					return;
+				}
+				player.setLastGoal(goal);
 				// Increase player highest level if he reached a new checkpoint.
 				if (player.getHighestLevel().getLevel() < goal.getLevel().getLevel()) {
 					player.setHighestLevel(goal.getLevel());
@@ -68,17 +71,25 @@ public class ParkourManager implements Listener {
 				}
 
 				// Handle pending timings.
+				ParkourLevel lastLevel = parkour.getLevels().stream().filter(l -> !l.isBonusLevel())
+						.sorted((ParkourLevel p1, ParkourLevel p2) -> p2.getLevel() - p1.getLevel()).findFirst().get();
+
 				new ArrayList<>(player.getPendingTimes()).stream().filter(t -> t.getDestLevel().equals(goal.getLevel()))
 						.forEach(t -> {
 							t.setTimeMiliseconds(System.currentTimeMillis() - t.getTimeMiliseconds());
 							t.setDateObtained(Timestamp.from(Instant.now()));
-							player.addTiming(t);
+							if (t.getStartLevel().getLevel() != 0 && t.getDestLevel().equals(lastLevel)) {
+								Bukkit.getScheduler().runTaskLater(HubTweaks.getInstance(), () -> {
+									player.addTiming(t);
+								} , 100l);
+							} else {
+								player.addTiming(t);
+							}
 							player.removePendingTime(t);
 						});
 
 				// Create new timings.
-				ParkourLevel lastLevel = parkour.getLevels().stream().filter(l -> !l.isBonusLevel())
-						.sorted((ParkourLevel p1, ParkourLevel p2) -> p2.getLevel() - p1.getLevel()).findFirst().get();
+
 				// Time between levels
 				if (goal.getLevel().getLevel() < lastLevel.getLevel()) {
 					player.addPendingTime(new ParkourTiming(null, goal.getLevel(),
@@ -171,5 +182,9 @@ public class ParkourManager implements Listener {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static Parkour getParkourInstance() {
+		return parkour;
 	}
 }
