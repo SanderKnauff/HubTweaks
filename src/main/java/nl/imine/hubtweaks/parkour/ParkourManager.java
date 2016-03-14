@@ -48,6 +48,7 @@ public class ParkourManager implements Listener {
 	public void onPressurePlateInteract(PlayerInteractEvent evt) {
 		// Check if the player interacted with a pressure plate.
 		if (evt.getAction().equals(Action.PHYSICAL)) {
+			evt.getPlayer().sendMessage("a");
 			// Check if the pressureplate is part of the parkour.
 			if (parkour.isParkourGoal(evt.getClickedBlock().getLocation())) {
 				ParkourPlayer player = parkour.getParkourPlayer(evt.getPlayer());
