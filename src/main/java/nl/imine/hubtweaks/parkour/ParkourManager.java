@@ -89,7 +89,6 @@ public class ParkourManager implements Listener {
 					player.addPendingTime(
 						new ParkourTiming(null, goal.getLevel(), lastLevel, System.currentTimeMillis()));
 				}
-				evt.setCancelled(true);
 			}
 		}
 	}
