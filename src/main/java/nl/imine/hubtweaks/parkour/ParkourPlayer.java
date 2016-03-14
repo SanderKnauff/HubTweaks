@@ -62,7 +62,6 @@ public class ParkourPlayer {
 		PlayerUtil.sendActionMessage(Bukkit.getPlayer(uuid),
 			ColorUtil.replaceColors("&7Old time: &c%s &8|| &7New Time: &c%s", oldTime,
 				StringUtil.readableMiliseconds(timing.getTimeMiliseconds())));
-
 		timings.add(timing);
 	}
 
