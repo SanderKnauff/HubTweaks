@@ -11,5 +11,5 @@ package nl.imine.hubtweaks.parkour_old.util;
  */
 public class Config {
 
-    public static final String PLAYER_LEVEL = "level";
+	public static final String PLAYER_LEVEL = "level";
 }

@@ -64,5 +64,4 @@ public class Parkour {
 	public List<ParkourPlayer> getPlayers() {
 		return players;
 	}
-
 }
