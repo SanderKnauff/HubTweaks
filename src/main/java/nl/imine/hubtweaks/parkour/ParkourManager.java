@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -39,6 +40,7 @@ public class ParkourManager implements Listener {
 		}
 		parkour = new Parkour(levels);
 		parkour.addGoals(loadGoals());
+		Bukkit.getOnlinePlayers().stream().forEach(p -> loadParkourPlayer(p));
 		Bukkit.getPluginManager().registerEvents(new ParkourManager(), HubTweaks.getInstance());
 	}
 
@@ -97,32 +99,7 @@ public class ParkourManager implements Listener {
 	@EventHandler
 	public void onPlayerLogin(PlayerLoginEvent evt) {
 		if (parkour.getParkourPlayer(evt.getPlayer()) == null) {
-			ResultSet rs = DM.selectQuery("SELECT * FROM parkour_player WHERE uuid LIKE '%s' LIMIT 1",
-				evt.getPlayer().getUniqueId().toString());
-			ParkourPlayer parkourPlayer = null;
-			try {
-				while (rs.next()) {
-					ResultSet timingSet = DM.selectQuery("SELECT * FROM parkour_timing WHERE uuid LIKE '%s'",
-						evt.getPlayer().getUniqueId().toString());
-					List<ParkourTiming> timings = new ArrayList<>();
-					while (timingSet.next()) {
-						timings.add(new ParkourTiming(timingSet.getTimestamp("dateObtained"),
-								parkour.getLevel((short) timingSet.getInt("origin")),
-								parkour.getLevel((short) timingSet.getInt("destination")), timingSet.getLong("time")));
-					}
-					parkourPlayer = new ParkourPlayer(evt.getPlayer().getUniqueId(),
-							parkour.getLevel((short) rs.getInt("level")), timings);
-				}
-				if (parkourPlayer == null) {
-					parkourPlayer = new ParkourPlayer(evt.getPlayer().getUniqueId(), parkour.getLevel((short) 0),
-							new ArrayList<>());
-					DM.insertQuery("INSERT INTO parkour_player VALUES(%s,0)", evt.getPlayer().getUniqueId());
-				}
-				parkourPlayer.save();
-				parkour.addPlayer(parkourPlayer);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			loadParkourPlayer(evt.getPlayer());
 		}
 	}
 
@@ -169,5 +146,33 @@ public class ParkourManager implements Listener {
 			e.printStackTrace();
 		}
 		return ret;
+	}
+
+	public static void loadParkourPlayer(Player player) {
+		ResultSet rs = DM.selectQuery("SELECT * FROM parkour_player WHERE uuid LIKE '%s' LIMIT 1",
+			player.getUniqueId().toString());
+		ParkourPlayer parkourPlayer = null;
+		try {
+			while (rs.next()) {
+				ResultSet timingSet = DM.selectQuery("SELECT * FROM parkour_timing WHERE uuid LIKE '%s'",
+					player.getUniqueId().toString());
+				List<ParkourTiming> timings = new ArrayList<>();
+				while (timingSet.next()) {
+					timings.add(new ParkourTiming(timingSet.getTimestamp("dateObtained"),
+							parkour.getLevel((short) timingSet.getInt("origin")),
+							parkour.getLevel((short) timingSet.getInt("destination")), timingSet.getLong("time")));
+				}
+				parkourPlayer = new ParkourPlayer(player.getUniqueId(), parkour.getLevel((short) rs.getInt("level")),
+						timings);
+			}
+			if (parkourPlayer == null) {
+				parkourPlayer = new ParkourPlayer(player.getUniqueId(), parkour.getLevel((short) 0), new ArrayList<>());
+				DM.insertQuery("INSERT INTO parkour_player VALUES(%s,0)", player.getUniqueId());
+			}
+			parkourPlayer.save();
+			parkour.addPlayer(parkourPlayer);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
