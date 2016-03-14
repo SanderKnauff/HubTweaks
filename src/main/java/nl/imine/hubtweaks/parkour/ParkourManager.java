@@ -52,6 +52,8 @@ public class ParkourManager implements Listener {
 				ParkourGoal goal = parkour.getParkourGoal(evt.getClickedBlock().getLocation());
 
 				// Increase player highest level if he reached a new checkpoint.
+				System.out.println(player.getHighestLevel());
+				System.out.println(goal);
 				if (player.getHighestLevel().getLevel() < goal.getLevel().getLevel()) {
 					player.setHighestLevel(goal.getLevel());
 				}
