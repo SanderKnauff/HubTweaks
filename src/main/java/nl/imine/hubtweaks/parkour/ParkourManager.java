@@ -32,13 +32,12 @@ public class ParkourManager implements Listener {
 
 	public static void init() {
 		List<ParkourLevel> levels = loadLevels();
-		List<ParkourGoal> goals = loadGoals();
 		if (levels.isEmpty()) {
 			ParkourLevel level = new ParkourLevel((short) 0, true, DyeColor.BLACK);
 			levels.add(level);
 			saveLevel(level);
 		}
-		parkour = new Parkour(goals, levels);
+		parkour = new Parkour(levels);
 		Bukkit.getPluginManager().registerEvents(new ParkourManager(), HubTweaks.getInstance());
 	}
 
@@ -138,7 +137,7 @@ public class ParkourManager implements Listener {
 			goal.getTarget().getBlockZ());
 	}
 
-	private static List<ParkourLevel> loadLevels() {
+	public static List<ParkourLevel> loadLevels() {
 		List<ParkourLevel> ret = new ArrayList<>();
 		ResultSet rs = DM.selectQuery("SELECT * FROM parkour_level");
 		try {
@@ -152,7 +151,7 @@ public class ParkourManager implements Listener {
 		return ret;
 	}
 
-	private static List<ParkourGoal> loadGoals() {
+	public static List<ParkourGoal> loadGoals() {
 		List<ParkourGoal> ret = new ArrayList<>();
 		ResultSet rs = DM.selectQuery("SELECT * FROM parkour_goal");
 		try {
