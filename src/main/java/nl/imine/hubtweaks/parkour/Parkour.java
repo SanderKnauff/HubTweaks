@@ -11,8 +11,8 @@ public class Parkour {
 	private List<ParkourLevel> levels;
 	private List<ParkourPlayer> players = new ArrayList<>();
 
-	public Parkour(List<ParkourGoal> goals, List<ParkourLevel> levels) {
-		this.goals = goals;
+	public Parkour(List<ParkourLevel> levels) {
+		this.goals = ParkourManager.loadGoals();
 		this.levels = levels;
 	}
 
