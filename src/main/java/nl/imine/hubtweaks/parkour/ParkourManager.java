@@ -165,7 +165,7 @@ public class ParkourManager implements Listener {
 			}
 			if (parkourPlayer == null) {
 				parkourPlayer = new ParkourPlayer(player.getUniqueId(), parkour.getLevel((short) 0), new ArrayList<>());
-				DM.insertQuery("INSERT INTO parkour_player VALUES(%s,0)", player.getUniqueId());
+				DM.insertQuery("INSERT INTO parkour_player VALUES('%s',0)", player.getUniqueId());
 			}
 			parkourPlayer.save();
 			parkour.addPlayer(parkourPlayer);
