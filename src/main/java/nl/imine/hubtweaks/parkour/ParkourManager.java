@@ -157,7 +157,7 @@ public class ParkourManager implements Listener {
 		ResultSet rs = DM.selectQuery("SELECT * FROM parkour_goal");
 		try {
 			while (rs.next()) {
-				ParkourLevel level = parkour.getLevel(rs.getInt("id"));
+				ParkourLevel level = parkour.getLevel((short) rs.getInt("id"));
 				Location location = new Location(Bukkit.getWorld(UUID.fromString(rs.getString("worlduuid"))),
 						rs.getInt("x"), rs.getInt("y"), rs.getInt("z"));
 				ret.add(new ParkourGoal(level, location));
