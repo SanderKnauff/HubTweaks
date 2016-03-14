@@ -7,13 +7,16 @@ import org.bukkit.entity.Player;
 
 public class Parkour {
 
-	private List<ParkourGoal> goals;
+	private List<ParkourGoal> goals = new ArrayList<>();
 	private List<ParkourLevel> levels;
 	private List<ParkourPlayer> players = new ArrayList<>();
 
 	public Parkour(List<ParkourLevel> levels) {
-		this.goals = ParkourManager.loadGoals();
 		this.levels = levels;
+	}
+
+	public void addGoals(List<ParkourGoal> goals) {
+		this.goals.addAll(goals);
 	}
 
 	public List<ParkourGoal> getGoals() {

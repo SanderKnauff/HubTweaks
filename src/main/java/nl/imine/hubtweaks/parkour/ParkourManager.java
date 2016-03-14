@@ -38,6 +38,7 @@ public class ParkourManager implements Listener {
 			saveLevel(level);
 		}
 		parkour = new Parkour(levels);
+		parkour.addGoals(loadGoals());
 		Bukkit.getPluginManager().registerEvents(new ParkourManager(), HubTweaks.getInstance());
 	}
 
