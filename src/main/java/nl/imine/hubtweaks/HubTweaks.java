@@ -32,7 +32,6 @@ public class HubTweaks extends JavaPlugin {
 		// this.getConfig().addDefault("WarpItems", "[]");
 		// this.getConfig().options().copyDefaults(true);
 		// this.saveConfig();
-		Bukkit.getWorlds().stream().forEach(w -> System.out.println(w.getName() + ": " + w.getUID()));
 	}
 
 	@Override
