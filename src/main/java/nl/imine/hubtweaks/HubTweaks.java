@@ -1,14 +1,6 @@
 package nl.imine.hubtweaks;
 
-import nl.imine.hubtweaks.entity.Spawner;
-import nl.imine.hubtweaks.kotl.Kotl;
-import nl.imine.hubtweaks.login.HideLogs;
 import nl.imine.hubtweaks.parkour.ParkourManager;
-import nl.imine.hubtweaks.pvp.PvP;
-import nl.imine.hubtweaks.ride.EntityRide;
-import nl.imine.hubtweaks.warps.CompassWarp;
-import nl.imine.hubtweaks.world.AntiFly;
-import nl.imine.hubtweaks.world.WorldProtector;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
@@ -21,29 +13,31 @@ public class HubTweaks extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		plugin = this;
-		HideLogs.init();
-		EventListener.init();
-		WorldProtector.init();
-		PvP.init();
-		Kotl.init();
-		CompassWarp.init();
+		// HideLogs.init();
+		// EventListener.init();
+		// WorldProtector.init();
+		// PvP.init();
+		// Kotl.init();
+		// CompassWarp.init();
 		ParkourManager.init();
-		EntityRide.init();
-		Spawner.init();
-		AntiFly.init();
+		// EntityRide.init();
+		// Spawner.init();
+		// AntiFly.init();
 		Statistic.init();
-		Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
-		getCommand("HubTweaks").setExecutor(new CommandHandler(this));
-		getCommand("kotl").setExecutor(new CommandHandler(this));
-		PlayerDataManager.RemoveAllPlayerData();
-		this.getConfig().addDefault("WarpItems", "[]");
-		this.getConfig().options().copyDefaults(true);
-		this.saveConfig();
+		// Bukkit.getMessenger().registerOutgoingPluginChannel(plugin,
+		// "BungeeCord");
+		// getCommand("HubTweaks").setExecutor(new CommandHandler(this));
+		// getCommand("kotl").setExecutor(new CommandHandler(this));
+		// PlayerDataManager.RemoveAllPlayerData();
+		// this.getConfig().addDefault("WarpItems", "[]");
+		// this.getConfig().options().copyDefaults(true);
+		// this.saveConfig();
+		Bukkit.getWorlds().stream().forEach(w -> System.out.println(w.getName() + ": " + w.getUID()));
 	}
 
 	@Override
 	public void onDisable() {
-		PlayerDataManager.RemoveAllPlayerData();
+		// PlayerDataManager.RemoveAllPlayerData();
 		plugin = null;
 	}
 

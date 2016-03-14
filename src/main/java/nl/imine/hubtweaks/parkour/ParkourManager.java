@@ -128,12 +128,12 @@ public class ParkourManager implements Listener {
 	}
 
 	private static void saveLevel(ParkourLevel level) {
-		DM.insertQuery("INSERT * INTO parkour_level VALUES (%s,%b,%s)", level.getLevel(), level.isBonusLevel(),
+		DM.insertQuery("INSERT INTO parkour_level VALUES (%s,%b,%s)", level.getLevel(), level.isBonusLevel(),
 			level.getReward().name());
 	}
 
 	private static void saveGoal(ParkourGoal goal) {
-		DM.insertQuery("INSERT * INTO parkour_goal VALUES (%s,%s,%d,%d,%d)", goal.getLevel().getLevel(),
+		DM.insertQuery("INSERT INTO parkour_goal VALUES (%s,%s,%d,%d,%d)", goal.getLevel().getLevel(),
 			goal.getTarget().getWorld().getUID(), goal.getTarget().getBlockX(), goal.getTarget().getBlockY(),
 			goal.getTarget().getBlockZ());
 	}

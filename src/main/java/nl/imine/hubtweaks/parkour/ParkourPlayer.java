@@ -69,7 +69,8 @@ public class ParkourPlayer {
 	}
 
 	public void save() {
-		DM.updateQuery("UPDATE parkour_player SET level=%s WHERE uuid LIKE '%s'", highestLevel, uuid.toString());
+		DM.updateQuery("UPDATE parkour_player SET level=%s WHERE uuid LIKE '%s'", highestLevel.getLevel(),
+			uuid.toString());
 	}
 
 }
