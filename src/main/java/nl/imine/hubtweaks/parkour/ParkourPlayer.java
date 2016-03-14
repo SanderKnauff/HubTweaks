@@ -55,10 +55,12 @@ public class ParkourPlayer {
 			recordTime = oRecordTime.get().getTimeMiliseconds();
 		}
 		if (recordTime > timing.getTimeMiliseconds() || recordTime == -1) {
-			System.out.println("Record for player: " + uuid.toString());
-			Bukkit.getPlayer(uuid).sendMessage("New record time");
-			PlayerUtil.sendTitleMessage(Bukkit.getPlayer(uuid), null, ColorUtil.replaceColors("&7New Record: &c%s",
-				StringUtil.readableMiliseconds(timing.getTimeMiliseconds())), 40l);
+			PlayerUtil.sendTitleMessage(Bukkit.getPlayer(uuid),
+				ColorUtil.replaceColors("&7New Record: &c%s",
+					StringUtil.readableMiliseconds(timing.getTimeMiliseconds())),
+				ColorUtil.replaceColors("&7New Record: &c%s",
+					StringUtil.readableMiliseconds(timing.getTimeMiliseconds())),
+				40l);
 		}
 		String oldTime = (recordTime == -1) ? "--:--:--" : StringUtil.readableMiliseconds(recordTime);
 		PlayerUtil.sendActionMessage(Bukkit.getPlayer(uuid),
