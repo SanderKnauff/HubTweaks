@@ -57,7 +57,7 @@ public class ParkourPlayer {
 				.filter(l -> !l.isBonusLevel())
 				.sorted((ParkourLevel p1, ParkourLevel p2) -> p2.getLevel() - p1.getLevel()).findFirst().get();
 		long recordTime = -1;
-		boolean isEnd = (timing.getStartLevel().getLevel() != 0 && timing.getDestLevel().equals(finalLevel));
+		boolean isEnd = (timing.getStartLevel().getLevel() == 0 && timing.getDestLevel().equals(finalLevel));
 		if (oRecordTime.isPresent()) {
 			recordTime = oRecordTime.get().getTimeMiliseconds();
 		}
