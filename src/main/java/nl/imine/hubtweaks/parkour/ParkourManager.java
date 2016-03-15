@@ -86,6 +86,7 @@ public class ParkourManager implements Listener {
 				}
 				// Overall Timing
 				if (goal.getLevel().getLevel() == 0) {
+					player.setLastLevel(parkour.getLevels().stream().filter(p -> p.getLevel() == 0).findFirst().get());
 					player.addPendingTime(
 						new ParkourTiming(null, goal.getLevel(), finalLevel, System.currentTimeMillis()));
 				}
