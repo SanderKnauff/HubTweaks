@@ -18,7 +18,8 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.Statistic;
-import nl.imine.hubtweaks.parkour.Parkour;
+import nl.imine.hubtweaks.parkour.ParkourManager;
+import nl.imine.hubtweaks.parkour.ParkourPlayer;
 import nl.imine.hubtweaks.pvp.PvP;
 
 public class EntityRide implements Listener {
@@ -106,7 +107,8 @@ public class EntityRide implements Listener {
 						pl.teleport(new Location(pl.getWorld(), l.getX(), l.getY(), l.getZ(), e.getLocation().getYaw(),
 								e.getLocation().getPitch()));
 						e.setPassenger(pl);
-						Parkour.getInstance().getPlayer(pl).setTouchedPlate(true);
+						ParkourPlayer player = ParkourManager.getParkourInstance().getParkourPlayer(pl);
+						player.setCheated(true);
 					}
 				}, 2L);
 			}

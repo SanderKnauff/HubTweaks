@@ -1,40 +1,28 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package nl.imine.hubtweaks.parkour;
 
 import org.bukkit.DyeColor;
 
-/**
- *
- * @author Sander
- */
 public class ParkourLevel {
 
-	private int level;
-	private DyeColor color;
+	private final short level;
+	private final boolean bonusLevel;
+	private final DyeColor reward;
 
-	public ParkourLevel(int level, DyeColor color) {
+	public ParkourLevel(short level, boolean bonusLevel, DyeColor reward) {
 		this.level = level;
-		this.color = color;
+		this.bonusLevel = bonusLevel;
+		this.reward = reward;
 	}
 
-	public int getLevel() {
-		return this.level;
+	public short getLevel() {
+		return level;
 	}
 
-	public DyeColor getColor() {
-		return this.color;
+	public boolean isBonusLevel() {
+		return bonusLevel;
 	}
 
-	@Override
-	public String toString() {
-		return this.level + " || " + this.color.toString();
-	}
-
-	public boolean equals(ParkourLevel plvl) {
-		return (this.getColor().equals(plvl.getColor()) && this.getLevel() == plvl.getLevel());
+	public DyeColor getReward() {
+		return reward;
 	}
 }

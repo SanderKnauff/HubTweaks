@@ -2,7 +2,8 @@ package nl.imine.hubtweaks;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import nl.imine.hubtweaks.parkour.ParkourManager;
+import nl.imine.hubtweaks.parkour.ParkourPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -26,9 +27,6 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import nl.imine.hubtweaks.parkour.Parkour;
-import nl.imine.hubtweaks.parkour.ParkourListener;
 
 public class EventListener implements Listener, Runnable {
 
@@ -54,10 +52,12 @@ public class EventListener implements Listener, Runnable {
 			Location spawn = e.getWorld().getSpawnLocation().getBlock().getLocation();
 			spawn.add(0.5D, 0.1D, 0.5D);
 			spawn.setDirection(e.getLocation().getDirection());
-			e.teleport(spawn,PlayerTeleportEvent.TeleportCause.END_PORTAL);
+			e.teleport(spawn, PlayerTeleportEvent.TeleportCause.END_PORTAL);
 			if (e instanceof Player) {
 				playerRespawn((Player) e);
-				ParkourListener.resetCheat((Player) e);
+				ParkourPlayer pPlayer = ParkourManager.getParkourInstance().getParkourPlayer((Player) e);
+				pPlayer.setCheated(false);
+				pPlayer.setLastLevel(null);
 			}
 		}
 	}
@@ -112,7 +112,9 @@ public class EventListener implements Listener, Runnable {
 	private void playerRespawn(final Player pl) {
 		FileConfiguration config = HubTweaks.getInstance().getConfig();
 		pl.setGameMode(GameMode.ADVENTURE);
-		Parkour.getInstance().getPlayer(pl).setTouchedPlate(false);
+		ParkourPlayer pPlayer = ParkourManager.getParkourInstance().getParkourPlayer(pl);
+		pPlayer.setCheated(false);
+		pPlayer.setLastLevel(null);
 		pl.getInventory().setArmorContents(new ItemStack[pl.getInventory().getArmorContents().length]);
 		final ItemStack item = new ItemStack(Material.COMPASS, 1);
 		ItemMeta metadat = (ItemMeta) item.getItemMeta();

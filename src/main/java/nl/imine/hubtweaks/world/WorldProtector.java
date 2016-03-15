@@ -1,5 +1,9 @@
 package nl.imine.hubtweaks.world;
 
+import nl.imine.api.util.LocationUtil;
+import nl.imine.hubtweaks.HubTweaks;
+import nl.imine.hubtweaks.kotl.Kotl;
+import nl.imine.hubtweaks.pvp.PvP;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -22,11 +26,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.PlayerInventory;
-
-import nl.imine.api.util.LocationUtil;
-import nl.imine.hubtweaks.HubTweaks;
-import nl.imine.hubtweaks.kotl.Kotl;
-import nl.imine.hubtweaks.pvp.PvP;
 
 public class WorldProtector implements Listener {
 

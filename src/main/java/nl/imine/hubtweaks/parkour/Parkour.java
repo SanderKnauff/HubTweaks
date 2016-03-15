@@ -1,79 +1,74 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package nl.imine.hubtweaks.parkour;
 
 import java.util.ArrayList;
-import org.bukkit.DyeColor;
+import java.util.List;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-/**
- *
- * @author Sander
- */
 public class Parkour {
 
-	private static Parkour parkour;
+	private List<ParkourGoal> goals = new ArrayList<>();
+	private List<ParkourLevel> levels;
+	private List<ParkourPlayer> players = new ArrayList<>();
 
-	private final ArrayList<ParkourLevel> levels = new ArrayList<>();
-	private final ArrayList<ParkourPlayer> players = new ArrayList<>();
-
-	public static void init() {
-		Parkour.parkour = new Parkour();
-		ParkourConfig.getLevels(parkour);
-		ParkourConfig.getPlayers(parkour);
+	public Parkour(List<ParkourLevel> levels) {
+		this.levels = levels;
 	}
 
-	public Parkour() {
-		ParkourListener.init();
+	public void addGoals(List<ParkourGoal> goals) {
+		this.goals.addAll(goals);
 	}
 
-	public void addLevel(ParkourLevel level) {
-		levels.add(level);
+	public List<ParkourGoal> getGoals() {
+		return goals;
 	}
 
-	public ArrayList<ParkourLevel> getLevels() {
-		return this.levels;
+	public List<ParkourLevel> getLevels() {
+		return levels;
+	}
+
+	public boolean isParkourGoal(Location l) {
+		return goals.stream().anyMatch(g -> g.getTarget().equals(l));
+	}
+
+	public boolean isParkourLevel(short level) {
+		return levels.stream().anyMatch(l -> l.getLevel() == level);
+	}
+
+	public ParkourGoal getParkourGoal(Location l) {
+		if (isParkourGoal(l)) {
+			return goals.stream().filter(g -> g.getTarget().equals(l)).findFirst().get();
+		}
+		return null;
+	}
+
+	public ParkourLevel getLevel(short level) {
+		if (isParkourLevel(level)) {
+			return levels.stream().filter(l -> l.getLevel() == level).findFirst().get();
+		}
+		return null;
 	}
 
 	public void addPlayer(ParkourPlayer player) {
 		players.add(player);
 	}
 
-	public ArrayList<ParkourPlayer> getPlayers() {
-		return players;
+	public void removePlayer(ParkourPlayer player) {
+		players.remove(player);
 	}
 
-	public ParkourPlayer getPlayer(Player player) {
-		for (ParkourPlayer p : players) {
-			if (p.getUUID().equals(player.getUniqueId().toString())) {
-				return p;
-			}
+	public boolean isParkourPlayer(Player player) {
+		return players.stream().anyMatch(p -> p.getUuid().equals(player.getUniqueId()));
+	}
+
+	public ParkourPlayer getParkourPlayer(Player player) {
+		if (isParkourPlayer(player)) {
+			return players.stream().filter(p -> p.getUuid().equals(player.getUniqueId())).findFirst().get();
 		}
 		return null;
 	}
 
-	public ParkourLevel getLevel(String levelName) {
-		for (ParkourLevel lvl : levels) {
-			if (lvl.getColor().toString().equals(levelName)) {
-				return lvl;
-			}
-		}
-		return new ParkourLevel(-1, DyeColor.BLACK);
-	}
-
-	public ParkourLevel getLevel(DyeColor levelColor) {
-		for (ParkourLevel lvl : levels) {
-			if (lvl.getColor() == levelColor) {
-				return lvl;
-			}
-		}
-		return new ParkourLevel(-1, DyeColor.BLACK);
-	}
-
-	public static Parkour getInstance() {
-		return Parkour.parkour;
+	public List<ParkourPlayer> getPlayers() {
+		return players;
 	}
 }

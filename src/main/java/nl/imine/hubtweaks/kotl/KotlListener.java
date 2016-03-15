@@ -1,7 +1,11 @@
 package nl.imine.hubtweaks.kotl;
 
 import java.util.ArrayList;
-
+import nl.imine.api.event.OffhandChangeEvent;
+import nl.imine.api.util.ColorUtil;
+import nl.imine.api.util.LocationUtil;
+import nl.imine.api.util.PlayerUtil;
+import nl.imine.hubtweaks.HubTweaks;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Effect;
@@ -22,12 +26,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-
-import nl.imine.api.event.OffhandChangeEvent;
-import nl.imine.api.util.ColorUtil;
-import nl.imine.api.util.LocationUtil;
-import nl.imine.api.util.PlayerUtil;
-import nl.imine.hubtweaks.HubTweaks;
 
 public class KotlListener implements Listener {
 

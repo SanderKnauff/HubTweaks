@@ -1,6 +1,12 @@
 
 package nl.imine.hubtweaks.warps;
 
+import nl.imine.api.gui.Container;
+import nl.imine.api.gui.GuiManager;
+import nl.imine.api.gui.button.ButtonTeleport;
+import nl.imine.api.util.ColorUtil;
+import nl.imine.api.util.ItemUtil;
+import nl.imine.hubtweaks.HubTweaks;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,13 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
-
-import nl.imine.api.gui.Container;
-import nl.imine.api.gui.GuiManager;
-import nl.imine.api.gui.button.ButtonTeleport;
-import nl.imine.api.util.ColorUtil;
-import nl.imine.api.util.ItemUtil;
-import nl.imine.hubtweaks.HubTweaks;
 
 public class CompassWarp implements Listener {
 

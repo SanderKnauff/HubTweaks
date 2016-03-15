@@ -1,12 +1,11 @@
 package nl.imine.hubtweaks;
 
+import nl.makertim.stats.PlayerStatistics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-
-import nl.makertim.stats.PlayerStatistics;
 
 public class Statistic implements Listener {
 

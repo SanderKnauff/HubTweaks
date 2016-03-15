@@ -1,13 +1,12 @@
 package nl.imine.hubtweaks.login;
 
+import nl.imine.hubtweaks.HubTweaks;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
-import nl.imine.hubtweaks.HubTweaks;
 
 public class HideLogs implements Listener {
 
