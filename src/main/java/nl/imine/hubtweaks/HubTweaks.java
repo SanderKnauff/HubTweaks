@@ -40,7 +40,7 @@ public class HubTweaks extends JavaPlugin {
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
 		for (World world : Bukkit.getWorlds()) {
-			System.out.println(world.getUID().toString());
+			System.out.println(world.getName() + ": " + world.getUID().toString());
 		}
 	}
 
