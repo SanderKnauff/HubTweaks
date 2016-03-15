@@ -11,6 +11,7 @@ import nl.imine.api.Credentials;
 import nl.imine.api.db.DatabaseManager;
 import nl.imine.api.util.ItemUtil;
 import nl.imine.hubtweaks.HubTweaks;
+import nl.imine.hubtweaks.Statistic;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
@@ -89,6 +90,11 @@ public class ParkourManager implements Listener {
 					player.setLastLevel(parkour.getLevels().stream().filter(p -> p.getLevel() == 0).findFirst().get());
 					player.addPendingTime(
 						new ParkourTiming(null, goal.getLevel(), finalLevel, System.currentTimeMillis()));
+				}
+
+				if (goal.getLevel().equals(finalLevel) && !player.hasCheated()
+						&& !player.getLastLevel().equals(finalLevel)) {
+					Statistic.addToParkour(evt.getPlayer());
 				}
 
 				// HARDCODED BONUSES
