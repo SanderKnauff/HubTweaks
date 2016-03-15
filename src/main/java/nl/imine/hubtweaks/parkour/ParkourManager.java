@@ -81,7 +81,7 @@ public class ParkourManager implements Listener {
 							if (t.getStartLevel().getLevel() != 0 && t.getDestLevel().equals(lastLevel)) {
 								Bukkit.getScheduler().runTaskLater(HubTweaks.getInstance(), () -> {
 									player.addTiming(t);
-								} , 100l);
+								} , 60l);
 							} else {
 								player.addTiming(t);
 							}
