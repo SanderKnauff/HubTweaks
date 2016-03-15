@@ -10,10 +10,13 @@ import java.util.UUID;
 import nl.imine.api.Credentials;
 import nl.imine.api.db.DatabaseManager;
 import nl.imine.api.util.ItemUtil;
+import nl.imine.api.util.LocationUtil;
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.Statistic;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.DyeColor;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -79,7 +82,6 @@ public class ParkourManager implements Listener {
 						});
 
 				// Create new timings.
-
 				// Time between levels
 				if (goal.getLevel().getLevel() < finalLevel.getLevel()) {
 					player.addPendingTime(new ParkourTiming(null, goal.getLevel(),
@@ -104,6 +106,15 @@ public class ParkourManager implements Listener {
 							.get();
 					player.setLastLevel(bonusLevel);
 					player.setHighestLevel(bonusLevel);
+					for (int i = 0; i < 10; i++) {
+						Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), () -> {
+							LocationUtil.firework(evt.getPlayer().getLocation(),
+								FireworkEffect.builder().with(FireworkEffect.Type.BALL_LARGE).withColor(Color.PURPLE)
+										.withFade(Color.GREEN, Color.LIME, Color.YELLOW, Color.ORANGE, Color.RED)
+										.build(),
+								20L);
+						} , 20 * (i + 5));
+					}
 				} else if (player.getHighestLevel().getLevel() < goal.getLevel().getLevel()) {
 					player.setHighestLevel(goal.getLevel());
 				}
