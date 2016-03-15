@@ -62,19 +62,19 @@ public class ParkourPlayer {
 		if (recordTime > timing.getTimeMiliseconds() || recordTime == -1) {
 			if (!isEnd) {
 				PlayerUtil.sendTitleMessage(Bukkit.getPlayer(uuid), "", ColorUtil.replaceColors("&7New Record: &c%s",
-					StringUtil.readableMiliseconds(timing.getTimeMiliseconds())), 40l);
+					StringUtil.readableMiliseconds(timing.getTimeMiliseconds())), 60l);
 			} else {
 				PlayerUtil.sendTitleMessage(Bukkit.getPlayer(uuid),
 					ColorUtil.replaceColors("&7New overall Record: &c%s",
 						StringUtil.readableMiliseconds(timing.getTimeMiliseconds())),
 					ColorUtil.replaceColors("&7Sum of best segments: &c%s",
 						StringUtil.readableMiliseconds(getSumOfBest())),
-					40l);
+					60l);
 			}
 		}
-		if (!isEnd) {
+		if (isEnd) {
 			PlayerUtil.sendTitleMessage(Bukkit.getPlayer(uuid), "", ColorUtil.replaceColors("&7Final Time: &c%s",
-				StringUtil.readableMiliseconds(timing.getTimeMiliseconds())), 40l);
+				StringUtil.readableMiliseconds(timing.getTimeMiliseconds())), 60l);
 		}
 		String oldTime = (recordTime == -1) ? "--:--:--" : StringUtil.readableMiliseconds(recordTime);
 		PlayerUtil.sendActionMessage(Bukkit.getPlayer(uuid),
