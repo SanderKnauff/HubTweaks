@@ -73,10 +73,11 @@ public class ParkourPlayer {
 						StringUtil.readableMiliseconds(getSumOfBest())),
 					60l);
 			}
-		}
-		if (isEnd) {
-			PlayerUtil.sendTitleMessage(Bukkit.getPlayer(uuid), "", ColorUtil.replaceColors("&7Final Time: &c%s",
-				StringUtil.readableMiliseconds(timing.getTimeMiliseconds())), 60l);
+		} else {
+			if (isEnd) {
+				PlayerUtil.sendTitleMessage(Bukkit.getPlayer(uuid), "", ColorUtil.replaceColors("&7Final Time: &c%s",
+					StringUtil.readableMiliseconds(timing.getTimeMiliseconds())), 60l);
+			}
 		}
 		String oldTime = (recordTime == -1) ? "--:--:--" : StringUtil.readableMiliseconds(recordTime);
 		PlayerUtil.sendActionMessage(Bukkit.getPlayer(uuid),
