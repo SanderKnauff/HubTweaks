@@ -22,7 +22,8 @@ public class ParkourPlayer {
 
 	private final List<ParkourTiming> pendingTimes = new ArrayList<>();
 
-	private ParkourGoal lastGoal = null;
+	private ParkourLevel lastLevel = null;
+	private boolean hasCheated = false;
 
 	public ParkourPlayer(UUID uuid, ParkourLevel highestLevel, List<ParkourTiming> timings) {
 		this.uuid = uuid;
@@ -52,10 +53,11 @@ public class ParkourPlayer {
 				.sorted(
 					(ParkourTiming t1, ParkourTiming t2) -> (int) (t1.getTimeMiliseconds() - t2.getTimeMiliseconds()))
 				.findFirst();
-		ParkourLevel lastLevel = ParkourManager.getParkourInstance().getLevels().stream().filter(l -> !l.isBonusLevel())
+		ParkourLevel finalLevel = ParkourManager.getParkourInstance().getLevels().stream()
+				.filter(l -> !l.isBonusLevel())
 				.sorted((ParkourLevel p1, ParkourLevel p2) -> p2.getLevel() - p1.getLevel()).findFirst().get();
 		long recordTime = -1;
-		boolean isEnd = (timing.getStartLevel().getLevel() != 0 && timing.getDestLevel().equals(lastLevel));
+		boolean isEnd = (timing.getStartLevel().getLevel() != 0 && timing.getDestLevel().equals(finalLevel));
 		if (oRecordTime.isPresent()) {
 			recordTime = oRecordTime.get().getTimeMiliseconds();
 		}
@@ -84,6 +86,14 @@ public class ParkourPlayer {
 		timings.add(timing);
 	}
 
+	public void setCheated(boolean hasCheated) {
+		this.hasCheated = hasCheated;
+	}
+
+	public boolean hasCheated() {
+		return hasCheated;
+	}
+
 	public List<ParkourTiming> getTimings() {
 		return timings;
 	}
@@ -104,12 +114,12 @@ public class ParkourPlayer {
 		pendingTimes.clear();
 	}
 
-	public void setLastGoal(ParkourGoal lastGoal) {
-		this.lastGoal = lastGoal;
+	public void setLastLevel(ParkourLevel lastLevel) {
+		this.lastLevel = lastLevel;
 	}
 
-	public ParkourGoal getLastGoal() {
-		return lastGoal;
+	public ParkourLevel getLastLevel() {
+		return lastLevel;
 	}
 
 	public long getSumOfBest() {
