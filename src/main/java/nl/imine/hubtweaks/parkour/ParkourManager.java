@@ -20,7 +20,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
@@ -119,6 +121,16 @@ public class ParkourManager implements Listener {
 		if (parkour.getParkourPlayer(evt.getPlayer()) == null) {
 			loadParkourPlayer(evt.getPlayer());
 		}
+	}
+
+	@EventHandler
+	public void onPlayerLogout(PlayerQuitEvent evt) {
+		parkour.removePlayer(parkour.getParkourPlayer(evt.getPlayer()));
+	}
+
+	@EventHandler
+	public void onPlayerKick(PlayerKickEvent evt) {
+		parkour.removePlayer(parkour.getParkourPlayer(evt.getPlayer()));
 	}
 
 	public ParkourLevel getLevel(short level) {

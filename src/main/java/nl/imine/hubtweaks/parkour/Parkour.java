@@ -53,6 +53,10 @@ public class Parkour {
 		players.add(player);
 	}
 
+	public void removePlayer(ParkourPlayer player) {
+		players.remove(player);
+	}
+
 	public boolean isParkourPlayer(Player player) {
 		return players.stream().anyMatch(p -> p.getUuid().equals(player.getUniqueId()));
 	}
