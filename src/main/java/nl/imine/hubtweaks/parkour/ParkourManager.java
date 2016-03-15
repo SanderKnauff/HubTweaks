@@ -59,10 +59,6 @@ public class ParkourManager implements Listener {
 					return;
 				}
 				player.setLastLevel(goal.getLevel());
-				// Increase player highest level if he reached a new checkpoint.
-				if (player.getHighestLevel().getLevel() < goal.getLevel().getLevel()) {
-					player.setHighestLevel(goal.getLevel());
-				}
 
 				// Handle pending timings.
 				ParkourLevel finalLevel = parkour.getLevels().stream().filter(l -> !l.isBonusLevel())
@@ -109,6 +105,8 @@ public class ParkourManager implements Listener {
 							.get();
 					player.setLastLevel(bonusLevel);
 					player.setHighestLevel(bonusLevel);
+				} else if (player.getHighestLevel().getLevel() < goal.getLevel().getLevel()) {
+					player.setHighestLevel(goal.getLevel());
 				}
 
 				// Give the player his boots if he has reached a level before.
@@ -119,6 +117,7 @@ public class ParkourManager implements Listener {
 					boots.setItemMeta(meta);
 					Bukkit.getPlayer(player.getUuid()).getInventory().setBoots(boots);
 				}
+
 			}
 		}
 	}
