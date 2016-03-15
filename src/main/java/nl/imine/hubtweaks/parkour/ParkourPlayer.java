@@ -108,22 +108,38 @@ public class ParkourPlayer {
 
 	public long getSumOfBest() {
 		long sumOfBest = 0;
-		for (ParkourTiming t : timings) {
-			List<ParkourTiming> bestSegment = new ArrayList<>();
-			if (t.getStartLevel().getLevel() + 1 == t.getDestLevel().getLevel()) {
-				Optional<ParkourTiming> best = bestSegment.stream()
-						.filter(s -> (s.getStartLevel() == t.getStartLevel()) && (s.getDestLevel() == t.getDestLevel()))
-						.sorted((ParkourTiming p1, ParkourTiming p2) -> (int) (p1.getTimeMiliseconds()
-								- p2.getTimeMiliseconds()))
-						.findFirst();
-				if (best.isPresent()) {
-					bestSegment.add(best.get());
-				}
-			}
-			for (ParkourTiming best : bestSegment) {
-				sumOfBest += best.getTimeMiliseconds();
+		List<ParkourTiming> bestSegments = new ArrayList<>();
+		for (ParkourTiming timing : timings) {
+			List<ParkourTiming> bestSegmentsCopy = new ArrayList<>(bestSegments);
+			if (bestSegmentsCopy.stream().filter(t -> t.getStartLevel().equals(timing.getStartLevel()))
+					.filter(t -> t.getDestLevel().equals(timing.getDestLevel()))
+					.noneMatch(t -> t.getTimeMiliseconds() < timing.getTimeMiliseconds())) {
+				bestSegmentsCopy.stream().filter(t -> t.getStartLevel().equals(timing.getStartLevel()))
+						.filter(t -> t.getDestLevel().equals(timing.getDestLevel()))
+						.forEach(t -> bestSegments.remove(t));
+				bestSegments.add(timing);
 			}
 		}
+		sumOfBest = bestSegments.stream().mapToLong(l -> l.getTimeMiliseconds()).sum();
+		// for (ParkourTiming t : timings) {
+		// List<ParkourTiming> bestSegment = new ArrayList<>();
+		// if (t.getStartLevel().getLevel() + 1 == t.getDestLevel().getLevel())
+		// {
+		// Optional<ParkourTiming> best = bestSegment.stream()
+		// .filter(s -> (s.getStartLevel() == t.getStartLevel()) &&
+		// (s.getDestLevel() == t.getDestLevel()))
+		// .sorted((ParkourTiming p1, ParkourTiming p2) -> (int)
+		// (p1.getTimeMiliseconds()
+		// - p2.getTimeMiliseconds()))
+		// .findFirst();
+		// if (best.isPresent()) {
+		// bestSegment.add(best.get());
+		// }
+		// }
+		// for (ParkourTiming best : bestSegment) {
+		// sumOfBest += best.getTimeMiliseconds();
+		// }
+		// }
 		return sumOfBest;
 	}
 
