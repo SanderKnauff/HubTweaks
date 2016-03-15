@@ -127,6 +127,11 @@ public class ParkourManager implements Listener {
 					meta.setColor(player.getHighestLevel().getReward().getColor());
 					boots.setItemMeta(meta);
 					Bukkit.getPlayer(player.getUuid()).getInventory().setBoots(boots);
+					if (player.getHighestLevel().getLevel() == 6
+							&& (goal.getLevel().getLevel() == 0 || goal.getLevel().getLevel() == 5)) {
+						Bukkit.getPlayer(player.getUuid()).getInventory()
+								.setChestplate(new ItemStack(ItemUtil.getBuilder(Material.ELYTRA).build()));
+					}
 				}
 
 			}
