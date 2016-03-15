@@ -22,7 +22,8 @@ public class ParkourPlayer {
 
 	private final List<ParkourTiming> pendingTimes = new ArrayList<>();
 
-	private ParkourLevel lastLevel = null;
+	private ParkourLevel lastLevel = ParkourManager.getParkourInstance().getLevels().stream()
+			.filter(p -> p.getLevel() == 0).findFirst().get();
 	private boolean hasCheated = false;
 
 	public ParkourPlayer(UUID uuid, ParkourLevel highestLevel, List<ParkourTiming> timings) {

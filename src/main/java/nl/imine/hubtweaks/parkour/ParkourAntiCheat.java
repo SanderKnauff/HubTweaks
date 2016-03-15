@@ -24,7 +24,8 @@ public class ParkourAntiCheat implements Listener {
 	public static void resetCheat(Player player) {
 		ParkourPlayer pPlayer = ParkourManager.getParkourInstance().getParkourPlayer(player);
 		pPlayer.setCheated(false);
-		pPlayer.setLastLevel(null);
+		pPlayer.setLastLevel(
+			ParkourManager.getParkourInstance().getLevels().stream().filter(p -> p.getLevel() == 0).findFirst().get());
 	}
 
 	@EventHandler
