@@ -58,7 +58,6 @@ public class ParkourManager implements Listener {
 				if (goal.getLevel().equals(player.getLastLevel())) {
 					return;
 				}
-				player.setLastLevel(goal.getLevel());
 
 				// Handle pending timings.
 				ParkourLevel finalLevel = parkour.getLevels().stream().filter(l -> !l.isBonusLevel())
@@ -108,6 +107,7 @@ public class ParkourManager implements Listener {
 				} else if (player.getHighestLevel().getLevel() < goal.getLevel().getLevel()) {
 					player.setHighestLevel(goal.getLevel());
 				}
+				player.setLastLevel(goal.getLevel());
 
 				// Give the player his boots if he has reached a level before.
 				if (player.getHighestLevel().getLevel() != 0) {
