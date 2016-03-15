@@ -100,6 +100,9 @@ public class ParkourManager implements Listener {
 				System.out.println(!player.hasCheated());
 				System.out.println(player.getLastLevel()
 						.equals(parkour.getLevels().stream().filter(p -> p.getLevel() == 0).findFirst().get()));
+				System.out.println(player.getLastLevel().getLevel());
+				System.out.println(
+					parkour.getLevels().stream().filter(p -> p.getLevel() == 0).findFirst().get().getLevel());
 				if (goal.getLevel().equals(finalLevel) && !player.hasCheated() && player.getLastLevel()
 						.equals(parkour.getLevels().stream().filter(p -> p.getLevel() == 0).findFirst().get())) {
 					ParkourLevel bonusLevel = parkour.getLevels().stream().filter(p -> p.getLevel() == 6).findFirst()
