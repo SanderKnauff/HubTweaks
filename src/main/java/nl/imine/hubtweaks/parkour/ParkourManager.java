@@ -133,6 +133,7 @@ public class ParkourManager implements Listener {
 								.setChestplate(new ItemStack(ItemUtil.getBuilder(Material.ELYTRA).build()));
 					}
 				}
+				player.save();
 
 			}
 		}
