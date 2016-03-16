@@ -1,7 +1,6 @@
 package nl.imine.hubtweaks.kotl;
 
 import java.util.ArrayList;
-import nl.imine.api.event.OffhandChangeEvent;
 import nl.imine.api.util.ColorUtil;
 import nl.imine.api.util.LocationUtil;
 import nl.imine.api.util.PlayerUtil;
@@ -25,6 +24,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class KotlListener implements Listener {
@@ -41,7 +41,7 @@ public class KotlListener implements Listener {
 	}
 
 	@EventHandler
-	public void onSwitchItem(final OffhandChangeEvent evt) {
+	public void onSwitchItem(PlayerSwapHandItemsEvent evt) {
 		if (evt.getPlayer().getGameMode() == GameMode.ADVENTURE
 				&& LocationUtil.isInBox(evt.getPlayer().getLocation(), Kotl.BOX[0], Kotl.BOX[1])) {
 			evt.setCancelled(true);
