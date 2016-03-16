@@ -59,6 +59,9 @@ public class ParkourManager implements Listener {
 			if (parkour.isParkourGoal(evt.getClickedBlock().getLocation())) {
 				ParkourPlayer player = parkour.getParkourPlayer(evt.getPlayer());
 				ParkourGoal goal = parkour.getParkourGoal(evt.getClickedBlock().getLocation());
+				if (player.hasCheated()) {
+					return;
+				}
 				if (goal.getLevel().equals(player.getLastLevel())) {
 					return;
 				}

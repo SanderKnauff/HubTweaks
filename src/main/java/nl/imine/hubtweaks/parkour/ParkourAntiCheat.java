@@ -5,6 +5,7 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -19,6 +20,16 @@ public class ParkourAntiCheat implements Listener {
 		player.setCheated(true);
 		player.setLastLevel(ParkourManager.getParkourInstance().getLevels().stream().filter(l -> !l.isBonusLevel())
 				.sorted((ParkourLevel p1, ParkourLevel p2) -> p2.getLevel() - p1.getLevel()).findFirst().get());
+	}
+
+	@EventHandler
+	public void onPlayerGlide(EntityToggleGlideEvent evt) {
+		if (evt.getEntity() instanceof Player) {
+			ParkourPlayer player = ParkourManager.getParkourInstance().getParkourPlayer((Player) evt.getEntity());
+			player.setCheated(true);
+			player.setLastLevel(ParkourManager.getParkourInstance().getLevels().stream().filter(l -> !l.isBonusLevel())
+					.sorted((ParkourLevel p1, ParkourLevel p2) -> p2.getLevel() - p1.getLevel()).findFirst().get());
+		}
 	}
 
 	public static void resetCheat(Player player) {
