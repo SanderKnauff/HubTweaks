@@ -96,6 +96,12 @@ public class ParkourPlayer {
 		return hasCheated;
 	}
 
+	public void resetPlayer() {
+		setCheated(false);
+		setLastLevel(
+			ParkourManager.getParkourInstance().getLevels().stream().filter(p -> p.getLevel() == 0).findFirst().get());
+	}
+
 	public List<ParkourTiming> getTimings() {
 		return timings;
 	}

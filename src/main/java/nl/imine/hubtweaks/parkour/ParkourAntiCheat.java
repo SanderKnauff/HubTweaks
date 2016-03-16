@@ -32,13 +32,6 @@ public class ParkourAntiCheat implements Listener {
 		}
 	}
 
-	public static void resetCheat(Player player) {
-		ParkourPlayer pPlayer = ParkourManager.getParkourInstance().getParkourPlayer(player);
-		pPlayer.setCheated(false);
-		pPlayer.setLastLevel(
-			ParkourManager.getParkourInstance().getLevels().stream().filter(p -> p.getLevel() == 0).findFirst().get());
-	}
-
 	@EventHandler
 	public void onGameModeChange(PlayerGameModeChangeEvent evt) {
 		if (!evt.getNewGameMode().equals(GameMode.ADVENTURE)) {
@@ -69,7 +62,7 @@ public class ParkourAntiCheat implements Listener {
 
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent evt) {
-		resetCheat(evt.getEntity());
+		ParkourManager.getParkourInstance().getParkourPlayer(evt.getEntity()).resetPlayer();
 	}
 
 	@EventHandler

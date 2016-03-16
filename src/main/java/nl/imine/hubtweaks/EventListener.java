@@ -54,10 +54,7 @@ public class EventListener implements Listener, Runnable {
 			spawn.setDirection(e.getLocation().getDirection());
 			e.teleport(spawn, PlayerTeleportEvent.TeleportCause.END_PORTAL);
 			if (e instanceof Player) {
-				playerRespawn((Player) e);
-				ParkourPlayer pPlayer = ParkourManager.getParkourInstance().getParkourPlayer((Player) e);
-				pPlayer.setCheated(false);
-				pPlayer.setLastLevel(null);
+				ParkourManager.getParkourInstance().getParkourPlayer((Player) e).resetPlayer();
 			}
 		}
 	}
