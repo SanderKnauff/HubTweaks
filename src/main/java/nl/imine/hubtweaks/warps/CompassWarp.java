@@ -27,21 +27,21 @@ public class CompassWarp implements Listener {
 		inv.addButton(new ButtonTeleport(
 				ItemUtil.getBuilder(Material.INK_SACK).setDurability((short) 5)
 						.setName(ColorUtil.replaceColors("&dSpawn")).build(),
-				13, new Location(HubTweaks.getMainWorld(), 47.5D, 36.0D, -509.5D, -45F, 0F)));
+				4, new Location(HubTweaks.getMainWorld(), 47.5D, 36.0D, -509.5D, -45F, 0F)));
 		inv.addButton(
 			new ButtonTeleport(ItemUtil.getBuilder(Material.TNT).setName(ColorUtil.replaceColors("&eOutlaws")).build(),
-					2, new Location(HubTweaks.getMainWorld(), 73.5D, 36.1D, -503.5D, -90F, 0F)));
+					11, new Location(HubTweaks.getMainWorld(), 73.5D, 36.1D, -503.5D, -90F, 0F)));
 		inv.addButton(new ButtonBrowseUHC(ItemUtil.getBuilder(Material.GOLDEN_APPLE).setDurability((short) 1)
-				.setName(ColorUtil.replaceColors("&4UHC")).build(), 4));
+				.setName(ColorUtil.replaceColors("&4UHC")).build(), 13));
 		inv.addButton(new ButtonTeleport(
 				ItemUtil.getBuilder(Material.GOLD_PICKAXE).setName(ColorUtil.replaceColors("&6Survival"))
 						.addFlag(ItemFlag.HIDE_ATTRIBUTES).build(),
-				6, new Location(HubTweaks.getMainWorld(), 28.5D, 31.1D, -500.5D, 90F, 0F)));
+				15, new Location(HubTweaks.getMainWorld(), 28.5D, 31.1D, -500.5D, 90F, 0F)));
 		inv.addButton(new ButtonTeleport(
-				ItemUtil.getBuilder(Material.BRICK).setName(ColorUtil.replaceColors("&aCreative")).build(), 8,
+				ItemUtil.getBuilder(Material.BRICK).setName(ColorUtil.replaceColors("&aCreative")).build(), 17,
 				new Location(HubTweaks.getMainWorld(), 33.5D, 64.1D, -534.5D, 180F, 0F)));
 
-		inv.addButton(new ButtonOitc(0));
+		inv.addButton(new ButtonOitc(9));
 
 		Bukkit.getPluginManager().registerEvents(new CompassWarp(), HubTweaks.getInstance());
 	}
