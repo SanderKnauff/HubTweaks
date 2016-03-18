@@ -49,6 +49,11 @@ public class Parkour {
 		return null;
 	}
 
+	public ParkourLevel getFinalLevel(boolean includeBonus) {
+		return getLevels().stream().filter(l -> !l.isBonusLevel() || !includeBonus)
+				.sorted((ParkourLevel p1, ParkourLevel p2) -> p2.getLevel() - p1.getLevel()).findFirst().get();
+	}
+
 	public void addPlayer(ParkourPlayer player) {
 		players.add(player);
 	}

@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.UUID;
 import nl.imine.api.Credentials;
 import nl.imine.api.db.DatabaseManager;
+import nl.imine.api.util.ColorUtil;
 import nl.imine.api.util.ItemUtil;
 import nl.imine.api.util.LocationUtil;
+import nl.imine.api.util.PlayerUtil;
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.Statistic;
 import org.bukkit.Bukkit;
@@ -40,9 +42,8 @@ public class ParkourManager implements Listener {
 	public static void init() {
 		List<ParkourLevel> levels = loadLevels();
 		if (levels.isEmpty()) {
-			ParkourLevel level = new ParkourLevel((short) 0, true, DyeColor.BLACK);
-			levels.add(level);
-			saveLevel(level);
+			levels.add(ParkourLevel.START_LEVEL);
+			levels.add(ParkourLevel.EQUIPMENT_LEVEL);
 		}
 		parkour = new Parkour(levels);
 		parkour.addGoals(loadGoals());
@@ -59,22 +60,38 @@ public class ParkourManager implements Listener {
 			if (parkour.isParkourGoal(evt.getClickedBlock().getLocation())) {
 				ParkourPlayer player = parkour.getParkourPlayer(evt.getPlayer());
 				ParkourGoal goal = parkour.getParkourGoal(evt.getClickedBlock().getLocation());
+				if (goal.getLevel().equals(ParkourLevel.EQUIPMENT_LEVEL)) {
+					if (!player.getHighestLevel().equals(ParkourLevel.START_LEVEL)) {
+						ItemStack boots = ItemUtil.getBuilder(Material.LEATHER_BOOTS).build();
+						LeatherArmorMeta meta = (LeatherArmorMeta) boots.getItemMeta();
+						meta.setColor(player.getHighestLevel().getReward().getColor());
+						boots.setItemMeta(meta);
+						Bukkit.getPlayer(player.getUuid()).getInventory().setBoots(boots);
+					}
+					if (player.getHighestLevel().equals(parkour.getFinalLevel(true))) {
+						Bukkit.getPlayer(player.getUuid()).getInventory()
+								.setChestplate(new ItemStack(ItemUtil.getBuilder(Material.ELYTRA).build()));
+					}
+					return;
+				}
 				if (player.hasCheated()) {
 					return;
 				}
-				if (goal.getLevel().equals(player.getLastLevel())) {
-					return;
-				}
+
+				// Timings
+
+				// Remove old timings
+				new ArrayList<>(player.getPendingTimes()).stream()
+						.filter(t -> t.getStartLevel().equals(goal.getLevel()))
+						.forEach(t -> player.removePendingTime(t));
 
 				// Handle pending timings.
-				ParkourLevel finalLevel = parkour.getLevels().stream().filter(l -> !l.isBonusLevel())
-						.sorted((ParkourLevel p1, ParkourLevel p2) -> p2.getLevel() - p1.getLevel()).findFirst().get();
-
 				new ArrayList<>(player.getPendingTimes()).stream().filter(t -> t.getDestLevel().equals(goal.getLevel()))
 						.forEach(t -> {
 							t.setTimeMiliseconds(System.currentTimeMillis() - t.getTimeMiliseconds());
 							t.setDateObtained(Timestamp.from(Instant.now()));
-							if (t.getStartLevel().getLevel() == 0 && t.getDestLevel().equals(finalLevel)) {
+							if (t.getStartLevel().getLevel() == 0
+									&& t.getDestLevel().equals(parkour.getFinalLevel(false))) {
 								Bukkit.getScheduler().runTaskLater(HubTweaks.getInstance(), () -> {
 									player.addTiming(t);
 								} , 60l);
@@ -86,25 +103,25 @@ public class ParkourManager implements Listener {
 
 				// Create new timings.
 				// Time between levels
-				if (goal.getLevel().getLevel() < finalLevel.getLevel()) {
+				if (goal.getLevel().getLevel() < parkour.getFinalLevel(false).getLevel()) {
 					player.addPendingTime(new ParkourTiming(null, goal.getLevel(),
 							parkour.getLevel((short) (goal.getLevel().getLevel() + 1)), System.currentTimeMillis()));
 				}
 				// Overall Timing
 				if (goal.getLevel().getLevel() == 0) {
 					player.setLastLevel(parkour.getLevels().stream().filter(p -> p.getLevel() == 0).findFirst().get());
-					player.addPendingTime(
-						new ParkourTiming(null, goal.getLevel(), finalLevel, System.currentTimeMillis()));
+					player.addPendingTime(new ParkourTiming(null, goal.getLevel(), parkour.getFinalLevel(false),
+							System.currentTimeMillis()));
 				}
 
-				if (goal.getLevel().equals(finalLevel) && !player.hasCheated()
-						&& !player.getLastLevel().equals(finalLevel)) {
+				if (goal.getLevel().equals(parkour.getFinalLevel(false)) && !player.hasCheated()
+						&& !player.getLastLevel().equals(parkour.getFinalLevel(false))) {
 					Statistic.addToParkour(evt.getPlayer());
 				}
 
 				// HARDCODED BONUSES
-				if (goal.getLevel().equals(finalLevel) && !player.hasCheated() && player.getLastLevel()
-						.equals(parkour.getLevels().stream().filter(p -> p.getLevel() == 0).findFirst().get())) {
+				if (goal.getLevel().equals(parkour.getFinalLevel(false)) && !player.hasCheated()
+						&& player.getLastLevel().equals(ParkourLevel.START_LEVEL)) {
 					ParkourLevel bonusLevel = parkour.getLevels().stream().filter(p -> p.getLevel() == 6).findFirst()
 							.get();
 					player.setLastLevel(bonusLevel);
@@ -118,23 +135,25 @@ public class ParkourManager implements Listener {
 								20L);
 						} , 20 * (i + 5));
 					}
+					Bukkit.getOnlinePlayers().stream()
+							.forEach(pl -> PlayerUtil.sendActionMessage(pl, ColorUtil.replaceColors(
+								"&c&l%s &r&5has reached the end of the parkour!", evt.getPlayer().getName())));
 				} else if (player.getHighestLevel().getLevel() < goal.getLevel().getLevel()) {
 					player.setHighestLevel(goal.getLevel());
+					Bukkit.getOnlinePlayers().stream()
+							.forEach(pl -> PlayerUtil.sendActionMessage(pl, ColorUtil.replaceColors(
+								"&c&l%s &r&6 has reached the end of the parkour!", evt.getPlayer().getName())));
 				}
 				player.setLastLevel(goal.getLevel());
 
 				// Give the player his boots if he has reached a level before.
-				if (player.getHighestLevel().getLevel() != 0) {
+				if (!player.getHighestLevel().equals(ParkourLevel.START_LEVEL)
+						&& !goal.equals(ParkourLevel.START_LEVEL)) {
 					ItemStack boots = ItemUtil.getBuilder(Material.LEATHER_BOOTS).build();
 					LeatherArmorMeta meta = (LeatherArmorMeta) boots.getItemMeta();
 					meta.setColor(player.getHighestLevel().getReward().getColor());
 					boots.setItemMeta(meta);
 					Bukkit.getPlayer(player.getUuid()).getInventory().setBoots(boots);
-					if (player.getHighestLevel().getLevel() == 6
-							&& (goal.getLevel().getLevel() == 0 || goal.getLevel().getLevel() == 5)) {
-						Bukkit.getPlayer(player.getUuid()).getInventory()
-								.setChestplate(new ItemStack(ItemUtil.getBuilder(Material.ELYTRA).build()));
-					}
 				}
 				player.save();
 
@@ -176,7 +195,7 @@ public class ParkourManager implements Listener {
 
 	public static List<ParkourLevel> loadLevels() {
 		List<ParkourLevel> ret = new ArrayList<>();
-		ResultSet rs = DM.selectQuery("SELECT * FROM parkour_level");
+		ResultSet rs = DM.selectQuery("SELECT * FROM parkour_level WHERE id > 0");
 		try {
 			while (rs.next()) {
 				DyeColor reward = DyeColor.valueOf(rs.getString("reward"));
