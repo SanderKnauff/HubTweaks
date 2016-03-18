@@ -122,6 +122,9 @@ public class ParkourManager implements Listener {
 				System.out.println("need bonus?");
 				System.out.println(goal.getLevel() + ": " + goal.getLevel().getLevel());
 				System.out.println(parkour.getFinalLevel(false) + ": " + parkour.getFinalLevel(false).getLevel());
+				System.out.println(!player.hasCheated());
+				System.out.println(player.getLastLevel() + ": " + player.getLastLevel().getLevel());
+				System.out.println(ParkourLevel.START_LEVEL + ": " + ParkourLevel.START_LEVEL.getLevel());
 				if (goal.getLevel().equals(parkour.getFinalLevel(false)) && !player.hasCheated()
 						&& player.getLastLevel().equals(ParkourLevel.START_LEVEL)) {
 					System.out.println("Gib bonus");
