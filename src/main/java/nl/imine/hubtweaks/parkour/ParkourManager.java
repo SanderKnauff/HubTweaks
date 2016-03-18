@@ -58,6 +58,7 @@ public class ParkourManager implements Listener {
 			if (parkour.isParkourGoal(evt.getClickedBlock().getLocation())) {
 				ParkourPlayer player = parkour.getParkourPlayer(evt.getPlayer());
 				ParkourGoal goal = parkour.getParkourGoal(evt.getClickedBlock().getLocation());
+				System.out.println(parkour.getFinalLevel(false).getLevel());
 				if (goal.getLevel().equals(ParkourLevel.EQUIPMENT_LEVEL)) {
 					if (!player.getHighestLevel().equals(ParkourLevel.START_LEVEL)) {
 						ItemStack boots = ItemUtil.getBuilder(Material.LEATHER_BOOTS).build();
@@ -106,8 +107,9 @@ public class ParkourManager implements Listener {
 							parkour.getLevel((short) (goal.getLevel().getLevel() + 1)), System.currentTimeMillis()));
 				}
 				// Overall Timing
-				if (goal.getLevel().getLevel() == 0) {
-					player.setLastLevel(parkour.getLevels().stream().filter(p -> p.getLevel() == 0).findFirst().get());
+				if (goal.getLevel().equals(ParkourLevel.START_LEVEL)) {
+					player.setLastLevel(
+						parkour.getLevels().stream().filter(p -> p.equals(ParkourLevel.START_LEVEL)).findFirst().get());
 					player.addPendingTime(new ParkourTiming(null, goal.getLevel(), parkour.getFinalLevel(false),
 							System.currentTimeMillis()));
 				}
