@@ -115,18 +115,16 @@ public class ParkourManager implements Listener {
 				if (goal.getLevel().equals(parkour.getFinalLevel(false)) && !player.hasCheated()
 						&& !player.getLastLevel().equals(parkour.getFinalLevel(false))) {
 					Statistic.addToParkour(evt.getPlayer());
+					if (!player.getLastLevel().equals(ParkourLevel.START_LEVEL)) {
+						Bukkit.getOnlinePlayers().stream()
+								.forEach(pl -> PlayerUtil.sendActionMessage(pl, ColorUtil.replaceColors(
+									"&c&l%s &r&6 has reached the end of the parkour!", evt.getPlayer().getName())));
+					}
 				}
 
 				// HARDCODED BONUSES
-				System.out.println("need bonus?");
-				System.out.println(goal.getLevel() + ": " + goal.getLevel().getLevel());
-				System.out.println(parkour.getFinalLevel(false) + ": " + parkour.getFinalLevel(false).getLevel());
-				System.out.println(!player.hasCheated());
-				System.out.println(player.getLastLevel() + ": " + player.getLastLevel().getLevel());
-				System.out.println(ParkourLevel.START_LEVEL + ": " + ParkourLevel.START_LEVEL.getLevel());
 				if (goal.getLevel().equals(parkour.getFinalLevel(false)) && !player.hasCheated()
 						&& player.getLastLevel().equals(ParkourLevel.START_LEVEL)) {
-					System.out.println("Gib bonus");
 					ParkourLevel bonusLevel = parkour.getLevels().stream().filter(p -> p.getLevel() == 6).findFirst()
 							.get();
 					player.setHighestLevel(bonusLevel);
@@ -144,9 +142,6 @@ public class ParkourManager implements Listener {
 								"&c&l%s &r&5has reached the end of the parkour!", evt.getPlayer().getName())));
 				} else if (player.getHighestLevel().getLevel() < goal.getLevel().getLevel()) {
 					player.setHighestLevel(goal.getLevel());
-					Bukkit.getOnlinePlayers().stream()
-							.forEach(pl -> PlayerUtil.sendActionMessage(pl, ColorUtil.replaceColors(
-								"&c&l%s &r&6 has reached the end of the parkour!", evt.getPlayer().getName())));
 				}
 				player.setLastLevel(goal.getLevel());
 
