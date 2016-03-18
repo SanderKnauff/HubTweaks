@@ -52,7 +52,7 @@ public class ParkourAntiCheat implements Listener {
 		}
 	}
 
-	@EventHandler
+	// @EventHandler
 	public void onPlayerToggleFlight(PlayerToggleFlightEvent evt) {
 		ParkourPlayer player = ParkourManager.getParkourInstance().getParkourPlayer(evt.getPlayer());
 		player.setCheated(true);
