@@ -119,8 +119,12 @@ public class ParkourManager implements Listener {
 				}
 
 				// HARDCODED BONUSES
+				System.out.println("need bonus?");
+				System.out.println(goal.getLevel() + ": " + goal.getLevel().getLevel());
+				System.out.println(parkour.getFinalLevel(false) + ": " + parkour.getFinalLevel(false).getLevel());
 				if (goal.getLevel().equals(parkour.getFinalLevel(false)) && !player.hasCheated()
 						&& player.getLastLevel().equals(ParkourLevel.START_LEVEL)) {
+					System.out.println("Gib bonus");
 					ParkourLevel bonusLevel = parkour.getLevels().stream().filter(p -> p.getLevel() == 6).findFirst()
 							.get();
 					player.setLastLevel(bonusLevel);
@@ -147,7 +151,7 @@ public class ParkourManager implements Listener {
 
 				// Give the player his boots if he has reached a level before.
 				if (!player.getHighestLevel().equals(ParkourLevel.START_LEVEL)
-						&& !goal.equals(ParkourLevel.START_LEVEL)) {
+						&& !goal.getLevel().equals(ParkourLevel.START_LEVEL)) {
 					ItemStack boots = ItemUtil.getBuilder(Material.LEATHER_BOOTS).build();
 					LeatherArmorMeta meta = (LeatherArmorMeta) boots.getItemMeta();
 					meta.setColor(player.getHighestLevel().getReward().getColor());
