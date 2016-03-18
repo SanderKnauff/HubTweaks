@@ -107,8 +107,7 @@ public class ParkourManager implements Listener {
 				}
 				// Overall Timing
 				if (goal.getLevel().equals(ParkourLevel.START_LEVEL)) {
-					player.setLastLevel(
-						parkour.getLevels().stream().filter(p -> p.equals(ParkourLevel.START_LEVEL)).findFirst().get());
+					player.setLastLevel(ParkourLevel.START_LEVEL);
 					player.addPendingTime(new ParkourTiming(null, goal.getLevel(), parkour.getFinalLevel(false),
 							System.currentTimeMillis()));
 				}
@@ -130,7 +129,6 @@ public class ParkourManager implements Listener {
 					System.out.println("Gib bonus");
 					ParkourLevel bonusLevel = parkour.getLevels().stream().filter(p -> p.getLevel() == 6).findFirst()
 							.get();
-					player.setLastLevel(bonusLevel);
 					player.setHighestLevel(bonusLevel);
 					for (int i = 0; i < 10; i++) {
 						Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), () -> {
