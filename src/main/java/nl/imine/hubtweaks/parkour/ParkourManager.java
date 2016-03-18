@@ -41,10 +41,8 @@ public class ParkourManager implements Listener {
 
 	public static void init() {
 		List<ParkourLevel> levels = loadLevels();
-		if (levels.isEmpty()) {
-			levels.add(ParkourLevel.START_LEVEL);
-			levels.add(ParkourLevel.EQUIPMENT_LEVEL);
-		}
+		levels.add(ParkourLevel.START_LEVEL);
+		levels.add(ParkourLevel.EQUIPMENT_LEVEL);
 		parkour = new Parkour(levels);
 		parkour.addGoals(loadGoals());
 		Bukkit.getOnlinePlayers().stream().forEach(p -> loadParkourPlayer(p));
