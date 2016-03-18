@@ -14,6 +14,8 @@ devfase:
     - set $(git remote show -n origin | grep Fetch | sed 's%^.*/\([^/]*\)\.git$%\1%g')
     - mvn clean install
     - curl -T target/$1.jar ftp://Deploy.8:$ftppass@localhost/plugins/update/
+  only:
+    - Parkour_Rewrite
 stages:
   - build
   - dev
