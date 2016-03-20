@@ -25,7 +25,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import nl.imine.api.util.LocationUtil;
 import nl.imine.hubtweaks.HubTweaks;
-import nl.imine.hubtweaks.pvp.PvP;
+import nl.imine.hubtweaks.oitc.PvP;
 
 public class WorldProtector implements Listener {
 

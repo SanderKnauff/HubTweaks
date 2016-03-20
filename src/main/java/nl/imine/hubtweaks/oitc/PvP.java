@@ -1,4 +1,4 @@
-package nl.imine.hubtweaks.pvp;
+package nl.imine.hubtweaks.oitc;
 
 import com.google.common.collect.Lists;
 import java.io.File;
