@@ -88,6 +88,7 @@ public class KotlListener implements Listener {
 						ColorUtil.replaceColors("&6&l%s is the new king!", player.getDisplayName())));
 				}
 			}
+			evt.setCancelled(false);
 		}
 	}
 
@@ -119,6 +120,7 @@ public class KotlListener implements Listener {
 			if (e.getVehicle() != null) {
 				e.getVehicle().eject();
 			}
+			edbee.setCancelled(false);
 		}
 	}
 
