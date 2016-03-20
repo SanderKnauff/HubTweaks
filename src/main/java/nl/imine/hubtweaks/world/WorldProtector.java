@@ -20,10 +20,13 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.util.Vector;
 
 import nl.imine.api.util.LocationUtil;
+import nl.imine.api.util.LocationUtil.Coordinate;
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.oitc.PvP;
 
@@ -60,6 +63,18 @@ public class WorldProtector implements Listener {
 			return false;
 		default:
 			return true;
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onLaunch(PlayerToggleSneakEvent ptse) {
+		Player pl = ptse.getPlayer();
+		if (pl.getLocation().add(0, -1, 0).getBlock().getType() == Material.FROSTED_ICE) {
+			Coordinate c = LocationUtil.getDirectionFromYaw(pl.getLocation().getYaw());
+			Vector v = pl.getVelocity();
+			v.setX(v.getX() + (100 * c.getX()));
+			v.setZ(v.getZ() + (100 * c.getZ()));
+			pl.setVelocity(v);
 		}
 	}
 
