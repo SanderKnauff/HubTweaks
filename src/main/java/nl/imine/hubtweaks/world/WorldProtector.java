@@ -72,8 +72,8 @@ public class WorldProtector implements Listener {
 		if (pl.getLocation().add(0, -1, 0).getBlock().getType().name().contains("ICE")) {
 			Coordinate c = LocationUtil.getDirectionFromYaw(pl.getLocation().getYaw());
 			Vector v = pl.getVelocity();
-			v.setX(v.getX() + (100 * c.getX()));
-			v.setZ(v.getZ() + (100 * c.getZ()));
+			v.setX(v.getX() + (500 * c.getX()));
+			v.setZ(v.getZ() + (500 * c.getZ()));
 			pl.setVelocity(v);
 		}
 	}
