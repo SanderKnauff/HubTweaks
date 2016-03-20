@@ -69,7 +69,7 @@ public class WorldProtector implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onLaunch(PlayerToggleSneakEvent ptse) {
 		Player pl = ptse.getPlayer();
-		if (pl.getLocation().add(0, -1, 0).getBlock().getType() == Material.FROSTED_ICE) {
+		if (pl.getLocation().add(0, -1, 0).getBlock().getType().name().contains("ICE")) {
 			Coordinate c = LocationUtil.getDirectionFromYaw(pl.getLocation().getYaw());
 			Vector v = pl.getVelocity();
 			v.setX(v.getX() + (100 * c.getX()));
