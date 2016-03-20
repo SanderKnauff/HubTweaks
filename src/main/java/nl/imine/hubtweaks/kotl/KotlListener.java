@@ -113,27 +113,25 @@ public class KotlListener implements Listener {
 		}
 	}
 
-	@EventHandler
-	public void onPlayerHit(EntityDamageByEntityEvent edbee) {
-		Entity e = edbee.getEntity();
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onEntityDamageByEntity(EntityDamageByEntityEvent evt) {
+		Entity e = evt.getEntity();
 		if (LocationUtil.isInBox(e.getLocation(), Kotl.BOX[0], Kotl.BOX[1])) {
 			if (e.getVehicle() != null) {
 				e.getVehicle().eject();
 			}
-			edbee.setCancelled(false);
+			evt.setDamage(1D);
+			evt.setCancelled(false);
 		}
-	}
 
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onEntityDamageByEntity(EntityDamageByEntityEvent evt) {
-		if (((evt.getDamager() instanceof Player)) && ((evt.getEntity() instanceof Player))) {
+		if (((evt.getDamager() instanceof Player)) && ((e instanceof Player))) {
 			Player damager = (Player) evt.getDamager();
 			if ((damager.getInventory().getItemInMainHand().getType() != null)
 					&& (damager.getInventory().getItemInMainHand().getType().equals(Material.GOLDEN_CARROT))) {
 				if (Kotl.getInstance().getKing() != null) {
 					if (Kotl.getInstance().getKing().equals(damager)
-							&& LocationUtil.isInBox(evt.getEntity().getLocation(), Kotl.BOX[0], Kotl.BOX[1])) {
-						LocationUtil.firework(evt.getEntity().getLocation(),
+							&& LocationUtil.isInBox(e.getLocation(), Kotl.BOX[0], Kotl.BOX[1])) {
+						LocationUtil.firework(e.getLocation(),
 							FireworkEffect.builder().withColor(Color.RED).withColor(Color.BLUE).withColor(Color.GREEN)
 									.withColor(Color.YELLOW).with(FireworkEffect.Type.BALL_LARGE).build(),
 							5L);

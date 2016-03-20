@@ -1,9 +1,5 @@
 package nl.imine.hubtweaks.world;
 
-import nl.imine.api.util.LocationUtil;
-import nl.imine.hubtweaks.HubTweaks;
-import nl.imine.hubtweaks.kotl.Kotl;
-import nl.imine.hubtweaks.pvp.PvP;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -26,6 +22,10 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.PlayerInventory;
+
+import nl.imine.api.util.LocationUtil;
+import nl.imine.hubtweaks.HubTweaks;
+import nl.imine.hubtweaks.pvp.PvP;
 
 public class WorldProtector implements Listener {
 
@@ -128,12 +128,7 @@ public class WorldProtector implements Listener {
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent edbee) {
-		if (edbee.getEntity() instanceof Player) {
-			if ((LocationUtil.isInBox(edbee.getEntity().getLocation(), Kotl.BOX[0], Kotl.BOX[1]))) {
-				edbee.setDamage(0D);
-				edbee.setCancelled(false);
-				return;
-			}
+		if (edbee.getEntity() instanceof Player && ((Player) edbee.getEntity()).getGameMode() == GameMode.ADVENTURE) {
 			edbee.setCancelled(true);
 		}
 	}
