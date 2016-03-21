@@ -11,7 +11,6 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
-import org.bukkit.Material;
 
 public class ParkourAntiCheat implements Listener {
 
@@ -21,7 +20,6 @@ public class ParkourAntiCheat implements Listener {
 		player.setCheated(true);
 		player.setLastLevel(ParkourManager.getParkourInstance().getLevels().stream().filter(l -> !l.isBonusLevel())
 				.sorted((ParkourLevel p1, ParkourLevel p2) -> p2.getLevel() - p1.getLevel()).findFirst().get());
-		System.out.println(Material.FROSTED_ICE);
 	}
 
 	@EventHandler
