@@ -74,7 +74,6 @@ public class PvPListener implements Listener {
 						Player attacker = (Player) arrow.getShooter();
 						if (PvP.isPlayerInArena(player) && PvP.isPlayerInArena(attacker) && attacker != player) {
 							player.damage(player.getHealth(), attacker);
-							player.setHealth(0D);
 							arrow.remove();
 						}
 					}
