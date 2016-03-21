@@ -10,7 +10,6 @@ import nl.imine.hubtweaks.HubTweaks;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -30,10 +29,6 @@ public class PvP {
 	public static void init() {
 		PvPListener.init();
 		loadArena();
-		Bukkit.getScheduler().runTaskTimer(HubTweaks.getInstance(), () -> {
-			LocationUtil.getBlocksInOutline(BOX[0], BOX[1]).stream()
-					.forEach(l -> Bukkit.getWorlds().get(0).spawnParticle(Particle.REDSTONE, l.getLocation(), 0));
-		} , 5, 5l);
 	}
 
 	public static boolean isPlayerInArena(Player player) {
