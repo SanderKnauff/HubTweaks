@@ -76,7 +76,7 @@ public class WorldProtector implements Listener {
 			v.setY(0.5);
 			v.setZ(v.getZ() + (15 * c.getZ()));
 			if (pl.getInventory().getChestplate().getType() == Material.ELYTRA) {
-				// pl.setGliding(true);
+				pl.setGliding(true);
 			}
 			pl.setVelocity(v);
 		}
