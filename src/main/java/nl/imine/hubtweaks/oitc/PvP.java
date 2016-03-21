@@ -22,7 +22,7 @@ import org.bukkit.util.Vector;
 public class PvP {
 
 	public static final Location[] BOX = new Location[]{new Location(Bukkit.getWorlds().get(0), -14, 55, -449),
-			new Location(Bukkit.getWorlds().get(0), -41, 14, -399)};
+			new Location(Bukkit.getWorlds().get(0), 43, 14, -399)};
 	private static final List<Location> SPAWN_ARENA = new ArrayList<>();
 	private static File pvpConfigFile = null;
 	private static FileConfiguration pvpConfig = null;
