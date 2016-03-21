@@ -89,7 +89,7 @@ public class ParkourPlayer {
 	}
 
 	public void setCheated(boolean hasCheated) {
-		this.hasCheated = false; // FIX
+		this.hasCheated = hasCheated;
 	}
 
 	public boolean hasCheated() {
