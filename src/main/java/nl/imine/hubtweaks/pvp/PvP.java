@@ -1,11 +1,11 @@
 package nl.imine.hubtweaks.pvp;
 
-import com.google.common.collect.Lists;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import nl.imine.api.util.LocationUtil;
 import nl.imine.hubtweaks.HubTweaks;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,9 +21,8 @@ import org.bukkit.util.Vector;
 
 public class PvP {
 
-	public static final Location[] BOX = new Location[]{new Location(Bukkit.getWorlds().get(0), 50, 0, -450),
-			new Location(Bukkit.getWorlds().get(0), -15, 60, -400)};
-	private static final List<Player> PVP_LIST = Lists.newArrayList();
+	public static final Location[] BOX = new Location[]{new Location(Bukkit.getWorlds().get(0), -14, 55, -449),
+			new Location(Bukkit.getWorlds().get(0), -41, 14, -399)};
 	private static final List<Location> SPAWN_ARENA = new ArrayList<>();
 	private static File pvpConfigFile = null;
 	private static FileConfiguration pvpConfig = null;
@@ -37,14 +36,10 @@ public class PvP {
 	}
 
 	public static boolean isPlayerInArena(Player player) {
-		if (PVP_LIST.contains(player)) {
-			return true;
-		}
-		return false;
+		return LocationUtil.isInBox(BOX[0], BOX[2], player.getLocation());
 	}
 
 	public static void addPlayerToArena(Player player) {
-		PVP_LIST.add(player);
 		PvP.addGear(player);
 		player.setFireTicks(0);
 		player.setFallDistance(0);
@@ -56,8 +51,7 @@ public class PvP {
 	}
 
 	public static void removePlayerFromArena(Player player) {
-		if (PVP_LIST.contains(player)) {
-			PVP_LIST.remove(player);
+		if (isPlayerInArena(player)) {
 			player.getInventory().clear();
 		}
 	}
@@ -87,13 +81,13 @@ public class PvP {
 		}
 	}
 
+	public static Location[] getCorners() {
+		return BOX;
+	}
+
 	public static Location getRandomSpawn() {
 		Random r = new Random();
 		return SPAWN_ARENA.get(r.nextInt(SPAWN_ARENA.size()));
-	}
-
-	public static List<Player> getPlayerList() {
-		return PVP_LIST;
 	}
 
 	public static List<Location> getSpawnList() {

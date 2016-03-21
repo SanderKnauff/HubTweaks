@@ -51,9 +51,9 @@ public class PvPListener implements Listener {
 	public void onPvPDamage(EntityDamageByEntityEvent evt) {
 		if (evt.getEntity() instanceof Player) {
 			Player player = (Player) evt.getEntity();
-			if (PvP.getPlayerList().contains(player)) {
+			if (PvP.isPlayerInArena(player)) {
 				if (evt.getDamager() instanceof Player) {
-					if (PvP.getPlayerList().contains((Player) evt.getDamager())) {
+					if (PvP.isPlayerInArena((Player) evt.getDamager())) {
 						if (evt.getDamage() > 0) {
 							for (int i = 0; i < 3; i++) {
 								Location loc = new Location(evt.getEntity().getLocation().getWorld(),
@@ -72,8 +72,7 @@ public class PvPListener implements Listener {
 					Arrow arrow = (Arrow) evt.getDamager();
 					if (arrow.getShooter() instanceof Player) {
 						Player attacker = (Player) arrow.getShooter();
-						if (PvP.getPlayerList().contains(player) && PvP.getPlayerList().contains(attacker)
-								&& attacker != player) {
+						if (PvP.isPlayerInArena(player) && PvP.isPlayerInArena(attacker) && attacker != player) {
 							player.damage(player.getHealth(), attacker);
 							player.setHealth(0D);
 							arrow.remove();
@@ -90,7 +89,7 @@ public class PvPListener implements Listener {
 		if (evt.getEntity().getKiller() instanceof Player && evt.getEntity() instanceof Player) {
 			Player player = (Player) evt.getEntity();
 			Player killer = (Player) evt.getEntity().getKiller();
-			if (PvP.getPlayerList().contains(player) && PvP.getPlayerList().contains(killer)
+			if (PvP.isPlayerInArena(player) && PvP.isPlayerInArena(killer)
 					&& killer.getInventory().getItemInMainHand().getType() != null) {
 				PvP.removePlayerFromArena(player);
 				if (killer.getInventory().all(Material.ARROW).isEmpty()) {
@@ -106,9 +105,6 @@ public class PvPListener implements Listener {
 		evt.getDrops().clear();
 		evt.setDroppedExp(0);
 		evt.setDeathMessage(null);
-		if (PvP.getPlayerList().contains(evt.getEntity())) {
-			PvP.getPlayerList().remove(evt.getEntity());
-		}
 	}
 
 	@EventHandler
@@ -122,44 +118,42 @@ public class PvPListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent evt) {
-		if (PvP.getPlayerList().contains(evt.getPlayer())) {
-			if (!LocationUtil.isInBox(evt.getTo(), PvP.BOX[0], PvP.BOX[1])) {
-				evt.getPlayer().setHealth(0D);
-			}
+		if (LocationUtil.isInBox(PvP.getCorners()[0], PvP.getCorners()[1], evt.getFrom())
+				&& !LocationUtil.isInBox(PvP.getCorners()[0], PvP.getCorners()[1], evt.getTo())) {
+			evt.getPlayer().setHealth(0D);
+		} else if (LocationUtil.isInBox(PvP.getCorners()[0], PvP.getCorners()[1], evt.getTo())
+				&& !LocationUtil.isInBox(PvP.getCorners()[0], PvP.getCorners()[1], evt.getFrom())) {
+			PvP.addPlayerToArena(evt.getPlayer());
 		}
 	}
 
 	@EventHandler
 	public void onPlayerItemDrop(PlayerDropItemEvent evt) {
-		if (PvP.getPlayerList().contains(evt.getPlayer())) {
-			evt.setCancelled(true);
-		}
+		PvP.isPlayerInArena(evt.getPlayer());
 	}
 
 	@EventHandler
 	public void onPlayerItemPickup(PlayerPickupItemEvent evt) {
-		if (PvP.getPlayerList().contains(evt.getPlayer())) {
+		if (PvP.isPlayerInArena(evt.getPlayer())) {
 			evt.setCancelled(true);
 		}
 	}
 
 	@EventHandler
 	public void onPlayerInventoryChange(InventoryClickEvent evt) {
-		if (PvP.getPlayerList().contains((Player) evt.getWhoClicked())) {
-			evt.setCancelled(true);
-		}
+		PvP.isPlayerInArena((Player) evt.getWhoClicked());
 	}
 
 	@EventHandler
 	public void onPlayerKick(PlayerKickEvent evt) {
-		if (PvP.getPlayerList().contains(evt.getPlayer())) {
+		if (PvP.isPlayerInArena(evt.getPlayer())) {
 			PvP.removePlayerFromArena(evt.getPlayer());
 		}
 	}
 
 	@EventHandler
 	public void onPlayerDisconnect(PlayerQuitEvent evt) {
-		if (PvP.getPlayerList().contains(evt.getPlayer())) {
+		if (PvP.isPlayerInArena(evt.getPlayer())) {
 			PvP.removePlayerFromArena(evt.getPlayer());
 		}
 	}
