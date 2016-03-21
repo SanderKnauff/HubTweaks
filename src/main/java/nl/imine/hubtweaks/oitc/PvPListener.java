@@ -1,4 +1,4 @@
-package nl.imine.hubtweaks.pvp;
+package nl.imine.hubtweaks.oitc;
 
 import nl.imine.api.util.LocationUtil;
 import nl.imine.hubtweaks.HubTweaks;

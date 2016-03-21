@@ -1,4 +1,4 @@
-package nl.imine.hubtweaks.pvp;
+package nl.imine.hubtweaks.oitc;
 
 import java.io.File;
 import java.io.IOException;

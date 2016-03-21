@@ -16,11 +16,12 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
+import nl.imine.api.util.ColorUtil;
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.Statistic;
+import nl.imine.hubtweaks.oitc.PvP;
 import nl.imine.hubtweaks.parkour.ParkourManager;
 import nl.imine.hubtweaks.parkour.ParkourPlayer;
-import nl.imine.hubtweaks.pvp.PvP;
 
 public class EntityRide implements Listener {
 
@@ -90,6 +91,11 @@ public class EntityRide implements Listener {
 		}
 		if (e instanceof LivingEntity && pl.hasPermission("iMine.hub.ride") && !PvP.isPlayerInArena(pl)
 				&& pl.getVehicle() == null && (!(e instanceof Player) || pl.hasPermission("iMine.hub.ride.player"))) {
+			if (e instanceof Player) {
+				pl.sendMessage(ColorUtil.replaceColors("&cRiding on other players is for now disabled due a bug."));
+				if (true)
+					return;
+			}
 			Entity oldPassenger = e.getPassenger();
 			if (oldPassenger != null) {
 				if (oldPassenger instanceof Player) {

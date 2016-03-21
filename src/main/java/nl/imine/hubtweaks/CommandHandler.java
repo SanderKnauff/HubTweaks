@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import nl.imine.hubtweaks.kotl.Kotl;
-import nl.imine.hubtweaks.pvp.PvP;
+import nl.imine.hubtweaks.oitc.PvP;
 
 public class CommandHandler implements CommandExecutor {
 

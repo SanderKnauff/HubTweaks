@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemFlag;
 import nl.imine.api.gui.Button;
 import nl.imine.api.util.ItemUtil;
 import nl.imine.hubtweaks.HubTweaks;
-import nl.imine.hubtweaks.pvp.PvPJoinEvent;
+import nl.imine.hubtweaks.oitc.PvPJoinEvent;
 
 public class ButtonOitc extends Button {
 
