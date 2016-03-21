@@ -118,11 +118,11 @@ public class PvPListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent evt) {
-		if (LocationUtil.isInBox(PvP.getCorners()[0], PvP.getCorners()[1], evt.getFrom())
-				&& !LocationUtil.isInBox(PvP.getCorners()[0], PvP.getCorners()[1], evt.getTo())) {
+		if (LocationUtil.isInBox(evt.getFrom(), PvP.getCorners()[0], PvP.getCorners()[1])
+				&& !LocationUtil.isInBox(evt.getTo(), PvP.getCorners()[0], PvP.getCorners()[1])) {
 			evt.getPlayer().setHealth(0D);
-		} else if (LocationUtil.isInBox(PvP.getCorners()[0], PvP.getCorners()[1], evt.getTo())
-				&& !LocationUtil.isInBox(PvP.getCorners()[0], PvP.getCorners()[1], evt.getFrom())) {
+		} else if (LocationUtil.isInBox(evt.getTo(), PvP.getCorners()[0], PvP.getCorners()[1])
+				&& !LocationUtil.isInBox(evt.getFrom(), PvP.getCorners()[0], PvP.getCorners()[1])) {
 			PvP.addPlayerToArena(evt.getPlayer());
 		}
 	}

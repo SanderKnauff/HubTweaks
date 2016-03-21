@@ -32,7 +32,7 @@ public class PvP {
 	}
 
 	public static boolean isPlayerInArena(Player player) {
-		return LocationUtil.isInBox(BOX[0], BOX[1], player.getLocation());
+		return LocationUtil.isInBox(player.getLocation(), BOX[0], BOX[1]);
 	}
 
 	public static void addPlayerToArena(Player player) {
