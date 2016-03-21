@@ -1,6 +1,7 @@
 package nl.imine.hubtweaks.oitc;
 
 import nl.imine.api.util.LocationUtil;
+import nl.imine.api.util.PlayerUtil;
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.Statistic;
 import org.bukkit.Bukkit;
@@ -94,9 +95,9 @@ public class PvPListener implements Listener {
 				if (killer.getInventory().all(Material.ARROW).isEmpty()) {
 					killer.getInventory().addItem(new ItemStack(Material.ARROW, 1));
 				}
-				player.sendMessage(ChatColor.WHITE + "You have been killed by: '" + ChatColor.GRAY + killer.getName()
-						+ ChatColor.WHITE + "'");
-				killer.sendMessage(
+				PlayerUtil.sendActionMessage(player, ChatColor.WHITE + "You have been killed by: '" + ChatColor.GRAY
+						+ killer.getName() + ChatColor.WHITE + "'");
+				PlayerUtil.sendActionMessage(killer,
 					ChatColor.WHITE + "You killed: '" + ChatColor.GRAY + player.getName() + ChatColor.WHITE + "'");
 			}
 			Statistic.addToKill(killer);
