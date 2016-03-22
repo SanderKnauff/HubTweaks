@@ -86,7 +86,7 @@ public class EventListener implements Listener, Runnable {
 	@EventHandler
 	public void onPlayerDisconnect(final PlayerQuitEvent pqe) {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), () -> {
-			PlayerDataManager.RemovePlayerData(pqe.getPlayer());
+			PlayerDataManager.removePlayerData(pqe.getPlayer());
 		}, 10);
 	}
 
