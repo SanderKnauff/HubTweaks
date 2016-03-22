@@ -87,7 +87,7 @@ public class EventListener implements Listener, Runnable {
 	public void onPlayerDisconnect(final PlayerQuitEvent pqe) {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), () -> {
 			PlayerDataManager.RemovePlayerData(pqe.getPlayer());
-		} , 10);
+		}, 10);
 	}
 
 	@EventHandler
@@ -115,7 +115,7 @@ public class EventListener implements Listener, Runnable {
 		pPlayer.setLastLevel(null);
 		pl.getInventory().setArmorContents(new ItemStack[pl.getInventory().getArmorContents().length]);
 		final ItemStack item = new ItemStack(Material.COMPASS, 1);
-		ItemMeta metadat = (ItemMeta) item.getItemMeta();
+		ItemMeta metadat = item.getItemMeta();
 		List<String> list = new ArrayList<>();
 		list.add(ChatColor.GOLD + "Right click to open Warp Menu");
 		metadat.setLore(list);

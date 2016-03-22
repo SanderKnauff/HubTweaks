@@ -43,7 +43,7 @@ public class PvP {
 		player.setHealth(player.getMaxHealth());
 		player.getActivePotionEffects().clear();
 		player.teleport(PvP.getRandomSpawn());
-		player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect((int) 100, 0));
+		player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(100, 0));
 	}
 
 	public static void removePlayerFromArena(Player player) {
