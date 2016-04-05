@@ -86,9 +86,9 @@ public class PvPListener implements Listener {
 
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent evt) {
-		if (evt.getEntity().getKiller() instanceof Player && evt.getEntity() instanceof Player) {
-			Player player = (Player) evt.getEntity();
-			Player killer = (Player) evt.getEntity().getKiller();
+		if (evt.getEntity().getKiller() != null && evt.getEntity() != null) {
+			Player player = evt.getEntity();
+			Player killer = evt.getEntity().getKiller();
 			if (PvP.isPlayerInArena(player) && PvP.isPlayerInArena(killer)
 					&& killer.getInventory().getItemInMainHand().getType() != null) {
 				PvP.removePlayerFromArena(player);

@@ -37,7 +37,7 @@ public class HubTweaks extends JavaPlugin {
 		Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
 		getCommand("HubTweaks").setExecutor(new CommandHandler(this));
 		getCommand("kotl").setExecutor(new CommandHandler(this));
-		PlayerDataManager.RemoveAllPlayerData();
+		PlayerDataManager.removeAllPlayerData();
 		this.getConfig().addDefault("WarpItems", "[]");
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
