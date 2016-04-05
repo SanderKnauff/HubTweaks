@@ -60,6 +60,7 @@ public class WorldProtector implements Listener {
 		case STONE_PLATE:
 		case GOLD_PLATE:
 		case IRON_PLATE:
+		case JUKEBOX:
 			return false;
 		default:
 			return true;
