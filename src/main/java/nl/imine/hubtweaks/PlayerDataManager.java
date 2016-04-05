@@ -13,8 +13,10 @@ public class PlayerDataManager {
 			String worldDir = w.getName();
 			File file = new File(worldDir + File.separatorChar + "playerdata");
 			for (File f : file.listFiles()) {
-				System.out.println("Deleting: " + f.getName());
-				f.delete();
+				if (f.exists()) {
+					System.out.println("Deleting: " + f.getName());
+					f.delete();
+				}
 			}
 		}
 	}
