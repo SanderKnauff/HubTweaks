@@ -40,9 +40,14 @@ public class EntityRide implements Listener {
 	public void onPlayerLeft(final PlayerQuitEvent pqe) {
 		Player pl = pqe.getPlayer();
 		pl.eject();
-		if (pl.getVehicle() != null) {
-			pl.getVehicle().eject();
+		if (pl.isInsideVehicle()) {
+			pl.leaveVehicle();
 		}
+	}
+
+	@EventHandler
+	public void onEntityDespawn() {
+
 	}
 
 	@EventHandler
