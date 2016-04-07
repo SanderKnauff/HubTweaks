@@ -22,6 +22,7 @@ import nl.imine.hubtweaks.Statistic;
 import nl.imine.hubtweaks.oitc.PvP;
 import nl.imine.hubtweaks.parkour.ParkourManager;
 import nl.imine.hubtweaks.parkour.ParkourPlayer;
+import org.bukkit.event.player.PlayerKickEvent;
 
 public class EntityRide implements Listener {
 
@@ -46,8 +47,12 @@ public class EntityRide implements Listener {
 	}
 
 	@EventHandler
-	public void onEntityDespawn() {
-
+	public void onPlayerKick(final PlayerKickEvent pqe) {
+		Player pl = pqe.getPlayer();
+		pl.eject();
+		if (pl.isInsideVehicle()) {
+			pl.leaveVehicle();
+		}
 	}
 
 	@EventHandler
