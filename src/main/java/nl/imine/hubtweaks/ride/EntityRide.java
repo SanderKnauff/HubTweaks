@@ -39,9 +39,10 @@ public class EntityRide implements Listener {
 	@EventHandler
 	public void onPlayerLeft(final PlayerQuitEvent pqe) {
 		Player pl = pqe.getPlayer();
+		pl.eject();
 		while (pl.getVehicle() != null) {
 			System.out.println("before: " + pl.getVehicle());
-			pl.eject();
+			pl.getVehicle().eject();
 			System.out.println("after: " + pl.getVehicle());
 		}
 	}
