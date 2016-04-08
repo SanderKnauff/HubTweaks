@@ -87,7 +87,7 @@ public class EventListener implements Listener, Runnable {
 	public void onPlayerDisconnect(final PlayerQuitEvent pqe) {
 		Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), () -> {
 			PlayerDataManager.removePlayerData(pqe.getPlayer());
-		}, 10);
+		} , 10);
 	}
 
 	@EventHandler
@@ -110,6 +110,7 @@ public class EventListener implements Listener, Runnable {
 	private void playerRespawn(final Player pl) {
 		FileConfiguration config = HubTweaks.getInstance().getConfig();
 		pl.setGameMode(GameMode.ADVENTURE);
+		pl.teleport(HubTweaks.getMainWorld().getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
 		ParkourPlayer pPlayer = ParkourManager.getParkourInstance().getParkourPlayer(pl);
 		pPlayer.setCheated(false);
 		pPlayer.setLastLevel(null);
