@@ -48,6 +48,7 @@ public class HubTweaks extends JavaPlugin {
 	public void onDisable() {
 		for (Player pl : Bukkit.getOnlinePlayers()) {
 			if (PvP.isPlayerInArena(pl)) {
+				PvP.removePlayerFromArena(pl);
 				pl.teleport(getMainWorld().getSpawnLocation(), TeleportCause.PLUGIN);
 				pl.setHealth(0D);
 			}
