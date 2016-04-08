@@ -42,7 +42,6 @@ public class PvP {
 		player.setVelocity(new Vector());
 		player.setHealth(player.getMaxHealth());
 		player.getActivePotionEffects().clear();
-		player.teleport(PvP.getRandomSpawn());
 		player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(100, 0));
 	}
 

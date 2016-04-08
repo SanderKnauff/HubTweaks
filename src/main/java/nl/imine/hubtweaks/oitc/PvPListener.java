@@ -13,6 +13,7 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -23,6 +24,7 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class PvPListener implements Listener {
@@ -32,19 +34,12 @@ public class PvPListener implements Listener {
 			HubTweaks.getInstance());
 	}
 
-	@EventHandler
-	public void onPlayerJoinArena(PvPJoinEvent evt) {
-		Player player = evt.getPlayer();
-		if (!PvP.getSpawnList().isEmpty()) {
-			if (player.getVehicle() != null) {
-				player.leaveVehicle();
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPlayerTeleport(PlayerTeleportEvent evt) {
+		if (!evt.isCancelled()) {
+			if (PvP.getSpawnList().contains(evt.getTo())) {
+				PvP.addPlayerToArena(evt.getPlayer());
 			}
-			if (player.getPassenger() != null) {
-				player.getPassenger().leaveVehicle();
-			}
-			PvP.addPlayerToArena(player);
-		} else {
-			player.sendMessage(ChatColor.DARK_RED + "ERROR: Warp aborted due to no avalible spawns.");
 		}
 	}
 

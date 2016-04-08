@@ -9,7 +9,8 @@ import org.bukkit.inventory.ItemFlag;
 import nl.imine.api.gui.Button;
 import nl.imine.api.util.ItemUtil;
 import nl.imine.hubtweaks.HubTweaks;
-import nl.imine.hubtweaks.oitc.PvPJoinEvent;
+import nl.imine.hubtweaks.oitc.PvP;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class ButtonOitc extends Button {
 
@@ -20,6 +21,16 @@ public class ButtonOitc extends Button {
 
 	@Override
 	public void doAction(Player player, ClickType ct) {
-		HubTweaks.getInstance().getServer().getPluginManager().callEvent(new PvPJoinEvent(player));
+		if (!PvP.getSpawnList().isEmpty()) {
+			if (player.getVehicle() != null) {
+				player.leaveVehicle();
+			}
+			if (player.getPassenger() != null) {
+				player.getPassenger().leaveVehicle();
+			}
+			player.teleport(PvP.getRandomSpawn(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+		} else {
+			player.sendMessage(ChatColor.DARK_RED + "ERROR: Warp aborted due to no avalible spawns.");
+		}
 	}
 }
