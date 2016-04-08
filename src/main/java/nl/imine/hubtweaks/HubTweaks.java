@@ -15,6 +15,7 @@ import nl.imine.hubtweaks.parkour.ParkourManager;
 import nl.imine.hubtweaks.ride.EntityRide;
 import nl.imine.hubtweaks.warps.CompassWarp;
 import nl.imine.hubtweaks.world.WorldProtector;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 public class HubTweaks extends JavaPlugin {
 
@@ -45,8 +46,9 @@ public class HubTweaks extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		for(Player pl : Bukkit.getOnlinePlayers()){
-			if(PvP.isPlayerInArena(pl)){
+		for (Player pl : Bukkit.getOnlinePlayers()) {
+			if (PvP.isPlayerInArena(pl)) {
+				pl.teleport(getMainWorld().getSpawnLocation(), TeleportCause.PLUGIN);
 				pl.setHealth(0D);
 			}
 		}
