@@ -13,7 +13,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import jdk.nashorn.internal.runtime.Timing;
 import nl.imine.api.Credentials;
 import nl.imine.api.db.DatabaseManager;
 import nl.imine.api.util.ColorUtil;
@@ -30,6 +29,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -68,14 +68,18 @@ public class ParkourManager implements Listener {
 		mainObject.entrySet().stream().forEach(e -> {
 			UUID uuid = UUID.fromString(e.getKey());
 			JsonArray timings = (JsonArray) e.getValue();
-			timings.forEach(timingElement -> {
-				JsonObject timing = timingElement.getAsJsonObject();
-				parkour.getParkourPlayer(Bukkit.getPlayer(uuid))
-						.addPendingTime(new ParkourTiming(null,
-								ParkourManager.getParkourInstance().getLevel(timing.get("Origin").getAsShort()),
-								ParkourManager.getParkourInstance().getLevel(timing.get("Destination").getAsShort()),
-								timing.get("StartTime").getAsLong()));
-			});
+			Player owner = Bukkit.getPlayer(uuid);
+			if (owner != null) {
+				timings.forEach(timingElement -> {
+					JsonObject timing = timingElement.getAsJsonObject();
+					parkour.getParkourPlayer(owner.getPlayer())
+							.addPendingTime(new ParkourTiming(
+									null, ParkourManager.getParkourInstance().getLevel(
+										timing.get("Origin").getAsShort()),
+							ParkourManager.getParkourInstance().getLevel(timing.get("Destination").getAsShort()),
+							timing.get("StartTime").getAsLong()));
+				});
+			}
 		});
 	}
 
