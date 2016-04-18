@@ -86,7 +86,7 @@ public class ParkourManager implements Listener {
 		JsonObject playerJson = new JsonObject();
 		parkour.getPlayers().forEach(p -> {
 			JsonArray timings = new JsonArray();
-			p.getTimings().stream().filter(t -> t.getDateObtained() == null).forEach(t -> {
+			p.getPendingTimes().stream().filter(t -> t.getDateObtained() == null).forEach(t -> {
 				JsonObject timing = new JsonObject();
 				timing.add("Origin", new JsonPrimitive(t.getStartLevel().getLevel()));
 				timing.add("Destination", new JsonPrimitive(t.getDestLevel().getLevel()));
