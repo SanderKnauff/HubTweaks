@@ -42,6 +42,7 @@ public class HubTweaks extends JavaPlugin {
 		this.getConfig().addDefault("WarpItems", "[]");
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
+		ParkourManager.loadTimings();
 	}
 
 	@Override
@@ -53,6 +54,7 @@ public class HubTweaks extends JavaPlugin {
 				pl.setHealth(0D);
 			}
 		}
+		ParkourManager.saveTimings();
 		plugin = null;
 	}
 

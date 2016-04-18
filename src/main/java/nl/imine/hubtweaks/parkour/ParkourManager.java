@@ -1,5 +1,11 @@
 package nl.imine.hubtweaks.parkour;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -7,6 +13,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import jdk.nashorn.internal.runtime.Timing;
 import nl.imine.api.Credentials;
 import nl.imine.api.db.DatabaseManager;
 import nl.imine.api.util.ColorUtil;
@@ -15,6 +22,8 @@ import nl.imine.api.util.LocationUtil;
 import nl.imine.api.util.PlayerUtil;
 import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.Statistic;
+import nl.imine.hubtweaks.Util;
+import static nl.imine.hubtweaks.Util.readFromFile;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
@@ -39,6 +48,8 @@ public class ParkourManager implements Listener {
 	public static final DatabaseManager DM = new DatabaseManager(Credentials.getUrl(), Credentials.getUsername(),
 			Credentials.getPassword(), "iMine_Statistics");
 
+	private static final File TIMINGS_LIST = new File(HubTweaks.getInstance().getDataFolder(), "Timings.json");
+
 	public static void init() {
 		List<ParkourLevel> levels = loadLevels();
 		levels.add(ParkourLevel.START_LEVEL);
@@ -48,6 +59,44 @@ public class ParkourManager implements Listener {
 		Bukkit.getOnlinePlayers().stream().forEach(p -> loadParkourPlayer(p));
 		Bukkit.getPluginManager().registerEvents(new ParkourManager(), HubTweaks.getInstance());
 		Bukkit.getPluginManager().registerEvents(new ParkourAntiCheat(), HubTweaks.getInstance());
+	}
+
+	public static void loadTimings() {
+		String json = readFromFile(TIMINGS_LIST);
+		Gson gson = new GsonBuilder().create();
+		JsonObject mainObject = gson.fromJson(json, JsonObject.class);
+		mainObject.entrySet().stream().forEach(e -> {
+			UUID uuid = UUID.fromString(e.getKey());
+			JsonArray timings = (JsonArray) e.getValue();
+			timings.forEach(timingElement -> {
+				JsonObject timing = timingElement.getAsJsonObject();
+				parkour.getParkourPlayer(Bukkit.getPlayer(uuid))
+						.addPendingTime(new ParkourTiming(null,
+								ParkourManager.getParkourInstance().getLevel(timing.get("Origin").getAsShort()),
+								ParkourManager.getParkourInstance().getLevel(timing.get("Destination").getAsShort()),
+								timing.get("StartTime").getAsLong()));
+			});
+		});
+	}
+
+	public static void saveTimings() {
+		TIMINGS_LIST.delete();
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		Gson gson = gsonBuilder.setPrettyPrinting().create();
+		JsonObject playerJson = new JsonObject();
+		parkour.getPlayers().forEach(p -> {
+			JsonArray timings = new JsonArray();
+			p.getTimings().stream().filter(t -> t.getDateObtained() == null).forEach(t -> {
+				JsonObject timing = new JsonObject();
+				timing.add("Origin", new JsonPrimitive(t.getStartLevel().getLevel()));
+				timing.add("Destination", new JsonPrimitive(t.getDestLevel().getLevel()));
+				timing.add("StartTime", new JsonPrimitive(t.getTimeMiliseconds()));
+				timings.add(timing);
+			});
+			playerJson.add(p.getUuid().toString(), timings);
+		});
+		String json = gson.toJson(playerJson);
+		Util.saveToFile(TIMINGS_LIST, new String[]{json});
 	}
 
 	@EventHandler
