@@ -13,8 +13,8 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import nl.imine.api.Credentials;
 import nl.imine.api.db.DatabaseManager;
+import nl.imine.api.iMineAPI;
 import nl.imine.api.util.ColorUtil;
 import nl.imine.api.util.ItemUtil;
 import nl.imine.api.util.LocationUtil;
@@ -29,7 +29,6 @@ import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -45,8 +44,7 @@ public class ParkourManager implements Listener {
 
 	private static Parkour parkour;
 
-	public static final DatabaseManager DM = new DatabaseManager(Credentials.getUrl(), Credentials.getUsername(),
-			Credentials.getPassword(), "iMine_Statistics");
+	public static final DatabaseManager DM = iMineAPI.getDatabaseManager();
 
 	private static final File TIMINGS_LIST = new File(HubTweaks.getInstance().getDataFolder(), "Timings.json");
 
@@ -235,19 +233,19 @@ public class ParkourManager implements Listener {
 	}
 
 	public static void saveLevel(ParkourLevel level) {
-		DM.insertQuery("INSERT INTO parkour_level VALUES (%s,%b,%s)", level.getLevel(), level.isBonusLevel(),
-			level.getReward().name());
+		DM.insertQuery("INSERT INTO iMine_Statistics.parkour_level VALUES (%s,%b,%s)", level.getLevel(),
+			level.isBonusLevel(), level.getReward().name());
 	}
 
 	public static void saveGoal(ParkourGoal goal) {
-		DM.insertQuery("INSERT INTO parkour_goal VALUES (%s,%s,%d,%d,%d)", goal.getLevel().getLevel(),
+		DM.insertQuery("INSERT INTO iMine_Statistics.parkour_goal VALUES (%s,%s,%d,%d,%d)", goal.getLevel().getLevel(),
 			goal.getTarget().getWorld().getUID(), goal.getTarget().getBlockX(), goal.getTarget().getBlockY(),
 			goal.getTarget().getBlockZ());
 	}
 
 	public static List<ParkourLevel> loadLevels() {
 		List<ParkourLevel> ret = new ArrayList<>();
-		ResultSet rs = DM.selectQuery("SELECT * FROM parkour_level WHERE id > 0");
+		ResultSet rs = DM.selectQuery("SELECT * FROM iMine_Statistics.parkour_level WHERE id > 0");
 		try {
 			while (rs.next()) {
 				DyeColor reward = DyeColor.valueOf(rs.getString("reward"));
@@ -261,7 +259,7 @@ public class ParkourManager implements Listener {
 
 	public static List<ParkourGoal> loadGoals() {
 		List<ParkourGoal> ret = new ArrayList<>();
-		ResultSet rs = DM.selectQuery("SELECT * FROM parkour_goal");
+		ResultSet rs = DM.selectQuery("SELECT * FROM iMine_Statistics.parkour_goal");
 		try {
 			while (rs.next()) {
 				ParkourLevel level = parkour.getLevel((short) rs.getInt("id"));
@@ -276,12 +274,13 @@ public class ParkourManager implements Listener {
 	}
 
 	public static void loadParkourPlayer(Player player) {
-		ResultSet rs = DM.selectQuery("SELECT * FROM parkour_player WHERE uuid LIKE '%s' LIMIT 1",
+		ResultSet rs = DM.selectQuery("SELECT * FROM iMine_Statistics.parkour_player WHERE uuid LIKE '%s' LIMIT 1",
 			player.getUniqueId().toString());
 		ParkourPlayer parkourPlayer = null;
 		try {
 			while (rs.next()) {
-				ResultSet timingSet = DM.selectQuery("SELECT * FROM parkour_timing WHERE uuid LIKE '%s'",
+				ResultSet timingSet = DM.selectQuery(
+					"SELECT * FROM iMine_Statistics.parkour_timing WHERE uuid LIKE '%s'",
 					player.getUniqueId().toString());
 				List<ParkourTiming> timings = new ArrayList<>();
 				while (timingSet.next()) {
@@ -294,7 +293,7 @@ public class ParkourManager implements Listener {
 			}
 			if (parkourPlayer == null) {
 				parkourPlayer = new ParkourPlayer(player.getUniqueId(), parkour.getLevel((short) 0), new ArrayList<>());
-				DM.insertQuery("INSERT INTO parkour_player VALUES('%s',0)", player.getUniqueId());
+				DM.insertQuery("INSERT INTO iMine_Statistics.parkour_player VALUES('%s',0)", player.getUniqueId());
 			}
 			parkourPlayer.save();
 			parkour.addPlayer(parkourPlayer);

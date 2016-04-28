@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import nl.imine.api.Credentials;
 import nl.imine.api.db.DatabaseManager;
+import nl.imine.api.iMineAPI;
 import nl.imine.api.util.ColorUtil;
 import nl.imine.api.util.PlayerUtil;
 import nl.imine.api.util.StringUtil;
@@ -13,8 +13,7 @@ import org.bukkit.Bukkit;
 
 public class ParkourPlayer {
 
-	public static final DatabaseManager DM = new DatabaseManager(Credentials.getUrl(), Credentials.getUsername(),
-			Credentials.getPassword(), "iMine_Statistics");
+	public static final DatabaseManager DM = iMineAPI.getDatabaseManager();
 
 	private final UUID uuid;
 	private ParkourLevel highestLevel;
@@ -45,7 +44,7 @@ public class ParkourPlayer {
 	}
 
 	public void addTiming(ParkourTiming timing) {
-		DM.insertQuery("INSERT INTO parkour_timing VALUES ('%s','%s',%d,%d,%d)", uuid,
+		DM.insertQuery("INSERT INTO iMine_Statistics.parkour_timing VALUES ('%s','%s',%d,%d,%d)", uuid,
 			timing.getDateObtained().toString(), timing.getStartLevel().getLevel(), timing.getDestLevel().getLevel(),
 			timing.getTimeMiliseconds());
 		Optional<ParkourTiming> oRecordTime = timings.stream()
@@ -167,7 +166,7 @@ public class ParkourPlayer {
 	}
 
 	public void save() {
-		DM.updateQuery("UPDATE parkour_player SET level=%d WHERE uuid LIKE '%s'", highestLevel.getLevel(),
-			uuid.toString());
+		DM.updateQuery("UPDATE iMine_Statistics.parkour_player SET level=%d WHERE uuid LIKE '%s'",
+			highestLevel.getLevel(), uuid.toString());
 	}
 }
