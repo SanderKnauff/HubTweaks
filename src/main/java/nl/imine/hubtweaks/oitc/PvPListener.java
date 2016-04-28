@@ -39,6 +39,11 @@ public class PvPListener implements Listener {
 		if (!evt.isCancelled()) {
 			if (PvP.getSpawnList().contains(evt.getTo())) {
 				PvP.addPlayerToArena(evt.getPlayer());
+			} else {
+				if (LocationUtil.isInBox(evt.getFrom(), PvP.getCorners()[0], PvP.getCorners()[1])
+						&& !LocationUtil.isInBox(evt.getTo(), PvP.getCorners()[0], PvP.getCorners()[1])) {
+					evt.getPlayer().setHealth(0D);
+				}
 			}
 		}
 	}
