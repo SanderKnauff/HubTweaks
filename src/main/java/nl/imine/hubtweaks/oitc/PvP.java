@@ -37,6 +37,7 @@ public class PvP {
 
 	public static void addPlayerToArena(Player player) {
 		PvP.addGear(player);
+		player.closeInventory();
 		player.setFireTicks(0);
 		player.setFallDistance(0);
 		player.setVelocity(new Vector());
