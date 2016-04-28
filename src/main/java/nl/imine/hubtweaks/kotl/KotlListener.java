@@ -25,6 +25,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class KotlListener implements Listener {
@@ -94,6 +95,19 @@ public class KotlListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMoveEvent(PlayerMoveEvent event) {
+		Player player = event.getPlayer();
+		if (kotl.getKing() != null) {
+			if (kotl.getKing().equals(player)) {
+				if (event.getTo().distanceSquared(kotl.getPlateLoc()) > 2) {
+					kotl.setKing(null);
+					kotl.removeEntropiaWand(event.getPlayer());
+				}
+			}
+		}
+	}
+
+	@EventHandler
+	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		Player player = event.getPlayer();
 		if (kotl.getKing() != null) {
 			if (kotl.getKing().equals(player)) {
