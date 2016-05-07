@@ -83,7 +83,7 @@ public class PvPListener implements Listener {
 			}
 		}
 		if (evt.getEntity() instanceof Arrow) {
-			if (evt.getEntity() instanceof Player) {
+			if (((Arrow) evt.getEntity()).getShooter() instanceof Player) {
 				if (!PvP.isPlayerInArena((Player) evt.getEntity())) {
 					evt.setCancelled(true);
 				}
