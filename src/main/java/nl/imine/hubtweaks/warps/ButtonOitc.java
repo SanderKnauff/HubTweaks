@@ -7,8 +7,8 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemFlag;
 
 import nl.imine.api.gui.Button;
+import nl.imine.api.gui.Container;
 import nl.imine.api.util.ItemUtil;
-import nl.imine.hubtweaks.HubTweaks;
 import nl.imine.hubtweaks.oitc.PvP;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
@@ -20,7 +20,7 @@ public class ButtonOitc extends Button {
 	}
 
 	@Override
-	public void doAction(Player player, ClickType ct) {
+	public void doAction(Player player, Container container, ClickType ct) {
 		if (!PvP.getSpawnList().isEmpty()) {
 			if (player.getVehicle() != null) {
 				player.leaveVehicle();
