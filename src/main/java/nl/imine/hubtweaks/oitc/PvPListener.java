@@ -18,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -82,12 +83,16 @@ public class PvPListener implements Listener {
 				}
 			}
 		}
-		if (evt.getEntity() instanceof Arrow) {
-			if (((Arrow) evt.getEntity()).getShooter() instanceof Player) {
-				if (!PvP.isPlayerInArena((Player) evt.getEntity())) {
-					evt.setCancelled(true);
-				}
+	}
+
+	@EventHandler
+	public void onHangingBreak(HangingBreakByEntityEvent evt) {
+		if (evt.getRemover() instanceof Player) {
+			if (PvP.isPlayerInArena((Player) evt.getRemover())) {
+				evt.setCancelled(true);
 			}
+		} else if (evt.getRemover() instanceof Arrow) {
+			evt.setCancelled(true);
 		}
 	}
 
