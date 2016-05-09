@@ -7,6 +7,7 @@ import nl.imine.hubtweaks.Statistic;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
@@ -136,12 +137,14 @@ public class PvPListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent evt) {
-		if (LocationUtil.isInBox(evt.getFrom(), PvP.getCorners()[0], PvP.getCorners()[1])
-				&& !LocationUtil.isInBox(evt.getTo(), PvP.getCorners()[0], PvP.getCorners()[1])) {
-			evt.getPlayer().setHealth(0D);
-		} else if (LocationUtil.isInBox(evt.getTo(), PvP.getCorners()[0], PvP.getCorners()[1])
-				&& !LocationUtil.isInBox(evt.getFrom(), PvP.getCorners()[0], PvP.getCorners()[1])) {
-			PvP.addPlayerToArena(evt.getPlayer());
+		if (evt.getPlayer().getGameMode().equals(GameMode.ADVENTURE)) {
+			if (LocationUtil.isInBox(evt.getFrom(), PvP.getCorners()[0], PvP.getCorners()[1])
+					&& !LocationUtil.isInBox(evt.getTo(), PvP.getCorners()[0], PvP.getCorners()[1])) {
+				evt.getPlayer().setHealth(0D);
+			} else if (LocationUtil.isInBox(evt.getTo(), PvP.getCorners()[0], PvP.getCorners()[1])
+					&& !LocationUtil.isInBox(evt.getFrom(), PvP.getCorners()[0], PvP.getCorners()[1])) {
+				PvP.addPlayerToArena(evt.getPlayer());
+			}
 		}
 	}
 
