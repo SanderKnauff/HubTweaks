@@ -27,7 +27,10 @@ public class CompassWarp implements Listener {
 		inv.addButton(new ButtonTeleport(
 				ItemUtil.getBuilder(Material.INK_SACK).setDurability((short) 5)
 						.setName(ColorUtil.replaceColors("&dSpawn")).build(),
-				4, new Location(HubTweaks.getMainWorld(), 47.5D, 36.0D, -509.5D, -45F, 0F)));
+				3, new Location(HubTweaks.getMainWorld(), 47.5D, 36.0D, -509.5D, -45F, 0F)));
+		inv.addButton(new ButtonTeleport(
+				ItemUtil.getBuilder(Material.STONE).setName(ColorUtil.replaceColors("&8Voidblock")).build(), 5,
+				new Location(HubTweaks.getMainWorld(), 54.5D, 36.0D, -529.5D, 180F, 0F)));
 		inv.addButton(new ButtonTeleportCustom(
 				ItemUtil.getBuilder(Material.ELYTRA).setName(ColorUtil.replaceColors("&5Elytra Parkour")).build(), 11,
 				new Location(HubTweaks.getMainWorld(), 36.5D, 163.5D, -528.5D, -45F, 0F)));
