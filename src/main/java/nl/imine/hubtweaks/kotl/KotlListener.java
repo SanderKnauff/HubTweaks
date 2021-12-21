@@ -1,16 +1,15 @@
 package nl.imine.hubtweaks.kotl;
 
-import java.util.ArrayList;
-import nl.imine.api.util.ColorUtil;
-import nl.imine.api.util.LocationUtil;
-import nl.imine.api.util.PlayerUtil;
-import nl.imine.hubtweaks.HubTweaks;
+import nl.imine.hubtweaks.HubTweaksPlugin;
+import nl.imine.hubtweaks.util.ColorUtil;
+import nl.imine.hubtweaks.util.LocationUtil;
+import nl.imine.hubtweaks.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
-import org.bukkit.Effect;
 import org.bukkit.FireworkEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,33 +17,27 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class KotlListener implements Listener {
-
-	private final Kotl kotl;
+public record KotlListener(Kotl kotl) implements Listener {
 
 	public static void init(Kotl kotl) {
-		HubTweaks.getInstance().getServer().getPluginManager().registerEvents(new KotlListener(kotl),
-			HubTweaks.getInstance());
-	}
-
-	private KotlListener(Kotl kotl) {
-		this.kotl = kotl;
+		HubTweaksPlugin.getInstance().getServer().getPluginManager().registerEvents(new KotlListener(kotl),
+			HubTweaksPlugin.getInstance());
 	}
 
 	@EventHandler
 	public void onSwitchItem(PlayerSwapHandItemsEvent evt) {
 		if (evt.getPlayer().getGameMode() == GameMode.ADVENTURE
-				&& LocationUtil.isInBox(evt.getPlayer().getLocation(), Kotl.BOX[0], Kotl.BOX[1])) {
+			&& LocationUtil.isInBox(evt.getPlayer().getLocation(), Kotl.BOX[0], Kotl.BOX[1])) {
 			evt.setCancelled(true);
 		}
 	}
@@ -52,29 +45,25 @@ public class KotlListener implements Listener {
 	@EventHandler
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		if ((event.getItemDrop().getItemStack() != null) && (event.getItemDrop().getItemStack().getType() != null)
-				&& ((event.getItemDrop().getItemStack().getType().equals(Material.GOLD_HELMET))
-						|| (event.getItemDrop().getItemStack().getType().equals(Material.GOLDEN_CARROT)))) {
+			&& ((event.getItemDrop().getItemStack().getType().equals(Material.GOLDEN_HELMET))
+				|| (event.getItemDrop().getItemStack().getType().equals(Material.GOLDEN_CARROT)))) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler
-	public void onPlayerPickup(PlayerPickupItemEvent event) {
+	public void onPlayerPickup(EntityPickupItemEvent event) {
 		ItemStack is = event.getItem().getItemStack();
-		if ((is != null) && (is.getType() != null)
-				&& ((is.getType().equals(Material.GOLD_HELMET)) || (is.getType().equals(Material.GOLDEN_CARROT)))) {
+		if (is.getType().equals(Material.GOLDEN_HELMET) || is.getType().equals(Material.GOLDEN_CARROT)) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event) {
-		for (ItemStack is : new ArrayList<>(event.getDrops())) {
-			if ((is != null) && (is.getType() != null)
-					&& ((is.getType().equals(Material.GOLD_HELMET)) || (is.getType().equals(Material.GOLDEN_CARROT)))) {
-				event.getDrops().remove(is);
-			}
-		}
+		event.getDrops().removeIf(is ->
+			is.getType().equals(Material.GOLDEN_HELMET) || is.getType().equals(Material.GOLDEN_CARROT)
+		);
 	}
 
 	@EventHandler
@@ -83,10 +72,9 @@ public class KotlListener implements Listener {
 		if (evt.getAction().equals(Action.PHYSICAL) && evt.getClickedBlock().getLocation().equals(kotl.getPlateLoc())) {
 			if (kotl.getKing() == null || !kotl.getKing().isOnline()) {
 				kotl.setKing(player);
-				kotl.addEntropiaWandTo(player);
 				if (!kotl.getKing().equals(kotl.getOldKing())) {
-					Bukkit.getOnlinePlayers().stream().forEach(pl -> PlayerUtil.sendActionMessage(pl,
-						ColorUtil.replaceColors("&6&l%s is the new king!", player.getDisplayName())));
+					Bukkit.getOnlinePlayers().forEach(pl -> PlayerUtil.sendActionMessage(pl,
+						ColorUtil.replaceColors("&6&l%s is the new queen!".formatted(player.getDisplayName()))));
 				}
 			}
 			evt.setCancelled(false);
@@ -95,14 +83,13 @@ public class KotlListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMoveEvent(PlayerMoveEvent event) {
-		Player player = event.getPlayer();
-		if (kotl.getKing() != null) {
-			if (kotl.getKing().equals(player)) {
-				if (event.getTo().distanceSquared(kotl.getPlateLoc()) > 2) {
-					kotl.setKing(null);
-					kotl.removeEntropiaWand(event.getPlayer());
-				}
-			}
+		if (!event.getPlayer().equals(kotl.getKing())) {
+			return;
+		}
+
+		if (event.getTo() != null && event.getTo().distanceSquared(kotl.getPlateLoc()) > 2) {
+			kotl.setKing(null);
+			kotl.removeEntropiaWand(event.getPlayer());
 		}
 	}
 
@@ -141,23 +128,23 @@ public class KotlListener implements Listener {
 		if (((evt.getDamager() instanceof Player)) && ((e instanceof Player))) {
 			Player damager = (Player) evt.getDamager();
 			if ((damager.getInventory().getItemInMainHand().getType() != null)
-					&& (damager.getInventory().getItemInMainHand().getType().equals(Material.GOLDEN_CARROT))) {
+				&& (damager.getInventory().getItemInMainHand().getType().equals(Material.GOLDEN_CARROT))) {
 				if (Kotl.getInstance().getKing() != null) {
 					if (Kotl.getInstance().getKing().equals(damager)
-							&& LocationUtil.isInBox(e.getLocation(), Kotl.BOX[0], Kotl.BOX[1])) {
+						&& LocationUtil.isInBox(e.getLocation(), Kotl.BOX[0], Kotl.BOX[1])) {
 						LocationUtil.firework(e.getLocation(),
 							FireworkEffect.builder().withColor(Color.RED).withColor(Color.BLUE).withColor(Color.GREEN)
-									.withColor(Color.YELLOW).with(FireworkEffect.Type.BALL_LARGE).build(),
+								.withColor(Color.YELLOW).with(FireworkEffect.Type.BALL_LARGE).build(),
 							5L);
 					} else {
 						Kotl.getInstance().removeEntropiaWand(damager);
 						damager.setHealth(0);
-						damager.getLocation().getWorld().playEffect(damager.getLocation(), Effect.EXPLOSION_HUGE, 0);
+						damager.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, damager.getLocation(), 1);
 					}
 				} else {
 					Kotl.getInstance().removeEntropiaWand(damager);
 					damager.setHealth(0);
-					damager.getLocation().getWorld().playEffect(damager.getLocation(), Effect.EXPLOSION_HUGE, 0);
+					damager.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, damager.getLocation(), 1);
 				}
 			}
 		}

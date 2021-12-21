@@ -1,9 +1,6 @@
 package nl.imine.hubtweaks.ride;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.bukkit.Bukkit;
+import nl.imine.hubtweaks.parkour.ParkourPlayerRepository;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -16,30 +13,14 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
-import nl.imine.api.util.ColorUtil;
-import nl.imine.hubtweaks.HubTweaks;
-import nl.imine.hubtweaks.Statistic;
 import nl.imine.hubtweaks.oitc.PvP;
-import nl.imine.hubtweaks.parkour.ParkourManager;
-import nl.imine.hubtweaks.parkour.ParkourPlayer;
 import org.bukkit.event.player.PlayerKickEvent;
 
-public class EntityRide implements Listener {
-
-	private final Map<Entity, Integer> timeOut = new HashMap<>();
-	private static EntityRide instance;
-
-	public EntityRide() {
-		Bukkit.getPluginManager().registerEvents(this, HubTweaks.getInstance());
-	}
-
-	public static void init() {
-		instance = new EntityRide();
-	}
+public record EntityRide(PvP pvp, ParkourPlayerRepository parkourPlayerRepository) implements Listener {
 
 	@EventHandler
-	public void onPlayerLeft(final PlayerQuitEvent pqe) {
-		Player pl = pqe.getPlayer();
+	public void onPlayerLeft(final PlayerQuitEvent event) {
+		Player pl = event.getPlayer();
 		pl.eject();
 		if (pl.isInsideVehicle()) {
 			pl.leaveVehicle();
@@ -47,8 +28,8 @@ public class EntityRide implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerKick(final PlayerKickEvent pqe) {
-		Player pl = pqe.getPlayer();
+	public void onPlayerKick(final PlayerKickEvent event) {
+		Player pl = event.getPlayer();
 		pl.eject();
 		if (pl.isInsideVehicle()) {
 			pl.leaveVehicle();
@@ -56,81 +37,40 @@ public class EntityRide implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerSneak(final PlayerToggleSneakEvent ptse) {
-		final Player pl = ptse.getPlayer();
-		if (ptse.isSneaking()) {
-			addToTimeout(pl, 100L);
+	public void onPlayerSneak(final PlayerToggleSneakEvent event) {
+		final Player pl = event.getPlayer();
+		if (event.isSneaking()) {
 			pl.eject();
 		}
 	}
 
-	public static void removeFromTimeout(final Entity e) {
-		instance.timeOut.remove(e);
-	}
-
-	public static void addToTimeout(final Entity e, long delay) {
-		if (instance.timeOut.containsKey(e) && instance.timeOut.get(e) > -1) {
-			Bukkit.getScheduler().cancelTask(instance.timeOut.get(e));
-			instance.timeOut.remove(e);
+	@EventHandler
+	public void onPlayerHit(final EntityDamageByEntityEvent event) {
+		if (!event.getDamager().getPassengers().isEmpty()) {
+			event.getDamager().eject();
 		}
-		int sch = -1;
-		if (delay > 0) {
-			sch = Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), new Runnable() {
-				public void run() {
-					instance.timeOut.remove(e);
-				}
-			}, delay);
-		}
-		instance.timeOut.put(e, sch);
 	}
 
 	@EventHandler
-	public void onPlayerHit(final EntityDamageByEntityEvent edbee) {
-		if (edbee.getDamager().getPassenger() != null) {
-			edbee.getDamager().eject();
-		}
-		addToTimeout(edbee.getDamager(), 100L);
-	}
-
-	@EventHandler
-	public void onPlayerInteract(final PlayerInteractEntityEvent piee) {
-		final Player pl = piee.getPlayer();
-		final Entity e = piee.getRightClicked();
-		if (timeOut.containsKey(e) || e instanceof Villager || e.getLocation().getY() > 64) {
+	public void onPlayerInteract(final PlayerInteractEntityEvent event) {
+		final Player player = event.getPlayer();
+		final Entity target = event.getRightClicked();
+		if (target instanceof Villager || target.getLocation().getY() > 64) {
 			return;
 		}
-		if (e instanceof LivingEntity && pl.hasPermission("iMine.hub.ride") && !PvP.isPlayerInArena(pl)
-				&& pl.getVehicle() == null && (!(e instanceof Player) || pl.hasPermission("iMine.hub.ride.player"))) {
-			if (e instanceof Player) {
-				pl.sendMessage(ColorUtil.replaceColors("&cRiding on other players is for now disabled due a bug."));
-				if (true)
-					return;
-			}
-			Entity oldPassenger = e.getPassenger();
-			if (oldPassenger != null) {
-				if (oldPassenger instanceof Player) {
-					((Player) oldPassenger).sendMessage("You get kicked off the "
-							+ e.getType().toString().toLowerCase().replace("_", " ").replace("craft", ""));
+		if (target instanceof LivingEntity && !pvp.isPlayerInArena(player) && player.getVehicle() == null) {
+			for (Entity passenger : target.getPassengers()) {
+				if (passenger instanceof Player) {
+					passenger.sendMessage("You got kicked off " + target.getName());
 				}
-				oldPassenger.teleport(oldPassenger.getLocation().add(0D, 0.1D, 0D));
+				passenger.teleport(passenger.getLocation().add(0D, 0.1D, 0D));
 			}
-			addToTimeout(e, 100L);
-			e.eject();
-			if (pl.getVehicle() == null) {
-				Bukkit.getScheduler().scheduleSyncDelayedTask(HubTweaks.getInstance(), new Runnable() {
-					public void run() {
-						Location l = pl.getLocation();
-						pl.teleport(new Location(pl.getWorld(), l.getX(), l.getY(), l.getZ(), e.getLocation().getYaw(),
-								e.getLocation().getPitch()));
-						e.setPassenger(pl);
-						ParkourPlayer player = ParkourManager.getParkourInstance().getParkourPlayer(pl);
-						player.setCheated(true);
-					}
-				}, 2L);
-			}
-			Statistic.addToRide(pl);
-			if (e instanceof Player) {
-				Statistic.addToRidden(((Player) e));
+			target.eject();
+			if (player.getVehicle() == null) {
+				Location l = player.getLocation();
+				player.teleport(new Location(player.getWorld(), l.getX(), l.getY(), l.getZ(), target.getLocation().getYaw(), target.getLocation().getPitch()));
+				target.addPassenger(player);
+				parkourPlayerRepository.findOne(player.getUniqueId()).ifPresent(p -> p.setCheated(true));
 			}
 		}
 	}

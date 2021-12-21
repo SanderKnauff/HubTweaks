@@ -2,10 +2,9 @@ package nl.imine.hubtweaks.warps;
 
 import nl.imine.api.gui.Container;
 import nl.imine.api.gui.button.ButtonTeleport;
-import nl.imine.api.util.ColorUtil;
-import nl.imine.api.util.ItemUtil;
-import nl.imine.api.util.PlayerUtil;
+import nl.imine.hubtweaks.util.ColorUtil;
 import nl.imine.hubtweaks.parkour.ParkourManager;
+import nl.imine.hubtweaks.util.PlayerUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -22,18 +21,18 @@ public class ButtonTeleportCustom extends ButtonTeleport {
 
 	@Override
 	public void doAction(Player player, Container container, ClickType clickType) {
-		if (ParkourManager.getParkourInstance().getParkourPlayer(player).getHighestLevel().getLevel() > 4) {
+//		if (ParkourManager.getParkourInstance().getParkourPlayer(player).getHighestLevel().level() > 4) {
 			super.doAction(player, container, clickType);
-			ItemStack is = ItemUtil.getBuilder(Material.ELYTRA).build();
+			ItemStack is = new ItemStack(Material.ELYTRA, 1);
 			ItemMeta im = is.getItemMeta();
-			im.spigot().setUnbreakable(true);
+			im.setUnbreakable(true);
 			is.setItemMeta(im);
 			player.getInventory().setChestplate(is);
-		} else {
-			PlayerUtil.sendActionMessage(player,
-				ColorUtil.replaceColors("&c&lYou need to complete the parkour before warping to the Elytra Parkour"));
-			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
-		}
+//		} else {
+//			PlayerUtil.sendActionMessage(player,
+//				ColorUtil.replaceColors("&c&lYou need to complete the parkour before warping to the Elytra Parkour"));
+//			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+//		}
 	}
 
 }

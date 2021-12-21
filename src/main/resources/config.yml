@@ -1,3 +1,4 @@
-WarpItems: []
-ParkourLevels: []
-PlayerData: []
+db:
+  url:
+  username:
+  password:

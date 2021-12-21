@@ -1,16 +1,14 @@
 package nl.imine.hubtweaks.kotl;
 
-import java.io.File;
-import java.io.IOException;
-import nl.imine.hubtweaks.HubTweaks;
-import nl.imine.hubtweaks.Statistic;
+import java.util.Optional;
+
+import nl.imine.hubtweaks.HubTweaksPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -23,56 +21,38 @@ public class Kotl {
 
 	private static Kotl kotl;
 
-	private Location plate;
+	private final Location plate = new Location(Bukkit.getWorlds().get(0), 60, 41, -511);
 	private Player king;
 	private Player oldKing;
-	private int radius;
-	private final File configFile;
-	private YamlConfiguration config;
+	private final int radius = 10;
 
 	public static void init() {
 		Kotl.kotl = new Kotl();
 		KotlListener.init(kotl);
 	}
 
-	public Kotl() {
-		this.configFile = new File(HubTweaks.getInstance().getDataFolder() + File.separator + "KOTL.yml");
-		if (!configFile.exists()) {
-			try {
-				boolean success = configFile.createNewFile();
-				System.err.println("Creating file " + configFile.getPath() + ": " + success);
-			} catch (IOException e) {
-			}
-		}
-		loadKOTL();
-	}
-
-	private void loadKOTL() {
-		if (configFile.exists()) {
-			config = YamlConfiguration.loadConfiguration(configFile);
-			ConfigurationSection section = config.getConfigurationSection("Kotl");
-			if (section != null) {
-				plate = getLocationFromSection(section);
-				radius = section.getInt(KotlConfig.AREA_RADIUS);
-			}
-		}
-	}
-
 	public void addEntropiaWandTo(Player p) {
-		ItemStack EWStack = new ItemStack(Material.GOLDEN_CARROT, 1);
-		ItemMeta EWMeta = EWStack.getItemMeta();
-		EWMeta.setDisplayName(ChatColor.RESET + "Entropia Wand");
-		EWMeta.addEnchant(Enchantment.KNOCKBACK, (int) (Math.random() * 255D), true);
-		EWStack.setItemMeta(EWMeta);
-		ItemStack EntropiaWand = EWStack;
+		ItemStack wand = new ItemStack(Material.GOLDEN_CARROT, 1);
+		ItemMeta wandMeta = wand.getItemMeta();
+		wandMeta.setDisplayName(ChatColor.RESET + "Entropia Wand");
+		wandMeta.addEnchant(Enchantment.KNOCKBACK, (int) (Math.random() * 255D), true);
+		wand.setItemMeta(wandMeta);
+		ItemStack EntropiaWand = wand;
+
+		final ItemStack helmet = new ItemStack(Material.SLIME_BALL);
+		Optional.ofNullable(helmet.getItemMeta())
+			.ifPresent(itemMeta -> {
+				itemMeta.setCustomModelData(69);
+				helmet.setItemMeta(itemMeta);
+			});
 
 		p.getInventory().addItem(new ItemStack[]{EntropiaWand});
-		p.getInventory().setHelmet(new ItemStack(Material.GOLD_HELMET));
+		p.getInventory().setHelmet(helmet);
 	}
 
 	public void removeEntropiaWand(final Player p) {
 		p.getInventory().remove(Material.GOLDEN_CARROT);
-		p.getInventory().remove(Material.GOLD_HELMET);
+		p.getInventory().remove(Material.GOLDEN_HELMET);
 		p.getInventory().setHelmet(new ItemStack(Material.AIR));
 	}
 
@@ -81,11 +61,11 @@ public class Kotl {
 	}
 
 	public void setKing(Player player) {
-		if (king != player && player != null) {
-			Statistic.addToKing(player);
-		}
 		this.oldKing = king;
 		this.king = player;
+		if (this.king != null) {
+			kotl.addEntropiaWandTo(player);
+		}
 	}
 
 	public Player getKing() {
@@ -100,19 +80,8 @@ public class Kotl {
 		return this.radius;
 	}
 
-	public YamlConfiguration getConfig() {
-		return this.config;
-	}
-
-	public void saveConfig() {
-		try {
-			this.config.save(configFile);
-		} catch (IOException e) {
-		}
-	}
-
 	private Location getLocationFromSection(ConfigurationSection section) {
-		World world = HubTweaks.getInstance().getServer().getWorld(section.getString(KotlConfig.LOCATION_WORLD));
+		World world = HubTweaksPlugin.getInstance().getServer().getWorld(section.getString(KotlConfig.LOCATION_WORLD));
 		int x = (int) section.getDouble(KotlConfig.LOCATION_X);
 		int y = (int) section.getDouble(KotlConfig.LOCATION_Y);
 		int z = (int) section.getDouble(KotlConfig.LOCATION_Z);
